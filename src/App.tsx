@@ -1,45 +1,37 @@
-import { useState } from 'react'
-import logo from './logo.svg'
-import './App.css'
+import { HoppersFilter } from "api/hoppers"
+import HoppersTable from "components/hoppers/hoppers-table/HoppersTable"
+import { Adventure } from "constants/adventures"
+import { Market } from "constants/filters"
+import useApplyDarkMode from "hooks/useApplyDarkMode"
+import { useState } from "react"
+import { globalCss, styled } from "./theme"
 
 function App() {
-  const [count, setCount] = useState(0)
+    globalStyles()
+    useApplyDarkMode()
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
-    </div>
-  )
+    const [hoppersFilter, setHoppersFilter] = useState<HoppersFilter>({
+        adventure: Adventure.RIVER,
+        market: Market.ON,
+    })
+
+    return (
+        <Container>
+            <HoppersTable filter={hoppersFilter} />
+        </Container>
+    )
 }
 
 export default App
+
+const Container = styled("div", {
+    padding: "3rem",
+    maxWidth: 1024,
+    margin: "0 auto",
+})
+
+const globalStyles = globalCss({
+    body: {
+        backgroundColor: "$gray1",
+    },
+})
