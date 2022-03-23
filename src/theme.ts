@@ -1,4 +1,4 @@
-import { gray, grayDark, grass, grassDark, teal, tealDark, red, redDark } from "@radix-ui/colors"
+import { gray, grayDark, blue, blueDark, teal, tealDark, red, redDark } from "@radix-ui/colors"
 import { createStitches, CSS } from "@stitches/react"
 
 export const {
@@ -15,6 +15,7 @@ export const {
             ...gray,
             ...teal,
             ...red,
+            ...blue,
         },
     },
 })
@@ -26,5 +27,6 @@ export const darkTheme = createTheme({
         ...grayDark,
         ...tealDark,
         ...redDark,
+        ...blueDark,
     },
 })

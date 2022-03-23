@@ -1,21 +1,16 @@
-import { Adventure, getAdventureFilter } from "constants/adventures"
-import { getMarketFilter, Market } from "constants/filters"
 import { Hopper } from "models/Hopper"
+import { HoppersFilter, urlifyAdventureFilter, urlifyMarketFilter } from "./filters/hoopers"
 
 const ENDPOINT = import.meta.env.VITE_API_ENDPOINT
 
-export type HoppersFilter = {
-    adventure: Adventure
-    market: Market
-}
 type GetHoppersResponse = {
     data: Hopper[]
 }
 
 export function getHoppersUrl(filter: HoppersFilter): string {
     const params = new URLSearchParams([
-        ["adventure", getAdventureFilter(filter.adventure)],
-        ["market", getMarketFilter(filter.market)],
+        ["adventure", urlifyAdventureFilter(filter.adventure)],
+        ["market", urlifyMarketFilter(filter.market)],
     ])
 
     return `${ENDPOINT}/hoppers?${params.toString()}`

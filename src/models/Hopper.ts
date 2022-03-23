@@ -6,7 +6,7 @@ export type Hopper = {
     intelligence: number
     fertility: number
     level: number
-    market: boolean
+    listing: HopperListing
     adventure: boolean
     rating: HopperRating
     image: string
@@ -19,4 +19,9 @@ export type HopperRating = {
     river: number
     forest: number
     greatLake: number
+}
+
+export type HopperListing = {
+    active: boolean
+    price: number
 }
