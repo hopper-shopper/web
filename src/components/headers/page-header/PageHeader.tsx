@@ -18,8 +18,7 @@ const Header = styled("header", {
     alignItems: "center",
 })
 const HeaderContent = styled("div", {
-    width: 1280,
-    margin: "0 auto",
+    padding: "0 2rem",
 })
 const Title = styled("h1", {
     fontSize: "1.5rem",

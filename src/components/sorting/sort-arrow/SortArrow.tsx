@@ -28,11 +28,8 @@ const StyledIcon = styled("span", {
     },
     variants: {
         active: {
-            true: {
-                visibility: "visible",
-            },
             false: {
-                visibility: "hidden",
+                display: "none",
             },
         },
     },

@@ -72,25 +72,39 @@ export default function HoppersTable(props: HoppersTableProps) {
                             value={{ active: sortBy, direction: sortDirection, update: setSortBy }}>
                             <tr>
                                 <StyledTableHeader css={{ width: 90 }}>Image</StyledTableHeader>
-                                <SortableTableHeader sortBy={SortHopperBy.TOKEN_ID}>
+                                <SortableTableHeader
+                                    css={{ width: 120 }}
+                                    sortBy={SortHopperBy.TOKEN_ID}>
                                     Token-Id
                                 </SortableTableHeader>
-                                <SortableTableHeader sortBy={SortHopperBy.LEVEL}>
+                                <SortableTableHeader
+                                    css={{ width: 100 }}
+                                    sortBy={SortHopperBy.LEVEL}>
                                     Level
                                 </SortableTableHeader>
-                                <SortableTableHeader sortBy={SortHopperBy.STRENGTH}>
+                                <SortableTableHeader
+                                    css={{ width: 135 }}
+                                    sortBy={SortHopperBy.STRENGTH}>
                                     Strength
                                 </SortableTableHeader>
-                                <SortableTableHeader sortBy={SortHopperBy.AGILITY}>
+                                <SortableTableHeader
+                                    css={{ width: 135 }}
+                                    sortBy={SortHopperBy.AGILITY}>
                                     Agility
                                 </SortableTableHeader>
-                                <SortableTableHeader sortBy={SortHopperBy.VITALITY}>
+                                <SortableTableHeader
+                                    css={{ width: 135 }}
+                                    sortBy={SortHopperBy.VITALITY}>
                                     Vitality
                                 </SortableTableHeader>
-                                <SortableTableHeader sortBy={SortHopperBy.INTELLIGENCE}>
+                                <SortableTableHeader
+                                    css={{ width: 135 }}
+                                    sortBy={SortHopperBy.INTELLIGENCE}>
                                     Intelligence
                                 </SortableTableHeader>
-                                <SortableTableHeader sortBy={SortHopperBy.FERTILITY}>
+                                <SortableTableHeader
+                                    css={{ width: 135 }}
+                                    sortBy={SortHopperBy.FERTILITY}>
                                     Fertility
                                 </SortableTableHeader>
                                 {config.showRatingPond && (

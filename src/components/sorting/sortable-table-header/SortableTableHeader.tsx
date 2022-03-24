@@ -1,9 +1,9 @@
-import { VariantProps } from "@stitches/react"
+import { ComponentProps, VariantProps } from "@stitches/react"
 import { useSortContext } from "hooks/useSort"
 import { styled } from "theme"
 import SortArrow from "../sort-arrow/SortArrow"
 
-type SortableTableHeaderProps<SortBy> = VariantProps<typeof StyledTableHeader> & {
+type SortableTableHeaderProps<SortBy> = ComponentProps<typeof StyledTableHeader> & {
     sortBy: SortBy
     children?: React.ReactNode
 }
