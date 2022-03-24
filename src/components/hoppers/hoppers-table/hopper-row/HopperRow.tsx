@@ -1,18 +1,20 @@
 import { grassDark, tomatoDark } from "@radix-ui/colors"
-import MarketIndicator from "components/hoppers/market-indicator/MarketIndicator"
 import { scaleQuantize } from "d3-scale"
 import { Currency, formatCurrency } from "formatters/currency"
-import { formatRating } from "formatters/rating"
+import { formatRating, formatRatingPremium } from "formatters/rating"
 import { Hopper } from "models/Hopper"
 import { styled } from "theme"
+import { Adventure, calculateMaxRatingPrice } from "utils/adventures"
+import { HoppersTableConfiguration } from "../configure-hoppers-table/ConfigureHoppersTable"
 
 type HopperRowProps = {
     hopper: Hopper
     index: number
+    config: HoppersTableConfiguration
 }
 
 export default function HopperRow(props: HopperRowProps) {
-    const { hopper, index } = props
+    const { hopper, index, config } = props
 
     return (
         <>
@@ -48,30 +50,105 @@ export default function HopperRow(props: HopperRowProps) {
                     {hopper.fertility}
                 </Value>
             </TableCell>
-            <StyledRatingCell even={index % 2 === 0}>
-                {formatRating(hopper.rating.pond)}
-            </StyledRatingCell>
-            <StyledRatingCell even={index % 2 === 0}>
-                {formatRating(hopper.rating.stream)}
-            </StyledRatingCell>
-            <StyledRatingCell even={index % 2 === 0}>
-                {formatRating(hopper.rating.swamp)}
-            </StyledRatingCell>
-            <StyledRatingCell even={index % 2 === 0}>
-                {formatRating(hopper.rating.river)}
-            </StyledRatingCell>
-            <StyledRatingCell even={index % 2 === 0}>
-                {formatRating(hopper.rating.forest)}
-            </StyledRatingCell>
-            <StyledRatingCell even={index % 2 === 0}>
-                {formatRating(hopper.rating.greatLake)}
-            </StyledRatingCell>
-            <TableCell>
-                <Center>
-                    <MarketIndicator onMarket={hopper.listing.active} />
-                </Center>
+            {config.showRatingPond && (
+                <StyledRatingCell even={index % 2 === 0}>
+                    {formatRating(hopper.rating.pond)}
+                </StyledRatingCell>
+            )}
+            {config.showRatingStream && (
+                <StyledRatingCell even={index % 2 === 0}>
+                    {formatRating(hopper.rating.stream)}
+                </StyledRatingCell>
+            )}
+            {config.showRatingSwamp && (
+                <StyledRatingCell even={index % 2 === 0}>
+                    {formatRating(hopper.rating.swamp)}
+                </StyledRatingCell>
+            )}
+            {config.showRatingRiver && (
+                <StyledRatingCell even={index % 2 === 0}>
+                    {formatRating(hopper.rating.river)}
+                </StyledRatingCell>
+            )}
+            {config.showRatingForest && (
+                <StyledRatingCell even={index % 2 === 0}>
+                    {formatRating(hopper.rating.forest)}
+                </StyledRatingCell>
+            )}
+            {config.showRatingGreatLake && (
+                <StyledRatingCell even={index % 2 === 0}>
+                    {formatRating(hopper.rating.greatLake)}
+                </StyledRatingCell>
+            )}
+            <TableCell align="right">
+                {formatCurrency(hopper.listing.price, Currency.AVAX)}
             </TableCell>
-            <TableCell>{formatCurrency(hopper.listing.price, Currency.AVAX)}</TableCell>
+            {config.showRatingPond && (
+                <TableCell align="right">
+                    {formatCurrency(calculateMaxRatingPrice(Adventure.POND, hopper), Currency.AVAX)}
+                </TableCell>
+            )}
+            {config.showRatingStream && (
+                <TableCell align="right">
+                    {formatCurrency(
+                        calculateMaxRatingPrice(Adventure.STREAM, hopper),
+                        Currency.AVAX,
+                    )}
+                </TableCell>
+            )}
+            {config.showRatingSwamp && (
+                <TableCell align="right">
+                    {formatCurrency(
+                        calculateMaxRatingPrice(Adventure.SWAMP, hopper),
+                        Currency.AVAX,
+                    )}
+                </TableCell>
+            )}
+            {config.showRatingRiver && (
+                <TableCell align="right">
+                    {formatCurrency(
+                        calculateMaxRatingPrice(Adventure.RIVER, hopper),
+                        Currency.AVAX,
+                    )}
+                </TableCell>
+            )}
+            {config.showRatingForest && (
+                <TableCell align="right">
+                    {formatCurrency(
+                        calculateMaxRatingPrice(Adventure.FOREST, hopper),
+                        Currency.AVAX,
+                    )}
+                </TableCell>
+            )}
+            {config.showRatingGreatLake && (
+                <TableCell align="right">
+                    {formatCurrency(
+                        calculateMaxRatingPrice(Adventure.GREAT_LAKE, hopper),
+                        Currency.AVAX,
+                    )}
+                </TableCell>
+            )}
+
+            {config.showRatingPond && (
+                <TableCell align="right">{formatRatingPremium(Adventure.POND, hopper)}</TableCell>
+            )}
+            {config.showRatingStream && (
+                <TableCell align="right">{formatRatingPremium(Adventure.STREAM, hopper)}</TableCell>
+            )}
+            {config.showRatingSwamp && (
+                <TableCell align="right">{formatRatingPremium(Adventure.SWAMP, hopper)}</TableCell>
+            )}
+            {config.showRatingRiver && (
+                <TableCell align="right">{formatRatingPremium(Adventure.RIVER, hopper)}</TableCell>
+            )}
+            {config.showRatingForest && (
+                <TableCell align="right">{formatRatingPremium(Adventure.FOREST, hopper)}</TableCell>
+            )}
+            {config.showRatingGreatLake && (
+                <TableCell align="right">
+                    {formatRatingPremium(Adventure.GREAT_LAKE, hopper)}
+                </TableCell>
+            )}
         </>
     )
 }
@@ -101,8 +178,24 @@ const Image = styled("img", {
 })
 const TableCell = styled("td", {
     color: "$gray12",
-    textAlign: "center",
-    padding: "0.5rem 0",
+    padding: "0.5rem 1rem",
+    whiteSpace: "nowrap",
+    variants: {
+        align: {
+            left: {
+                textAlign: "left",
+            },
+            center: {
+                textAlign: "center",
+            },
+            right: {
+                textAlign: "right",
+            },
+        },
+    },
+    defaultVariants: {
+        align: "center",
+    },
 })
 const Value = styled("div", {
     display: "inline-flex",

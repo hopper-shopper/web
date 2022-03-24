@@ -1,5 +1,5 @@
 import { gray, grayDark, blue, blueDark, teal, tealDark, red, redDark } from "@radix-ui/colors"
-import { createStitches, CSS } from "@stitches/react"
+import { createStitches, CSS, PropertyValue } from "@stitches/react"
 
 export const {
     createTheme,
@@ -17,6 +17,12 @@ export const {
             ...red,
             ...blue,
         },
+    },
+    utils: {
+        size: (size: PropertyValue<"width">) => ({
+            width: size,
+            height: size,
+        }),
     },
 })
 

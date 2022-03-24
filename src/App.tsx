@@ -1,4 +1,5 @@
 import { AdventureFilter, HoppersFilter, MarketFilter } from "api/filters/hoopers"
+import PageHeader from "components/headers/page-header/PageHeader"
 import HoppersTable from "components/hoppers/hoppers-table/HoppersTable"
 import useApplyDarkMode from "hooks/useApplyDarkMode"
 import { useState } from "react"
@@ -14,16 +15,19 @@ function App() {
     })
 
     return (
-        <Container>
-            <HoppersTable filter={hoppersFilter} />
-        </Container>
+        <>
+            <PageHeader />
+            <Container>
+                <HoppersTable filter={hoppersFilter} />
+            </Container>
+        </>
     )
 }
 
 export default App
 
 const Container = styled("div", {
-    padding: "3rem",
+    padding: "1rem",
 })
 
 const globalStyles = globalCss({
