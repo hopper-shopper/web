@@ -13,6 +13,7 @@ const StyledCheckbox = styled(CheckboxPrimitives.Root, {
     padding: 0,
     "&:hover": {
         backgroundColor: "$gray3",
+        borderColor: "$gray8",
     },
     "&:focus": {
         outline: "2px solid $blue8",

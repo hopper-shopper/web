@@ -7,6 +7,7 @@ import { TableVirtuoso } from "react-virtuoso"
 import { SortHopperBy, sortHoppers } from "sorters/hoppers"
 import { SortDirection } from "sorters/_common"
 import { styled } from "theme"
+import { Adventure } from "utils/adventures"
 import ConfigureHoppersTable, {
     HoppersTableConfiguration,
 } from "./configure-hoppers-table/ConfigureHoppersTable"
@@ -21,12 +22,7 @@ export default function HoppersTable(props: HoppersTableProps) {
 
     const { hoppers } = useHoppers(filter)
     const [config, setConfig] = useState<HoppersTableConfiguration>({
-        showRatingPond: false,
-        showRatingStream: false,
-        showRatingSwamp: false,
-        showRatingRiver: true,
-        showRatingForest: false,
-        showRatingGreatLake: false,
+        adventure: Adventure.RIVER,
     })
 
     const {
@@ -107,32 +103,32 @@ export default function HoppersTable(props: HoppersTableProps) {
                                     sortBy={SortHopperBy.FERTILITY}>
                                     Fertility
                                 </SortableTableHeader>
-                                {config.showRatingPond && (
+                                {config.adventure === Adventure.POND && (
                                     <SortableTableHeader sortBy={SortHopperBy.RATING_POND}>
                                         Rating Pond
                                     </SortableTableHeader>
                                 )}
-                                {config.showRatingStream && (
+                                {config.adventure === Adventure.STREAM && (
                                     <SortableTableHeader sortBy={SortHopperBy.RATING_STREAM}>
                                         Rating Stream
                                     </SortableTableHeader>
                                 )}
-                                {config.showRatingSwamp && (
+                                {config.adventure === Adventure.SWAMP && (
                                     <SortableTableHeader sortBy={SortHopperBy.RATING_SWAMP}>
                                         Rating Swamp
                                     </SortableTableHeader>
                                 )}
-                                {config.showRatingRiver && (
+                                {config.adventure === Adventure.RIVER && (
                                     <SortableTableHeader sortBy={SortHopperBy.RATING_RIVER}>
                                         Rating River
                                     </SortableTableHeader>
                                 )}
-                                {config.showRatingForest && (
+                                {config.adventure === Adventure.FOREST && (
                                     <SortableTableHeader sortBy={SortHopperBy.RATING_FOREST}>
                                         Rating Forest
                                     </SortableTableHeader>
                                 )}
-                                {config.showRatingGreatLake && (
+                                {config.adventure === Adventure.GREAT_LAKE && (
                                     <SortableTableHeader sortBy={SortHopperBy.RATING_GREAT_LAKE}>
                                         Rating Great Lake
                                     </SortableTableHeader>
@@ -140,42 +136,42 @@ export default function HoppersTable(props: HoppersTableProps) {
                                 <SortableTableHeader align="right" sortBy={SortHopperBy.PRICE}>
                                     Price
                                 </SortableTableHeader>
-                                {config.showRatingPond && (
+                                {config.adventure === Adventure.POND && (
                                     <SortableTableHeader
                                         align="right"
                                         sortBy={SortHopperBy.MAX_PRICE_POND}>
                                         Max. Price Pond
                                     </SortableTableHeader>
                                 )}
-                                {config.showRatingStream && (
+                                {config.adventure === Adventure.STREAM && (
                                     <SortableTableHeader
                                         align="right"
                                         sortBy={SortHopperBy.MAX_PRICE_STREAM}>
                                         Max. Price Stream
                                     </SortableTableHeader>
                                 )}
-                                {config.showRatingSwamp && (
+                                {config.adventure === Adventure.SWAMP && (
                                     <SortableTableHeader
                                         align="right"
                                         sortBy={SortHopperBy.MAX_PRICE_SWAMP}>
                                         Max. Price Swamp
                                     </SortableTableHeader>
                                 )}
-                                {config.showRatingRiver && (
+                                {config.adventure === Adventure.RIVER && (
                                     <SortableTableHeader
                                         align="right"
                                         sortBy={SortHopperBy.MAX_PRICE_RIVER}>
                                         Max. Price River
                                     </SortableTableHeader>
                                 )}
-                                {config.showRatingForest && (
+                                {config.adventure === Adventure.FOREST && (
                                     <SortableTableHeader
                                         align="right"
                                         sortBy={SortHopperBy.MAX_PRICE_FOREST}>
                                         Max. Price Forest
                                     </SortableTableHeader>
                                 )}
-                                {config.showRatingGreatLake && (
+                                {config.adventure === Adventure.GREAT_LAKE && (
                                     <SortableTableHeader
                                         align="right"
                                         sortBy={SortHopperBy.MAX_PRICE_GREAT_LAKE}>
@@ -183,42 +179,42 @@ export default function HoppersTable(props: HoppersTableProps) {
                                     </SortableTableHeader>
                                 )}
 
-                                {config.showRatingPond && (
+                                {config.adventure === Adventure.POND && (
                                     <SortableTableHeader
                                         align="right"
                                         sortBy={SortHopperBy.PRICE_MULTIPLIER_POND}>
                                         Multiplier Pond
                                     </SortableTableHeader>
                                 )}
-                                {config.showRatingStream && (
+                                {config.adventure === Adventure.STREAM && (
                                     <SortableTableHeader
                                         align="right"
                                         sortBy={SortHopperBy.PRICE_MULTIPLIER_STREAM}>
                                         Multiplier Stream
                                     </SortableTableHeader>
                                 )}
-                                {config.showRatingSwamp && (
+                                {config.adventure === Adventure.SWAMP && (
                                     <SortableTableHeader
                                         align="right"
                                         sortBy={SortHopperBy.PRICE_MULTIPLIER_SWAMP}>
                                         Multiplier Swamp
                                     </SortableTableHeader>
                                 )}
-                                {config.showRatingRiver && (
+                                {config.adventure === Adventure.RIVER && (
                                     <SortableTableHeader
                                         align="right"
                                         sortBy={SortHopperBy.PRICE_MULTIPLIER_RIVER}>
                                         Multiplier River
                                     </SortableTableHeader>
                                 )}
-                                {config.showRatingForest && (
+                                {config.adventure === Adventure.FOREST && (
                                     <SortableTableHeader
                                         align="right"
                                         sortBy={SortHopperBy.PRICE_MULTIPLIER_FOREST}>
                                         Multiplier Forest
                                     </SortableTableHeader>
                                 )}
-                                {config.showRatingGreatLake && (
+                                {config.adventure === Adventure.GREAT_LAKE && (
                                     <SortableTableHeader
                                         align="right"
                                         sortBy={SortHopperBy.PRICE_MULTIPLIER_GREAT_LAKE}>

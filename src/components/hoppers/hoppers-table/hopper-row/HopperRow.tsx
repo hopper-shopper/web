@@ -50,32 +50,32 @@ export default function HopperRow(props: HopperRowProps) {
                     {hopper.fertility}
                 </Value>
             </TableCell>
-            {config.showRatingPond && (
+            {config.adventure === Adventure.POND && (
                 <StyledRatingCell even={index % 2 === 0}>
                     {formatRating(hopper.rating.pond)}
                 </StyledRatingCell>
             )}
-            {config.showRatingStream && (
+            {config.adventure === Adventure.STREAM && (
                 <StyledRatingCell even={index % 2 === 0}>
                     {formatRating(hopper.rating.stream)}
                 </StyledRatingCell>
             )}
-            {config.showRatingSwamp && (
+            {config.adventure === Adventure.SWAMP && (
                 <StyledRatingCell even={index % 2 === 0}>
                     {formatRating(hopper.rating.swamp)}
                 </StyledRatingCell>
             )}
-            {config.showRatingRiver && (
+            {config.adventure === Adventure.RIVER && (
                 <StyledRatingCell even={index % 2 === 0}>
                     {formatRating(hopper.rating.river)}
                 </StyledRatingCell>
             )}
-            {config.showRatingForest && (
+            {config.adventure === Adventure.FOREST && (
                 <StyledRatingCell even={index % 2 === 0}>
                     {formatRating(hopper.rating.forest)}
                 </StyledRatingCell>
             )}
-            {config.showRatingGreatLake && (
+            {config.adventure === Adventure.GREAT_LAKE && (
                 <StyledRatingCell even={index % 2 === 0}>
                     {formatRating(hopper.rating.greatLake)}
                 </StyledRatingCell>
@@ -83,12 +83,12 @@ export default function HopperRow(props: HopperRowProps) {
             <TableCell align="right">
                 {formatCurrency(hopper.listing.price, Currency.AVAX)}
             </TableCell>
-            {config.showRatingPond && (
+            {config.adventure === Adventure.POND && (
                 <TableCell align="right">
                     {formatCurrency(calculateMaxRatingPrice(Adventure.POND, hopper), Currency.AVAX)}
                 </TableCell>
             )}
-            {config.showRatingStream && (
+            {config.adventure === Adventure.STREAM && (
                 <TableCell align="right">
                     {formatCurrency(
                         calculateMaxRatingPrice(Adventure.STREAM, hopper),
@@ -96,7 +96,7 @@ export default function HopperRow(props: HopperRowProps) {
                     )}
                 </TableCell>
             )}
-            {config.showRatingSwamp && (
+            {config.adventure === Adventure.SWAMP && (
                 <TableCell align="right">
                     {formatCurrency(
                         calculateMaxRatingPrice(Adventure.SWAMP, hopper),
@@ -104,7 +104,7 @@ export default function HopperRow(props: HopperRowProps) {
                     )}
                 </TableCell>
             )}
-            {config.showRatingRiver && (
+            {config.adventure === Adventure.RIVER && (
                 <TableCell align="right">
                     {formatCurrency(
                         calculateMaxRatingPrice(Adventure.RIVER, hopper),
@@ -112,7 +112,7 @@ export default function HopperRow(props: HopperRowProps) {
                     )}
                 </TableCell>
             )}
-            {config.showRatingForest && (
+            {config.adventure === Adventure.FOREST && (
                 <TableCell align="right">
                     {formatCurrency(
                         calculateMaxRatingPrice(Adventure.FOREST, hopper),
@@ -120,7 +120,7 @@ export default function HopperRow(props: HopperRowProps) {
                     )}
                 </TableCell>
             )}
-            {config.showRatingGreatLake && (
+            {config.adventure === Adventure.GREAT_LAKE && (
                 <TableCell align="right">
                     {formatCurrency(
                         calculateMaxRatingPrice(Adventure.GREAT_LAKE, hopper),
@@ -129,22 +129,22 @@ export default function HopperRow(props: HopperRowProps) {
                 </TableCell>
             )}
 
-            {config.showRatingPond && (
+            {config.adventure === Adventure.POND && (
                 <TableCell align="right">{formatRatingPremium(Adventure.POND, hopper)}</TableCell>
             )}
-            {config.showRatingStream && (
+            {config.adventure === Adventure.STREAM && (
                 <TableCell align="right">{formatRatingPremium(Adventure.STREAM, hopper)}</TableCell>
             )}
-            {config.showRatingSwamp && (
+            {config.adventure === Adventure.SWAMP && (
                 <TableCell align="right">{formatRatingPremium(Adventure.SWAMP, hopper)}</TableCell>
             )}
-            {config.showRatingRiver && (
+            {config.adventure === Adventure.RIVER && (
                 <TableCell align="right">{formatRatingPremium(Adventure.RIVER, hopper)}</TableCell>
             )}
-            {config.showRatingForest && (
+            {config.adventure === Adventure.FOREST && (
                 <TableCell align="right">{formatRatingPremium(Adventure.FOREST, hopper)}</TableCell>
             )}
-            {config.showRatingGreatLake && (
+            {config.adventure === Adventure.GREAT_LAKE && (
                 <TableCell align="right">
                     {formatRatingPremium(Adventure.GREAT_LAKE, hopper)}
                 </TableCell>

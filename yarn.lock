@@ -421,6 +421,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@radix-ui/react-collection@npm:0.1.4":
+  version: 0.1.4
+  resolution: "@radix-ui/react-collection@npm:0.1.4"
+  dependencies:
+    "@babel/runtime": ^7.13.10
+    "@radix-ui/react-compose-refs": 0.1.0
+    "@radix-ui/react-context": 0.1.1
+    "@radix-ui/react-primitive": 0.1.4
+    "@radix-ui/react-slot": 0.1.2
+  peerDependencies:
+    react: ^16.8 || ^17.0
+  checksum: 7c2b0ccca5e873e570ebd53e9133de86dfff26df01e16a7af2f4af1e55df71f90dd6d89995b24cf01b6eeaf04a3b05481a8f916792f76de58f9b0e77e0c4902f
+  languageName: node
+  linkType: hard
+
 "@radix-ui/react-compose-refs@npm:0.1.0":
   version: 0.1.0
   resolution: "@radix-ui/react-compose-refs@npm:0.1.0"
@@ -492,6 +507,46 @@ __metadata:
   peerDependencies:
     react: ^16.8 || ^17.0
   checksum: e7b83dc51565a7a54dfd16296e2aa1639dafe32655e3a3974d29d28497f0e9ec9cdf0ee59bc54a88b2a51eeb307781f01f6fcacb4d6dc84a8e10631ddb6142e5
+  languageName: node
+  linkType: hard
+
+"@radix-ui/react-radio-group@npm:^0.1.5":
+  version: 0.1.5
+  resolution: "@radix-ui/react-radio-group@npm:0.1.5"
+  dependencies:
+    "@babel/runtime": ^7.13.10
+    "@radix-ui/primitive": 0.1.0
+    "@radix-ui/react-compose-refs": 0.1.0
+    "@radix-ui/react-context": 0.1.1
+    "@radix-ui/react-label": 0.1.5
+    "@radix-ui/react-presence": 0.1.2
+    "@radix-ui/react-primitive": 0.1.4
+    "@radix-ui/react-roving-focus": 0.1.5
+    "@radix-ui/react-use-controllable-state": 0.1.0
+    "@radix-ui/react-use-previous": 0.1.1
+    "@radix-ui/react-use-size": 0.1.1
+  peerDependencies:
+    react: ^16.8 || ^17.0
+  checksum: 5ce6a661ccdfec2587e690946a50e84589ce62dafe22c83d0b4266c0bb0705897f6c5583e26b317c646b71c312e21737c77228e9854b92328c015e31ceb3518b
+  languageName: node
+  linkType: hard
+
+"@radix-ui/react-roving-focus@npm:0.1.5":
+  version: 0.1.5
+  resolution: "@radix-ui/react-roving-focus@npm:0.1.5"
+  dependencies:
+    "@babel/runtime": ^7.13.10
+    "@radix-ui/primitive": 0.1.0
+    "@radix-ui/react-collection": 0.1.4
+    "@radix-ui/react-compose-refs": 0.1.0
+    "@radix-ui/react-context": 0.1.1
+    "@radix-ui/react-id": 0.1.5
+    "@radix-ui/react-primitive": 0.1.4
+    "@radix-ui/react-use-callback-ref": 0.1.0
+    "@radix-ui/react-use-controllable-state": 0.1.0
+  peerDependencies:
+    react: ^16.8 || ^17.0
+  checksum: 5a0504c1e6d617d0f3483fe7d16c4bc1552536f56828800ae6dac40cd9e758101405d99c3005721d059475715d28ede1f276cdf5d089b61d59b939fadf544a30
   languageName: node
   linkType: hard
 
@@ -2538,6 +2593,7 @@ __metadata:
   dependencies:
     "@radix-ui/colors": ^0.1.8
     "@radix-ui/react-checkbox": ^0.1.5
+    "@radix-ui/react-radio-group": ^0.1.5
     "@stitches/react": ^1.2.7
     "@tabler/icons": ^1.56.0
     "@types/d3-scale": ^4.0.2

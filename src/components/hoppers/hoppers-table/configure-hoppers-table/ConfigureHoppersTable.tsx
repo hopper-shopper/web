@@ -1,7 +1,8 @@
+import Label from "components/inputs/label/Label"
+import * as Radio from "components/inputs/radio/Radio"
 import Flex from "components/layout/flex/Flex"
 import { styled } from "theme"
-import * as Checkbox from "components/inputs/checkbox/Checkbox"
-import Label from "components/inputs/label/Label"
+import { Adventure } from "utils/adventures"
 
 type ConfigureHoppersTableProps = {
     configuration: HoppersTableConfiguration
@@ -11,89 +12,61 @@ type ConfigureHoppersTableProps = {
 export default function ConfigureHoppersTable(props: ConfigureHoppersTableProps) {
     const { configuration, onChange } = props
 
+    const handleAdventureChange = (adventure: Adventure) => {
+        props.onChange({ adventure })
+    }
+
     return (
         <Container>
             <Section>
                 <SectionTitle>Ratings</SectionTitle>
-                <SectionContent columns="2">
-                    <Column>
-                        <Flex gap="sm">
-                            <Checkbox.Root
-                                checked={configuration.showRatingPond}
-                                onCheckedChange={(state: boolean) =>
-                                    onChange({ showRatingPond: state })
-                                }>
-                                <Checkbox.Indicator>
-                                    <Checkbox.Icon />
-                                </Checkbox.Indicator>
-                            </Checkbox.Root>
-                            <Label>Show Pond rating</Label>
-                        </Flex>
-                        <Flex gap="sm">
-                            <Checkbox.Root
-                                checked={configuration.showRatingStream}
-                                onCheckedChange={(state: boolean) =>
-                                    onChange({ showRatingStream: state })
-                                }>
-                                <Checkbox.Indicator>
-                                    <Checkbox.Icon />
-                                </Checkbox.Indicator>
-                            </Checkbox.Root>
-                            <Label>Show Stream rating</Label>
-                        </Flex>
-                        <Flex gap="sm">
-                            <Checkbox.Root
-                                checked={configuration.showRatingSwamp}
-                                onCheckedChange={(state: boolean) =>
-                                    onChange({ showRatingSwamp: state })
-                                }>
-                                <Checkbox.Indicator>
-                                    <Checkbox.Icon />
-                                </Checkbox.Indicator>
-                            </Checkbox.Root>
-                            <Label>Show Swamp rating</Label>
-                        </Flex>
-                    </Column>
+                <Radio.Root
+                    value={configuration.adventure}
+                    onValueChange={adventure => handleAdventureChange(adventure as Adventure)}>
+                    <SectionContent columns="2">
+                        <Column>
+                            <Flex gap="sm">
+                                <Radio.Radio value={Adventure.POND} id="adventure-pond">
+                                    <Radio.Indicator />
+                                </Radio.Radio>
+                                <Label htmlFor="adventure-pond">Show Pond rating</Label>
+                            </Flex>
+                            <Flex gap="sm">
+                                <Radio.Radio value={Adventure.STREAM} id="adventure-stream">
+                                    <Radio.Indicator />
+                                </Radio.Radio>
+                                <Label htmlFor="adventure-stream">Show Stream rating</Label>
+                            </Flex>
+                            <Flex gap="sm">
+                                <Radio.Radio value={Adventure.SWAMP} id="adventure-swamp">
+                                    <Radio.Indicator />
+                                </Radio.Radio>
+                                <Label htmlFor="adventure-swamp">Show Swamp rating</Label>
+                            </Flex>
+                        </Column>
 
-                    <Column>
-                        <Flex gap="sm">
-                            <Checkbox.Root
-                                checked={configuration.showRatingRiver}
-                                onCheckedChange={(state: boolean) =>
-                                    onChange({ showRatingRiver: state })
-                                }>
-                                <Checkbox.Indicator>
-                                    <Checkbox.Icon />
-                                </Checkbox.Indicator>
-                            </Checkbox.Root>
-                            <Label>Show River rating</Label>
-                        </Flex>
-                        <Flex gap="sm">
-                            <Checkbox.Root
-                                checked={configuration.showRatingForest}
-                                onCheckedChange={(state: boolean) =>
-                                    onChange({ showRatingForest: state })
-                                }>
-                                <Checkbox.Indicator>
-                                    <Checkbox.Icon />
-                                </Checkbox.Indicator>
-                            </Checkbox.Root>
-                            <Label>Show Forest rating</Label>
-                        </Flex>
-                        <Flex gap="sm">
-                            <Checkbox.Root
-                                checked={configuration.showRatingGreatLake}
-                                onCheckedChange={(state: boolean) =>
-                                    onChange({ showRatingGreatLake: state })
-                                }>
-                                <Checkbox.Indicator>
-                                    <Checkbox.Icon />
-                                </Checkbox.Indicator>
-                            </Checkbox.Root>
-                            <Label>Show Great Lake rating</Label>
-                        </Flex>
-                    </Column>
-                </SectionContent>
+                        <Column>
+                            <Flex gap="sm">
+                                <Radio.Radio value={Adventure.RIVER} id="adventure-river">
+                                    <Radio.Indicator />
+                                </Radio.Radio>
+                                <Label htmlFor="adventure-river">Show River rating</Label>
+                            </Flex>
+                            <Flex gap="sm">
+                                <Radio.Radio value={Adventure.FOREST} id="adventure-forest">
+                                    <Radio.Indicator />
+                                </Radio.Radio>
+                                <Label htmlFor="adventure-forest">Show Forest rating</Label>
+                            </Flex>
+                            <Flex gap="sm">
+                                <Radio.Radio value={Adventure.GREAT_LAKE} id="adventure-great-lake">
+                                    <Radio.Indicator />
+                                </Radio.Radio>
+                                <Label htmlFor="adventure-great-lake">Show Great Lake rating</Label>
+                            </Flex>
+                        </Column>
+                    </SectionContent>
+                </Radio.Root>
             </Section>
         </Container>
     )
@@ -101,12 +74,7 @@ export default function ConfigureHoppersTable(props: ConfigureHoppersTableProps)
 
 // Types
 export type HoppersTableConfiguration = {
-    showRatingPond: boolean
-    showRatingStream: boolean
-    showRatingSwamp: boolean
-    showRatingRiver: boolean
-    showRatingForest: boolean
-    showRatingGreatLake: boolean
+    adventure: Adventure
 }
 
 // Styles
