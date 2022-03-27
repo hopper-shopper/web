@@ -1,7 +1,7 @@
 import { grassDark, tomatoDark } from "@radix-ui/colors"
 import { scaleQuantize } from "d3-scale"
 import { Currency, formatCurrency } from "formatters/currency"
-import { formatRating, formatRatingPremium } from "formatters/rating"
+import { formatRating } from "formatters/rating"
 import { Hopper } from "models/Hopper"
 import { styled } from "theme"
 import { Adventure, calculateMaxRatingPrice } from "utils/adventures"
@@ -126,27 +126,6 @@ export default function HopperRow(props: HopperRowProps) {
                         calculateMaxRatingPrice(Adventure.GREAT_LAKE, hopper),
                         Currency.AVAX,
                     )}
-                </TableCell>
-            )}
-
-            {config.adventure === Adventure.POND && (
-                <TableCell align="right">{formatRatingPremium(Adventure.POND, hopper)}</TableCell>
-            )}
-            {config.adventure === Adventure.STREAM && (
-                <TableCell align="right">{formatRatingPremium(Adventure.STREAM, hopper)}</TableCell>
-            )}
-            {config.adventure === Adventure.SWAMP && (
-                <TableCell align="right">{formatRatingPremium(Adventure.SWAMP, hopper)}</TableCell>
-            )}
-            {config.adventure === Adventure.RIVER && (
-                <TableCell align="right">{formatRatingPremium(Adventure.RIVER, hopper)}</TableCell>
-            )}
-            {config.adventure === Adventure.FOREST && (
-                <TableCell align="right">{formatRatingPremium(Adventure.FOREST, hopper)}</TableCell>
-            )}
-            {config.adventure === Adventure.GREAT_LAKE && (
-                <TableCell align="right">
-                    {formatRatingPremium(Adventure.GREAT_LAKE, hopper)}
                 </TableCell>
             )}
         </>

@@ -1,3 +1,5 @@
+import Fieldset from "components/inputs/fieldset/Fieldset"
+import Input from "components/inputs/input/Input"
 import Label from "components/inputs/label/Label"
 import * as Radio from "components/inputs/radio/Radio"
 import Flex from "components/layout/flex/Flex"
@@ -13,7 +15,13 @@ export default function ConfigureHoppersTable(props: ConfigureHoppersTableProps)
     const { configuration, onChange } = props
 
     const handleAdventureChange = (adventure: Adventure) => {
-        props.onChange({ adventure })
+        onChange({ adventure })
+    }
+    const handleRatingGeChange = (event: React.FocusEvent<HTMLInputElement>) => {
+        const value = event.target.valueAsNumber
+        if (!Number.isNaN(value)) {
+            onChange({ ratingGe: value })
+        }
     }
 
     return (
@@ -23,7 +31,7 @@ export default function ConfigureHoppersTable(props: ConfigureHoppersTableProps)
                 <Radio.Root
                     value={configuration.adventure}
                     onValueChange={adventure => handleAdventureChange(adventure as Adventure)}>
-                    <SectionContent columns="2">
+                    <SectionContent>
                         <Column>
                             <Flex gap="sm">
                                 <Radio.Radio value={Adventure.POND} id="adventure-pond">
@@ -68,6 +76,21 @@ export default function ConfigureHoppersTable(props: ConfigureHoppersTableProps)
                     </SectionContent>
                 </Radio.Root>
             </Section>
+
+            <Section>
+                <SectionTitle>Filter</SectionTitle>
+                <SectionContent>
+                    <Fieldset>
+                        <Label>Rating greater equals</Label>
+                        <Input
+                            type="number"
+                            placeholder="Rating >="
+                            defaultValue={configuration.ratingGe}
+                            onBlur={handleRatingGeChange}
+                        />
+                    </Fieldset>
+                </SectionContent>
+            </Section>
         </Container>
     )
 }
@@ -75,10 +98,14 @@ export default function ConfigureHoppersTable(props: ConfigureHoppersTableProps)
 // Types
 export type HoppersTableConfiguration = {
     adventure: Adventure
+    ratingGe: number
 }
 
 // Styles
-const Container = styled("div", {})
+const Container = styled("div", {
+    display: "flex",
+    columnGap: "3rem",
+})
 const Section = styled("div", {
     display: "grid",
     rowGap: "1rem",
@@ -90,22 +117,8 @@ const SectionTitle = styled("h3", {
     fontWeight: 500,
 })
 const SectionContent = styled("div", {
-    display: "grid",
+    display: "flex",
     columnGap: "2rem",
-    variants: {
-        columns: {
-            1: {},
-            2: {
-                gridTemplateColumns: "repeat(2, 1fr)",
-            },
-            3: {
-                gridTemplateColumns: "repeat(3, 1fr)",
-            },
-        },
-    },
-    defaultVariants: {
-        columns: "1",
-    },
 })
 const Column = styled("div", {
     display: "grid",

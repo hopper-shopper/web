@@ -10,7 +10,7 @@ function App() {
     useApplyDarkMode()
 
     const [hoppersFilter, setHoppersFilter] = useState<HoppersFilter>({
-        adventure: AdventureFilter.RIVER,
+        adventure: AdventureFilter.ANY,
         market: MarketFilter.ON,
     })
 

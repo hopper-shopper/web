@@ -1,6 +1,9 @@
 import { HoppersFilter } from "api/filters/hoopers"
 import useHoppers from "api/hooks/useHoppers"
 import SortableTableHeader from "components/sorting/sortable-table-header/SortableTableHeader"
+import { getHoppersRatingFilter } from "filters/hoppers"
+import { NumberComparison } from "filters/_common"
+import useFilter from "hooks/useFilter"
 import useSort, { SortContext } from "hooks/useSort"
 import { useState } from "react"
 import { TableVirtuoso } from "react-virtuoso"
@@ -23,15 +26,20 @@ export default function HoppersTable(props: HoppersTableProps) {
     const { hoppers } = useHoppers(filter)
     const [config, setConfig] = useState<HoppersTableConfiguration>({
         adventure: Adventure.RIVER,
+        ratingGe: 0,
     })
 
+    const filteredHoppers = useFilter(
+        [getHoppersRatingFilter(config.adventure, NumberComparison.GE, config.ratingGe)],
+        hoppers,
+    )
     const {
         sorted: sortedHoppers,
         setBy: setSortBy,
         by: sortBy,
         direction: sortDirection,
     } = useSort({
-        collection: hoppers,
+        collection: filteredHoppers,
         sorter: sortHoppers,
         initial: {
             by: SortHopperBy.TOKEN_ID,
@@ -176,49 +184,6 @@ export default function HoppersTable(props: HoppersTableProps) {
                                         align="right"
                                         sortBy={SortHopperBy.MAX_PRICE_GREAT_LAKE}>
                                         Max. Price Great Lake
-                                    </SortableTableHeader>
-                                )}
-
-                                {config.adventure === Adventure.POND && (
-                                    <SortableTableHeader
-                                        align="right"
-                                        sortBy={SortHopperBy.PRICE_MULTIPLIER_POND}>
-                                        Multiplier Pond
-                                    </SortableTableHeader>
-                                )}
-                                {config.adventure === Adventure.STREAM && (
-                                    <SortableTableHeader
-                                        align="right"
-                                        sortBy={SortHopperBy.PRICE_MULTIPLIER_STREAM}>
-                                        Multiplier Stream
-                                    </SortableTableHeader>
-                                )}
-                                {config.adventure === Adventure.SWAMP && (
-                                    <SortableTableHeader
-                                        align="right"
-                                        sortBy={SortHopperBy.PRICE_MULTIPLIER_SWAMP}>
-                                        Multiplier Swamp
-                                    </SortableTableHeader>
-                                )}
-                                {config.adventure === Adventure.RIVER && (
-                                    <SortableTableHeader
-                                        align="right"
-                                        sortBy={SortHopperBy.PRICE_MULTIPLIER_RIVER}>
-                                        Multiplier River
-                                    </SortableTableHeader>
-                                )}
-                                {config.adventure === Adventure.FOREST && (
-                                    <SortableTableHeader
-                                        align="right"
-                                        sortBy={SortHopperBy.PRICE_MULTIPLIER_FOREST}>
-                                        Multiplier Forest
-                                    </SortableTableHeader>
-                                )}
-                                {config.adventure === Adventure.GREAT_LAKE && (
-                                    <SortableTableHeader
-                                        align="right"
-                                        sortBy={SortHopperBy.PRICE_MULTIPLIER_GREAT_LAKE}>
-                                        Multiplier Great Lake
                                     </SortableTableHeader>
                                 )}
                             </tr>
