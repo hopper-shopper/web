@@ -1,7 +1,7 @@
 import { HoppersFilter } from "api/filters/hoopers"
 import useHoppers from "api/hooks/useHoppers"
 import SortableTableHeader from "components/sorting/sortable-table-header/SortableTableHeader"
-import { getHoppersRatingFilter } from "filters/hoppers"
+import { getHoppersAdventureFilter, getHoppersRatingFilter } from "filters/hoppers"
 import { NumberComparison } from "filters/_common"
 import useFilter from "hooks/useFilter"
 import useSort, { SortContext } from "hooks/useSort"
@@ -30,7 +30,10 @@ export default function HoppersTable(props: HoppersTableProps) {
     })
 
     const filteredHoppers = useFilter(
-        [getHoppersRatingFilter(config.adventure, NumberComparison.GE, config.ratingGe)],
+        [
+            getHoppersAdventureFilter(config.adventure),
+            getHoppersRatingFilter(config.adventure, NumberComparison.GE, config.ratingGe),
+        ],
         hoppers,
     )
     const {
@@ -53,6 +56,23 @@ export default function HoppersTable(props: HoppersTableProps) {
             ...config,
         }))
     }
+
+    const baseFlySorting = ((): SortHopperBy => {
+        switch (config.adventure) {
+            case Adventure.POND:
+                return SortHopperBy.BASE_FLY_POND
+            case Adventure.STREAM:
+                return SortHopperBy.BASE_FLY_STREAM
+            case Adventure.SWAMP:
+                return SortHopperBy.BASE_FLY_SWAMP
+            case Adventure.RIVER:
+                return SortHopperBy.BASE_FLY_RIVER
+            case Adventure.FOREST:
+                return SortHopperBy.BASE_FLY_FOREST
+            case Adventure.GREAT_LAKE:
+                return SortHopperBy.BASE_FLY_GREAT_LAKE
+        }
+    })()
 
     return (
         <>
@@ -186,6 +206,10 @@ export default function HoppersTable(props: HoppersTableProps) {
                                         Max. Price Great Lake
                                     </SortableTableHeader>
                                 )}
+
+                                <SortableTableHeader align="right" sortBy={baseFlySorting}>
+                                    Base Fly
+                                </SortableTableHeader>
                             </tr>
                         </SortContext.Provider>
                     )

@@ -1,4 +1,4 @@
-import { ComponentProps, VariantProps } from "@stitches/react"
+import { ComponentProps } from "@stitches/react"
 import { useSortContext } from "hooks/useSort"
 import { styled } from "theme"
 import SortArrow from "../sort-arrow/SortArrow"
@@ -36,13 +36,22 @@ export const StyledTableHeader = styled("th", {
     variants: {
         align: {
             left: {
-                textAlign: "left",
+                "> *": {
+                    justifyContent: "flex-start",
+                    textAlign: "left",
+                },
             },
             center: {
-                textAlign: "center",
+                "> *": {
+                    justifyContent: "center",
+                    textAlign: "center",
+                },
             },
             right: {
-                textAlign: "right",
+                "> *": {
+                    justifyContent: "flex-end",
+                    textAlign: "right",
+                },
             },
         },
     },
@@ -50,8 +59,8 @@ export const StyledTableHeader = styled("th", {
         align: "center",
     },
 })
-const HeaderInner = styled("span", {
-    display: "inline-flex",
+const HeaderInner = styled("div", {
+    display: "flex",
     alignItems: "center",
     columnGap: "0.5rem",
 })

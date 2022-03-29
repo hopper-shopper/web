@@ -4,7 +4,7 @@ import { Currency, formatCurrency } from "formatters/currency"
 import { formatRating } from "formatters/rating"
 import { Hopper } from "models/Hopper"
 import { styled } from "theme"
-import { Adventure, calculateMaxRatingPrice } from "utils/adventures"
+import { Adventure, calculateMaxRatingPrice, getBaseFlyByAdventure } from "utils/adventures"
 import { HoppersTableConfiguration } from "../configure-hoppers-table/ConfigureHoppersTable"
 
 type HopperRowProps = {
@@ -128,6 +128,10 @@ export default function HopperRow(props: HopperRowProps) {
                     )}
                 </TableCell>
             )}
+
+            <TableCell align="right">
+                {formatCurrency(getBaseFlyByAdventure(config.adventure, hopper), Currency.FLY)}
+            </TableCell>
         </>
     )
 }

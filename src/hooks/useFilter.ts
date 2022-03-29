@@ -11,7 +11,6 @@ export default function useFilter<T>(pipeline: UseFilterPipeline<T>, collection:
         if (collection.length === 0) {
             return []
         }
-        console.log("Run filter")
         let filtered: T[] = [...collection]
 
         for (const pipeline of pipelineList) {

@@ -6,7 +6,7 @@ const Fieldset = styled("fieldset", {
     padding: 0,
     margin: 0,
     [`& ${Label}`]: {
-        marginBottom: "0.25rem",
+        marginBottom: "0.5rem",
     },
 })
 

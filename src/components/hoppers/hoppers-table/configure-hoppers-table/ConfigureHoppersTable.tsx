@@ -19,9 +19,7 @@ export default function ConfigureHoppersTable(props: ConfigureHoppersTableProps)
     }
     const handleRatingGeChange = (event: React.FocusEvent<HTMLInputElement>) => {
         const value = event.target.valueAsNumber
-        if (!Number.isNaN(value)) {
-            onChange({ ratingGe: value })
-        }
+        onChange({ ratingGe: Number.isNaN(value) ? 0 : value })
     }
 
     return (
@@ -37,19 +35,19 @@ export default function ConfigureHoppersTable(props: ConfigureHoppersTableProps)
                                 <Radio.Radio value={Adventure.POND} id="adventure-pond">
                                     <Radio.Indicator />
                                 </Radio.Radio>
-                                <Label htmlFor="adventure-pond">Show Pond rating</Label>
+                                <Label htmlFor="adventure-pond">Pond</Label>
                             </Flex>
                             <Flex gap="sm">
                                 <Radio.Radio value={Adventure.STREAM} id="adventure-stream">
                                     <Radio.Indicator />
                                 </Radio.Radio>
-                                <Label htmlFor="adventure-stream">Show Stream rating</Label>
+                                <Label htmlFor="adventure-stream">Stream</Label>
                             </Flex>
                             <Flex gap="sm">
                                 <Radio.Radio value={Adventure.SWAMP} id="adventure-swamp">
                                     <Radio.Indicator />
                                 </Radio.Radio>
-                                <Label htmlFor="adventure-swamp">Show Swamp rating</Label>
+                                <Label htmlFor="adventure-swamp">Swamp</Label>
                             </Flex>
                         </Column>
 
@@ -58,19 +56,19 @@ export default function ConfigureHoppersTable(props: ConfigureHoppersTableProps)
                                 <Radio.Radio value={Adventure.RIVER} id="adventure-river">
                                     <Radio.Indicator />
                                 </Radio.Radio>
-                                <Label htmlFor="adventure-river">Show River rating</Label>
+                                <Label htmlFor="adventure-river">River</Label>
                             </Flex>
                             <Flex gap="sm">
                                 <Radio.Radio value={Adventure.FOREST} id="adventure-forest">
                                     <Radio.Indicator />
                                 </Radio.Radio>
-                                <Label htmlFor="adventure-forest">Show Forest rating</Label>
+                                <Label htmlFor="adventure-forest">Forest</Label>
                             </Flex>
                             <Flex gap="sm">
                                 <Radio.Radio value={Adventure.GREAT_LAKE} id="adventure-great-lake">
                                     <Radio.Indicator />
                                 </Radio.Radio>
-                                <Label htmlFor="adventure-great-lake">Show Great Lake rating</Label>
+                                <Label htmlFor="adventure-great-lake">Great Lake</Label>
                             </Flex>
                         </Column>
                     </SectionContent>
@@ -85,7 +83,7 @@ export default function ConfigureHoppersTable(props: ConfigureHoppersTableProps)
                         <Input
                             type="number"
                             placeholder="Rating >="
-                            defaultValue={configuration.ratingGe}
+                            defaultValue={configuration.ratingGe || ""}
                             onBlur={handleRatingGeChange}
                         />
                     </Fieldset>
@@ -104,7 +102,8 @@ export type HoppersTableConfiguration = {
 // Styles
 const Container = styled("div", {
     display: "flex",
-    columnGap: "3rem",
+    columnGap: "5rem",
+    alignItems: "flex-start",
 })
 const Section = styled("div", {
     display: "grid",

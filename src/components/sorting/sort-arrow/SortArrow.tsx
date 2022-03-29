@@ -24,7 +24,7 @@ const StyledIcon = styled("span", {
     justifyContent: "center",
     alignItems: "center",
     "& > svg": {
-        width: "1rem",
+        size: "1rem",
     },
     variants: {
         active: {

@@ -1,5 +1,5 @@
 import { Hopper } from "models/Hopper"
-import { Adventure, calculateMaxRatingPrice, calculatePriceMultiplier } from "utils/adventures"
+import { Adventure, calculateMaxRatingPrice } from "utils/adventures"
 import { SortDirection, SortOptions } from "./_common"
 
 export enum SortHopperBy {
@@ -23,12 +23,12 @@ export enum SortHopperBy {
     MAX_PRICE_RIVER = "MAX_PRICE_RIVER",
     MAX_PRICE_FOREST = "MAX_PRICE_FOREST",
     MAX_PRICE_GREAT_LAKE = "MAX_PRICE_GREAT_LAKE",
-    PRICE_MULTIPLIER_POND = "PRICE_MULTIPLIER_POND",
-    PRICE_MULTIPLIER_STREAM = "PRICE_MULTIPLIER_STREAM",
-    PRICE_MULTIPLIER_SWAMP = "PRICE_MULTIPLIER_SWAMP",
-    PRICE_MULTIPLIER_RIVER = "PRICE_MULTIPLIER_RIVER",
-    PRICE_MULTIPLIER_FOREST = "PRICE_MULTIPLIER_FOREST",
-    PRICE_MULTIPLIER_GREAT_LAKE = "PRICE_MULTIPLIER_GREAT_LAKE",
+    BASE_FLY_POND = "BASE_FLY_POND",
+    BASE_FLY_STREAM = "BASE_FLY_STREAM",
+    BASE_FLY_SWAMP = "BASE_FLY_SWAMP",
+    BASE_FLY_RIVER = "BASE_FLY_RIVER",
+    BASE_FLY_FOREST = "BASE_FLY_FOREST",
+    BASE_FLY_GREAT_LAKE = "BASE_FLY_GREAT_LAKE",
 }
 
 export type HopperSortOptions = SortOptions<SortHopperBy>
@@ -99,23 +99,23 @@ export function sortHoppers(hoppers: Hopper[], options: HopperSortOptions): Hopp
         case SortHopperBy.MAX_PRICE_GREAT_LAKE:
             sorted = sortByMaxPriceGreatLake(hoppers)
             break
-        case SortHopperBy.PRICE_MULTIPLIER_POND:
-            sorted = sortByMultiplierPond(hoppers)
+        case SortHopperBy.BASE_FLY_POND:
+            sorted = sortByBaseFlyPond(hoppers)
             break
-        case SortHopperBy.PRICE_MULTIPLIER_STREAM:
-            sorted = sortByMultiplierStream(hoppers)
+        case SortHopperBy.BASE_FLY_STREAM:
+            sorted = sortByBaseFlyStream(hoppers)
             break
-        case SortHopperBy.PRICE_MULTIPLIER_SWAMP:
-            sorted = sortByMultiplierSwamp(hoppers)
+        case SortHopperBy.BASE_FLY_SWAMP:
+            sorted = sortByBaseFlySwamp(hoppers)
             break
-        case SortHopperBy.PRICE_MULTIPLIER_RIVER:
-            sorted = sortByMultiplierRiver(hoppers)
+        case SortHopperBy.BASE_FLY_RIVER:
+            sorted = sortByBaseFlyRiver(hoppers)
             break
-        case SortHopperBy.PRICE_MULTIPLIER_FOREST:
-            sorted = sortByMultiplierForest(hoppers)
+        case SortHopperBy.BASE_FLY_FOREST:
+            sorted = sortByBaseFlyForest(hoppers)
             break
-        case SortHopperBy.PRICE_MULTIPLIER_GREAT_LAKE:
-            sorted = sortByMultiplierGreatLake(hoppers)
+        case SortHopperBy.BASE_FLY_GREAT_LAKE:
+            sorted = sortByBaseFlyGreatLake(hoppers)
             break
     }
 
@@ -210,45 +210,33 @@ function sortByMaxPriceGreatLake(hoppers: Hopper[]): Hopper[] {
             calculateMaxRatingPrice(Adventure.POND, b),
     )
 }
-function sortByMultiplierPond(hoppers: Hopper[]): Hopper[] {
-    return [...hoppers].sort(
-        (a, b) =>
-            calculatePriceMultiplier(Adventure.POND, a) -
-            calculatePriceMultiplier(Adventure.POND, b),
-    )
+function sortByBaseFlyPond(hoppers: Hopper[]): Hopper[] {
+    return [...hoppers].sort((a, b) => {
+        return a.baseFly.pond - b.baseFly.pond
+    })
 }
-function sortByMultiplierStream(hoppers: Hopper[]): Hopper[] {
-    return [...hoppers].sort(
-        (a, b) =>
-            calculatePriceMultiplier(Adventure.STREAM, a) -
-            calculatePriceMultiplier(Adventure.STREAM, b),
-    )
+function sortByBaseFlyStream(hoppers: Hopper[]): Hopper[] {
+    return [...hoppers].sort((a, b) => {
+        return a.baseFly.stream - b.baseFly.stream
+    })
 }
-function sortByMultiplierSwamp(hoppers: Hopper[]): Hopper[] {
-    return [...hoppers].sort(
-        (a, b) =>
-            calculatePriceMultiplier(Adventure.SWAMP, a) -
-            calculatePriceMultiplier(Adventure.SWAMP, b),
-    )
+function sortByBaseFlySwamp(hoppers: Hopper[]): Hopper[] {
+    return [...hoppers].sort((a, b) => {
+        return a.baseFly.swamp - b.baseFly.swamp
+    })
 }
-function sortByMultiplierRiver(hoppers: Hopper[]): Hopper[] {
-    return [...hoppers].sort(
-        (a, b) =>
-            calculatePriceMultiplier(Adventure.RIVER, a) -
-            calculatePriceMultiplier(Adventure.RIVER, b),
-    )
+function sortByBaseFlyRiver(hoppers: Hopper[]): Hopper[] {
+    return [...hoppers].sort((a, b) => {
+        return a.baseFly.river - b.baseFly.river
+    })
 }
-function sortByMultiplierForest(hoppers: Hopper[]): Hopper[] {
-    return [...hoppers].sort(
-        (a, b) =>
-            calculatePriceMultiplier(Adventure.FOREST, a) -
-            calculatePriceMultiplier(Adventure.FOREST, b),
-    )
+function sortByBaseFlyForest(hoppers: Hopper[]): Hopper[] {
+    return [...hoppers].sort((a, b) => {
+        return a.baseFly.forest - b.baseFly.forest
+    })
 }
-function sortByMultiplierGreatLake(hoppers: Hopper[]): Hopper[] {
-    return [...hoppers].sort(
-        (a, b) =>
-            calculatePriceMultiplier(Adventure.GREAT_LAKE, a) -
-            calculatePriceMultiplier(Adventure.POND, b),
-    )
+function sortByBaseFlyGreatLake(hoppers: Hopper[]): Hopper[] {
+    return [...hoppers].sort((a, b) => {
+        return a.baseFly.greatLake - b.baseFly.greatLake
+    })
 }

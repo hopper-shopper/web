@@ -20,6 +20,9 @@ const Input = styled("input", {
     "&::placeholder": {
         color: "$gray7",
     },
+    "&::-webkit-outer-spin-button, &::-webkit-inner-spin-button": {
+        "-webkit-appearance": "none",
+    },
 })
 
 export default Input
