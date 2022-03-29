@@ -14,6 +14,7 @@ import { Adventure } from "utils/adventures"
 import ConfigureHoppersTable, {
     HoppersTableConfiguration,
 } from "./configure-hoppers-table/ConfigureHoppersTable"
+import FloorPrice from "./floor-price/FloorPrice"
 import HopperRow from "./hopper-row/HopperRow"
 
 type HoppersTableProps = {
@@ -76,9 +77,10 @@ export default function HoppersTable(props: HoppersTableProps) {
 
     return (
         <>
-            <ConfigurationContainer>
+            <TableHeader>
                 <ConfigureHoppersTable configuration={config} onChange={updateConfig} />
-            </ConfigurationContainer>
+                <FloorPrice hoppers={filteredHoppers} />
+            </TableHeader>
 
             <TableVirtuoso
                 useWindowScroll
@@ -223,8 +225,11 @@ export default function HoppersTable(props: HoppersTableProps) {
 }
 
 // Styles
-const ConfigurationContainer = styled("div", {
+const TableHeader = styled("div", {
     marginBottom: "2rem",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
 })
 const StyledTable = styled("table", {
     width: "100%",
