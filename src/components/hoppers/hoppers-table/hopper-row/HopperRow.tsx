@@ -5,6 +5,7 @@ import { formatRating } from "formatters/rating"
 import { Hopper } from "models/Hopper"
 import { styled } from "theme"
 import { Adventure, calculateMaxRatingPrice, getBaseFlyByAdventure } from "utils/adventures"
+import { calculateMaxFertilityRatingPrice } from "utils/fertility"
 import { HoppersTableConfiguration } from "../configure-hoppers-table/ConfigureHoppersTable"
 
 type HopperRowProps = {
@@ -50,32 +51,32 @@ export default function HopperRow(props: HopperRowProps) {
                     {hopper.fertility}
                 </Value>
             </TableCell>
-            {config.adventure === Adventure.POND && (
+            {config.permit === Adventure.POND && (
                 <StyledRatingCell even={index % 2 === 0}>
                     {formatRating(hopper.rating.pond)}
                 </StyledRatingCell>
             )}
-            {config.adventure === Adventure.STREAM && (
+            {config.permit === Adventure.STREAM && (
                 <StyledRatingCell even={index % 2 === 0}>
                     {formatRating(hopper.rating.stream)}
                 </StyledRatingCell>
             )}
-            {config.adventure === Adventure.SWAMP && (
+            {config.permit === Adventure.SWAMP && (
                 <StyledRatingCell even={index % 2 === 0}>
                     {formatRating(hopper.rating.swamp)}
                 </StyledRatingCell>
             )}
-            {config.adventure === Adventure.RIVER && (
+            {config.permit === Adventure.RIVER && (
                 <StyledRatingCell even={index % 2 === 0}>
                     {formatRating(hopper.rating.river)}
                 </StyledRatingCell>
             )}
-            {config.adventure === Adventure.FOREST && (
+            {config.permit === Adventure.FOREST && (
                 <StyledRatingCell even={index % 2 === 0}>
                     {formatRating(hopper.rating.forest)}
                 </StyledRatingCell>
             )}
-            {config.adventure === Adventure.GREAT_LAKE && (
+            {config.permit === Adventure.GREAT_LAKE && (
                 <StyledRatingCell even={index % 2 === 0}>
                     {formatRating(hopper.rating.greatLake)}
                 </StyledRatingCell>
@@ -83,12 +84,13 @@ export default function HopperRow(props: HopperRowProps) {
             <TableCell align="right">
                 {formatCurrency(hopper.listing.price, Currency.AVAX)}
             </TableCell>
-            {config.adventure === Adventure.POND && (
+            <TableCell align="right">{formatCurrency(hopper.levelCosts, Currency.AVAX)}</TableCell>
+            {config.permit === Adventure.POND && (
                 <TableCell align="right">
                     {formatCurrency(calculateMaxRatingPrice(Adventure.POND, hopper), Currency.AVAX)}
                 </TableCell>
             )}
-            {config.adventure === Adventure.STREAM && (
+            {config.permit === Adventure.STREAM && (
                 <TableCell align="right">
                     {formatCurrency(
                         calculateMaxRatingPrice(Adventure.STREAM, hopper),
@@ -96,7 +98,7 @@ export default function HopperRow(props: HopperRowProps) {
                     )}
                 </TableCell>
             )}
-            {config.adventure === Adventure.SWAMP && (
+            {config.permit === Adventure.SWAMP && (
                 <TableCell align="right">
                     {formatCurrency(
                         calculateMaxRatingPrice(Adventure.SWAMP, hopper),
@@ -104,7 +106,7 @@ export default function HopperRow(props: HopperRowProps) {
                     )}
                 </TableCell>
             )}
-            {config.adventure === Adventure.RIVER && (
+            {config.permit === Adventure.RIVER && (
                 <TableCell align="right">
                     {formatCurrency(
                         calculateMaxRatingPrice(Adventure.RIVER, hopper),
@@ -112,7 +114,7 @@ export default function HopperRow(props: HopperRowProps) {
                     )}
                 </TableCell>
             )}
-            {config.adventure === Adventure.FOREST && (
+            {config.permit === Adventure.FOREST && (
                 <TableCell align="right">
                     {formatCurrency(
                         calculateMaxRatingPrice(Adventure.FOREST, hopper),
@@ -120,7 +122,7 @@ export default function HopperRow(props: HopperRowProps) {
                     )}
                 </TableCell>
             )}
-            {config.adventure === Adventure.GREAT_LAKE && (
+            {config.permit === Adventure.GREAT_LAKE && (
                 <TableCell align="right">
                     {formatCurrency(
                         calculateMaxRatingPrice(Adventure.GREAT_LAKE, hopper),
@@ -129,9 +131,17 @@ export default function HopperRow(props: HopperRowProps) {
                 </TableCell>
             )}
 
-            <TableCell align="right">
-                {formatCurrency(getBaseFlyByAdventure(config.adventure, hopper), Currency.FLY)}
-            </TableCell>
+            {config.permit && (
+                <TableCell align="right">
+                    {formatCurrency(getBaseFlyByAdventure(config.permit, hopper), Currency.FLY)}
+                </TableCell>
+            )}
+
+            {config.fertility && (
+                <TableCell align="right">
+                    {formatCurrency(calculateMaxFertilityRatingPrice(hopper), Currency.AVAX)}
+                </TableCell>
+            )}
         </>
     )
 }

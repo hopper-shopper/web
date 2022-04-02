@@ -1,4 +1,4 @@
-import { AdventureFilter, HoppersFilter, MarketFilter } from "api/filters/hoopers"
+import { AdventureFilter, HoppersFilter, MarketFilter, PermitFilter } from "api/filters/hoopers"
 import PageHeader from "components/headers/page-header/PageHeader"
 import HoppersTable from "components/hoppers/hoppers-table/HoppersTable"
 import useApplyDarkMode from "hooks/useApplyDarkMode"
@@ -11,6 +11,7 @@ function App() {
 
     const [hoppersFilter, setHoppersFilter] = useState<HoppersFilter>({
         adventure: AdventureFilter.ANY,
+        permit: PermitFilter.ANY,
         market: MarketFilter.ON,
     })
 

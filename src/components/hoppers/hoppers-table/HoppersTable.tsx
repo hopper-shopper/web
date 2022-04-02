@@ -3,8 +3,9 @@ import useHoppers from "api/hooks/useHoppers"
 import SortableTableHeader from "components/sorting/sortable-table-header/SortableTableHeader"
 import { getHoppersAdventureFilter, getHoppersRatingFilter } from "filters/hoppers"
 import { NumberComparison } from "filters/_common"
-import useFilter from "hooks/useFilter"
+import useFilter, { UseFilterPipeline } from "hooks/useFilter"
 import useSort, { SortContext } from "hooks/useSort"
+import { Hopper } from "models/Hopper"
 import { useState } from "react"
 import { TableVirtuoso } from "react-virtuoso"
 import { SortHopperBy, sortHoppers } from "sorters/hoppers"
@@ -26,17 +27,24 @@ export default function HoppersTable(props: HoppersTableProps) {
 
     const { hoppers } = useHoppers(filter)
     const [config, setConfig] = useState<HoppersTableConfiguration>({
-        adventure: Adventure.RIVER,
+        permit: Adventure.RIVER,
         ratingGe: 0,
+        fertility: false,
     })
 
-    const filteredHoppers = useFilter(
-        [
-            getHoppersAdventureFilter(config.adventure),
-            getHoppersRatingFilter(config.adventure, NumberComparison.GE, config.ratingGe),
-        ],
-        hoppers,
-    )
+    const { permit: adventure, ratingGe, fertility } = config
+    const hopperFilters: UseFilterPipeline<Hopper> = (() => {
+        if (adventure !== null) {
+            return [
+                getHoppersAdventureFilter(adventure),
+                getHoppersRatingFilter(adventure, NumberComparison.GE, ratingGe),
+            ]
+        }
+
+        return []
+    })()
+
+    const filteredHoppers = useFilter(hopperFilters, hoppers)
     const {
         sorted: sortedHoppers,
         setBy: setSortBy,
@@ -58,8 +66,12 @@ export default function HoppersTable(props: HoppersTableProps) {
         }))
     }
 
-    const baseFlySorting = ((): SortHopperBy => {
-        switch (config.adventure) {
+    const baseFlySorting = ((): SortHopperBy | null => {
+        if (!config.permit) {
+            return null
+        }
+
+        switch (config.permit) {
             case Adventure.POND:
                 return SortHopperBy.BASE_FLY_POND
             case Adventure.STREAM:
@@ -97,7 +109,7 @@ export default function HoppersTable(props: HoppersTableProps) {
                         <SortContext.Provider
                             value={{ active: sortBy, direction: sortDirection, update: setSortBy }}>
                             <tr>
-                                <StyledTableHeader css={{ width: 90 }}>Image</StyledTableHeader>
+                                <TableHeaderCell css={{ width: 90 }}>Image</TableHeaderCell>
                                 <SortableTableHeader
                                     css={{ width: 120 }}
                                     sortBy={SortHopperBy.TOKEN_ID}>
@@ -133,32 +145,32 @@ export default function HoppersTable(props: HoppersTableProps) {
                                     sortBy={SortHopperBy.FERTILITY}>
                                     Fertility
                                 </SortableTableHeader>
-                                {config.adventure === Adventure.POND && (
+                                {config.permit === Adventure.POND && (
                                     <SortableTableHeader sortBy={SortHopperBy.RATING_POND}>
                                         Rating Pond
                                     </SortableTableHeader>
                                 )}
-                                {config.adventure === Adventure.STREAM && (
+                                {config.permit === Adventure.STREAM && (
                                     <SortableTableHeader sortBy={SortHopperBy.RATING_STREAM}>
                                         Rating Stream
                                     </SortableTableHeader>
                                 )}
-                                {config.adventure === Adventure.SWAMP && (
+                                {config.permit === Adventure.SWAMP && (
                                     <SortableTableHeader sortBy={SortHopperBy.RATING_SWAMP}>
                                         Rating Swamp
                                     </SortableTableHeader>
                                 )}
-                                {config.adventure === Adventure.RIVER && (
+                                {config.permit === Adventure.RIVER && (
                                     <SortableTableHeader sortBy={SortHopperBy.RATING_RIVER}>
                                         Rating River
                                     </SortableTableHeader>
                                 )}
-                                {config.adventure === Adventure.FOREST && (
+                                {config.permit === Adventure.FOREST && (
                                     <SortableTableHeader sortBy={SortHopperBy.RATING_FOREST}>
                                         Rating Forest
                                     </SortableTableHeader>
                                 )}
-                                {config.adventure === Adventure.GREAT_LAKE && (
+                                {config.permit === Adventure.GREAT_LAKE && (
                                     <SortableTableHeader sortBy={SortHopperBy.RATING_GREAT_LAKE}>
                                         Rating Great Lake
                                     </SortableTableHeader>
@@ -166,42 +178,47 @@ export default function HoppersTable(props: HoppersTableProps) {
                                 <SortableTableHeader align="right" sortBy={SortHopperBy.PRICE}>
                                     Price
                                 </SortableTableHeader>
-                                {config.adventure === Adventure.POND && (
+                                <SortableTableHeader
+                                    align="right"
+                                    sortBy={SortHopperBy.LEVEL_COSTS}>
+                                    Level costs
+                                </SortableTableHeader>
+                                {config.permit === Adventure.POND && (
                                     <SortableTableHeader
                                         align="right"
                                         sortBy={SortHopperBy.MAX_PRICE_POND}>
                                         Max. Price Pond
                                     </SortableTableHeader>
                                 )}
-                                {config.adventure === Adventure.STREAM && (
+                                {config.permit === Adventure.STREAM && (
                                     <SortableTableHeader
                                         align="right"
                                         sortBy={SortHopperBy.MAX_PRICE_STREAM}>
                                         Max. Price Stream
                                     </SortableTableHeader>
                                 )}
-                                {config.adventure === Adventure.SWAMP && (
+                                {config.permit === Adventure.SWAMP && (
                                     <SortableTableHeader
                                         align="right"
                                         sortBy={SortHopperBy.MAX_PRICE_SWAMP}>
                                         Max. Price Swamp
                                     </SortableTableHeader>
                                 )}
-                                {config.adventure === Adventure.RIVER && (
+                                {config.permit === Adventure.RIVER && (
                                     <SortableTableHeader
                                         align="right"
                                         sortBy={SortHopperBy.MAX_PRICE_RIVER}>
                                         Max. Price River
                                     </SortableTableHeader>
                                 )}
-                                {config.adventure === Adventure.FOREST && (
+                                {config.permit === Adventure.FOREST && (
                                     <SortableTableHeader
                                         align="right"
                                         sortBy={SortHopperBy.MAX_PRICE_FOREST}>
                                         Max. Price Forest
                                     </SortableTableHeader>
                                 )}
-                                {config.adventure === Adventure.GREAT_LAKE && (
+                                {config.permit === Adventure.GREAT_LAKE && (
                                     <SortableTableHeader
                                         align="right"
                                         sortBy={SortHopperBy.MAX_PRICE_GREAT_LAKE}>
@@ -209,9 +226,19 @@ export default function HoppersTable(props: HoppersTableProps) {
                                     </SortableTableHeader>
                                 )}
 
-                                <SortableTableHeader align="right" sortBy={baseFlySorting}>
-                                    Base Fly
-                                </SortableTableHeader>
+                                {baseFlySorting && (
+                                    <SortableTableHeader align="right" sortBy={baseFlySorting}>
+                                        Base Fly
+                                    </SortableTableHeader>
+                                )}
+
+                                {config.fertility && (
+                                    <SortableTableHeader
+                                        align="right"
+                                        sortBy={SortHopperBy.MAX_PRICE_FERTILITY}>
+                                        Max. Price Fertility
+                                    </SortableTableHeader>
+                                )}
                             </tr>
                         </SortContext.Provider>
                     )
@@ -255,7 +282,7 @@ const StyledTable = styled("table", {
         borderRight: "1px solid $gray6",
     },
 })
-const StyledTableHeader = styled("th", {
+const TableHeaderCell = styled("th", {
     color: "$gray11",
     fontWeight: 500,
     backgroundColor: "$gray3",

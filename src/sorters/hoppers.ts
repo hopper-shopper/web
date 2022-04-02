@@ -1,10 +1,12 @@
 import { Hopper } from "models/Hopper"
 import { Adventure, calculateMaxRatingPrice } from "utils/adventures"
+import { calculateMaxFertilityRatingPrice } from "utils/fertility"
 import { SortDirection, SortOptions } from "./_common"
 
 export enum SortHopperBy {
     TOKEN_ID = "TOKEN_ID",
     LEVEL = "LEVEL",
+    LEVEL_COSTS = "LEVEL_COSTS",
     STRENGTH = "STRENGTH",
     AGILITY = "AGILITY",
     VITALITY = "VITALITY",
@@ -23,6 +25,7 @@ export enum SortHopperBy {
     MAX_PRICE_RIVER = "MAX_PRICE_RIVER",
     MAX_PRICE_FOREST = "MAX_PRICE_FOREST",
     MAX_PRICE_GREAT_LAKE = "MAX_PRICE_GREAT_LAKE",
+    MAX_PRICE_FERTILITY = "MAX_PRICE_FERTILITY",
     BASE_FLY_POND = "BASE_FLY_POND",
     BASE_FLY_STREAM = "BASE_FLY_STREAM",
     BASE_FLY_SWAMP = "BASE_FLY_SWAMP",
@@ -44,6 +47,9 @@ export function sortHoppers(hoppers: Hopper[], options: HopperSortOptions): Hopp
             break
         case SortHopperBy.LEVEL:
             sorted = sortByLevel(hoppers)
+            break
+        case SortHopperBy.LEVEL_COSTS:
+            sorted = sortByLevelCosts(hoppers)
             break
         case SortHopperBy.STRENGTH:
             sorted = sortByStrength(hoppers)
@@ -99,6 +105,9 @@ export function sortHoppers(hoppers: Hopper[], options: HopperSortOptions): Hopp
         case SortHopperBy.MAX_PRICE_GREAT_LAKE:
             sorted = sortByMaxPriceGreatLake(hoppers)
             break
+        case SortHopperBy.MAX_PRICE_FERTILITY:
+            sorted = sortByMaxPriceFertility(hoppers)
+            break
         case SortHopperBy.BASE_FLY_POND:
             sorted = sortByBaseFlyPond(hoppers)
             break
@@ -132,6 +141,9 @@ function sortByTokenId(hoppers: Hopper[]): Hopper[] {
 }
 function sortByLevel(hoppers: Hopper[]): Hopper[] {
     return [...hoppers].sort((a, b) => a.level - b.level)
+}
+function sortByLevelCosts(hoppers: Hopper[]): Hopper[] {
+    return [...hoppers].sort((a, b) => a.levelCosts - b.levelCosts)
 }
 function sortByStrength(hoppers: Hopper[]): Hopper[] {
     return [...hoppers].sort((a, b) => a.strength - b.strength)
@@ -208,6 +220,11 @@ function sortByMaxPriceGreatLake(hoppers: Hopper[]): Hopper[] {
         (a, b) =>
             calculateMaxRatingPrice(Adventure.GREAT_LAKE, a) -
             calculateMaxRatingPrice(Adventure.POND, b),
+    )
+}
+function sortByMaxPriceFertility(hoppers: Hopper[]): Hopper[] {
+    return [...hoppers].sort(
+        (a, b) => calculateMaxFertilityRatingPrice(a) - calculateMaxFertilityRatingPrice(b),
     )
 }
 function sortByBaseFlyPond(hoppers: Hopper[]): Hopper[] {

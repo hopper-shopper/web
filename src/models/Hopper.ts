@@ -1,3 +1,5 @@
+export type HopperAdventure = "pond" | "stream" | "swamp" | "river" | "forest" | "great-lake"
+
 export type Hopper = {
     tokenId: string
     strength: number
@@ -6,8 +8,10 @@ export type Hopper = {
     intelligence: number
     fertility: number
     level: number
+    levelCosts: number
     listing: HopperListing
-    adventure: boolean
+    adventure: HopperAdventure
+    inAdventure: boolean
     rating: HopperRating
     baseFly: HopperBaseFly
     image: string

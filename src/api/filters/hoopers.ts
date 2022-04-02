@@ -1,10 +1,14 @@
 export type HoppersFilter = {
     adventure: AdventureFilter
     market: MarketFilter
+    permit: PermitFilter
 }
 
 export enum AdventureFilter {
     ANY = "ANY",
+    POND = "POND",
+    STREAM = "STREAM",
+    SWAMP = "SWAMP",
     RIVER = "RIVER",
     FOREST = "FOREST",
     GREAT_LAKE = "GREAT_LAKE",
@@ -13,6 +17,12 @@ export function urlifyAdventureFilter(adventureFilter: AdventureFilter): string 
     switch (adventureFilter) {
         case AdventureFilter.ANY:
             return "any"
+        case AdventureFilter.POND:
+            return "pond"
+        case AdventureFilter.STREAM:
+            return "stream"
+        case AdventureFilter.SWAMP:
+            return "swamp"
         case AdventureFilter.RIVER:
             return "river"
         case AdventureFilter.FOREST:
@@ -23,9 +33,9 @@ export function urlifyAdventureFilter(adventureFilter: AdventureFilter): string 
 }
 
 export enum MarketFilter {
+    ANY = "ANY",
     ON = "ON",
     OFF = "OFF",
-    ANY = "ANY",
 }
 export function urlifyMarketFilter(marketFilter: MarketFilter): string {
     switch (marketFilter) {
@@ -35,5 +45,24 @@ export function urlifyMarketFilter(marketFilter: MarketFilter): string {
             return "on"
         case MarketFilter.OFF:
             return "off"
+    }
+}
+
+export enum PermitFilter {
+    ANY = "ANY",
+    RIVER = "RIVER",
+    FOREST = "FOREST",
+    GREAT_LAKE = "GREAT_LAKE",
+}
+export function urlifyPermitFilter(permitFilter: PermitFilter): string {
+    switch (permitFilter) {
+        case PermitFilter.ANY:
+            return "any"
+        case PermitFilter.RIVER:
+            return "river"
+        case PermitFilter.FOREST:
+            return "forest"
+        case PermitFilter.GREAT_LAKE:
+            return "great-lake"
     }
 }

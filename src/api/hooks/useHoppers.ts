@@ -1,7 +1,7 @@
 import { HoppersFilter } from "api/filters/hoopers"
 import { fetchHoppers } from "api/hoppers"
 import { Hopper } from "models/Hopper"
-import { useAsync, useAsyncFn, useEffectOnce, useInterval } from "react-use"
+import { useAsyncFn, useEffectOnce, useInterval } from "react-use"
 
 export type UseHoppersReturn = {
     hoppers: Hopper[]
@@ -10,14 +10,15 @@ export type UseHoppersReturn = {
 }
 
 export default function useHoppers(filter: HoppersFilter): UseHoppersReturn {
-    const { adventure, market } = filter
+    const { adventure, market, permit } = filter
 
     const [{ value: hoppers = [], loading, error }, fetch] = useAsyncFn(() => {
         return fetchHoppers({
             adventure,
             market,
+            permit,
         })
-    }, [adventure, market])
+    }, [adventure, market, permit])
 
     useEffectOnce(() => {
         fetch()

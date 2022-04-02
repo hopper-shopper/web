@@ -2,6 +2,7 @@ export enum Currency {
     AVAX = "AVAX",
     FLY = "FLY",
     EUR = "EUR",
+    USD = "USD",
 }
 
 export function formatCurrencyName(currency: Currency): string {
@@ -12,6 +13,8 @@ export function formatCurrencyName(currency: Currency): string {
             return "FLY"
         case Currency.EUR:
             return "€"
+        case Currency.USD:
+            return "$"
     }
 }
 
@@ -19,7 +22,7 @@ export function formatCurrency(value: number, currency: Currency): string {
     if (currency === Currency.EUR) {
         return new Intl.NumberFormat([], {
             style: "currency",
-            currency: "eur",
+            currency,
         }).format(value)
     }
 
