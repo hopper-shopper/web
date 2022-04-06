@@ -1,6 +1,6 @@
 export type FilterFn<T> = {
     (collection: T[]): T[]
-    toString: () => string
+    signature: string
 }
 
 export enum NumberComparison {

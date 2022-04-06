@@ -1,6 +1,8 @@
 import { HoppersFilter } from "api/filters/hoopers"
 import useHoppers from "api/hooks/useHoppers"
-import SortableTableHeader from "components/sorting/sortable-table-header/SortableTableHeader"
+import SortableTableHeader, {
+    StyledTableHeader,
+} from "components/sorting/sortable-table-header/SortableTableHeader"
 import { getHoppersAdventureFilter, getHoppersRatingFilter } from "filters/hoppers"
 import { NumberComparison } from "filters/_common"
 import useFilter, { UseFilterPipeline } from "hooks/useFilter"
@@ -66,27 +68,6 @@ export default function HoppersTable(props: HoppersTableProps) {
         }))
     }
 
-    const baseFlySorting = ((): SortHopperBy | null => {
-        if (!config.permit) {
-            return null
-        }
-
-        switch (config.permit) {
-            case Adventure.POND:
-                return SortHopperBy.BASE_FLY_POND
-            case Adventure.STREAM:
-                return SortHopperBy.BASE_FLY_STREAM
-            case Adventure.SWAMP:
-                return SortHopperBy.BASE_FLY_SWAMP
-            case Adventure.RIVER:
-                return SortHopperBy.BASE_FLY_RIVER
-            case Adventure.FOREST:
-                return SortHopperBy.BASE_FLY_FOREST
-            case Adventure.GREAT_LAKE:
-                return SortHopperBy.BASE_FLY_GREAT_LAKE
-        }
-    })()
-
     return (
         <>
             <TableHeader>
@@ -145,34 +126,9 @@ export default function HoppersTable(props: HoppersTableProps) {
                                     sortBy={SortHopperBy.FERTILITY}>
                                     Fertility
                                 </SortableTableHeader>
-                                {config.permit === Adventure.POND && (
-                                    <SortableTableHeader sortBy={SortHopperBy.RATING_POND}>
-                                        Rating Pond
-                                    </SortableTableHeader>
-                                )}
-                                {config.permit === Adventure.STREAM && (
-                                    <SortableTableHeader sortBy={SortHopperBy.RATING_STREAM}>
-                                        Rating Stream
-                                    </SortableTableHeader>
-                                )}
-                                {config.permit === Adventure.SWAMP && (
-                                    <SortableTableHeader sortBy={SortHopperBy.RATING_SWAMP}>
-                                        Rating Swamp
-                                    </SortableTableHeader>
-                                )}
-                                {config.permit === Adventure.RIVER && (
-                                    <SortableTableHeader sortBy={SortHopperBy.RATING_RIVER}>
-                                        Rating River
-                                    </SortableTableHeader>
-                                )}
-                                {config.permit === Adventure.FOREST && (
-                                    <SortableTableHeader sortBy={SortHopperBy.RATING_FOREST}>
-                                        Rating Forest
-                                    </SortableTableHeader>
-                                )}
-                                {config.permit === Adventure.GREAT_LAKE && (
-                                    <SortableTableHeader sortBy={SortHopperBy.RATING_GREAT_LAKE}>
-                                        Rating Great Lake
+                                {config.permit && (
+                                    <SortableTableHeader sortBy={RatingSortPreset[config.permit]}>
+                                        Rating
                                     </SortableTableHeader>
                                 )}
                                 <SortableTableHeader align="right" sortBy={SortHopperBy.PRICE}>
@@ -183,61 +139,33 @@ export default function HoppersTable(props: HoppersTableProps) {
                                     sortBy={SortHopperBy.LEVEL_COSTS}>
                                     Level costs
                                 </SortableTableHeader>
-                                {config.permit === Adventure.POND && (
+                                {config.permit && (
                                     <SortableTableHeader
                                         align="right"
-                                        sortBy={SortHopperBy.MAX_PRICE_POND}>
-                                        Max. Price Pond
-                                    </SortableTableHeader>
-                                )}
-                                {config.permit === Adventure.STREAM && (
-                                    <SortableTableHeader
-                                        align="right"
-                                        sortBy={SortHopperBy.MAX_PRICE_STREAM}>
-                                        Max. Price Stream
-                                    </SortableTableHeader>
-                                )}
-                                {config.permit === Adventure.SWAMP && (
-                                    <SortableTableHeader
-                                        align="right"
-                                        sortBy={SortHopperBy.MAX_PRICE_SWAMP}>
-                                        Max. Price Swamp
-                                    </SortableTableHeader>
-                                )}
-                                {config.permit === Adventure.RIVER && (
-                                    <SortableTableHeader
-                                        align="right"
-                                        sortBy={SortHopperBy.MAX_PRICE_RIVER}>
-                                        Max. Price River
-                                    </SortableTableHeader>
-                                )}
-                                {config.permit === Adventure.FOREST && (
-                                    <SortableTableHeader
-                                        align="right"
-                                        sortBy={SortHopperBy.MAX_PRICE_FOREST}>
-                                        Max. Price Forest
-                                    </SortableTableHeader>
-                                )}
-                                {config.permit === Adventure.GREAT_LAKE && (
-                                    <SortableTableHeader
-                                        align="right"
-                                        sortBy={SortHopperBy.MAX_PRICE_GREAT_LAKE}>
-                                        Max. Price Great Lake
+                                        sortBy={MaxPriceSortPreset[config.permit]}>
+                                        Max. Price
                                     </SortableTableHeader>
                                 )}
 
-                                {baseFlySorting && (
-                                    <SortableTableHeader align="right" sortBy={baseFlySorting}>
+                                {config.permit && (
+                                    <SortableTableHeader
+                                        align="right"
+                                        sortBy={BaseFlySortPreset[config.permit]}>
                                         Base Fly
                                     </SortableTableHeader>
                                 )}
 
                                 {config.fertility && (
-                                    <SortableTableHeader
-                                        align="right"
-                                        sortBy={SortHopperBy.MAX_PRICE_FERTILITY}>
-                                        Max. Price Fertility
-                                    </SortableTableHeader>
+                                    <>
+                                        <SortableTableHeader
+                                            align="right"
+                                            sortBy={SortHopperBy.MAX_PRICE_FERTILITY}>
+                                            Max. Price Fertility
+                                        </SortableTableHeader>
+                                        <TableHeaderCell css={{ textAlign: "right" }}>
+                                            Cost 50 % chance
+                                        </TableHeaderCell>
+                                    </>
                                 )}
                             </tr>
                         </SortContext.Provider>
@@ -301,3 +229,38 @@ const StyledTableRow = styled("tr", {
         },
     },
 })
+
+// Sort presets
+type SortPresetByAdventure = {
+    [Adventure.POND]: SortHopperBy
+    [Adventure.STREAM]: SortHopperBy
+    [Adventure.SWAMP]: SortHopperBy
+    [Adventure.RIVER]: SortHopperBy
+    [Adventure.FOREST]: SortHopperBy
+    [Adventure.GREAT_LAKE]: SortHopperBy
+}
+
+const RatingSortPreset: SortPresetByAdventure = {
+    [Adventure.POND]: SortHopperBy.RATING_POND,
+    [Adventure.STREAM]: SortHopperBy.RATING_STREAM,
+    [Adventure.SWAMP]: SortHopperBy.RATING_SWAMP,
+    [Adventure.RIVER]: SortHopperBy.RATING_RIVER,
+    [Adventure.FOREST]: SortHopperBy.RATING_FOREST,
+    [Adventure.GREAT_LAKE]: SortHopperBy.RATING_GREAT_LAKE,
+}
+const MaxPriceSortPreset: SortPresetByAdventure = {
+    [Adventure.POND]: SortHopperBy.MAX_PRICE_POND,
+    [Adventure.STREAM]: SortHopperBy.MAX_PRICE_STREAM,
+    [Adventure.SWAMP]: SortHopperBy.MAX_PRICE_SWAMP,
+    [Adventure.RIVER]: SortHopperBy.MAX_PRICE_RIVER,
+    [Adventure.FOREST]: SortHopperBy.MAX_PRICE_FOREST,
+    [Adventure.GREAT_LAKE]: SortHopperBy.MAX_PRICE_GREAT_LAKE,
+}
+const BaseFlySortPreset: SortPresetByAdventure = {
+    [Adventure.POND]: SortHopperBy.BASE_FLY_POND,
+    [Adventure.STREAM]: SortHopperBy.BASE_FLY_STREAM,
+    [Adventure.SWAMP]: SortHopperBy.BASE_FLY_SWAMP,
+    [Adventure.RIVER]: SortHopperBy.BASE_FLY_RIVER,
+    [Adventure.FOREST]: SortHopperBy.BASE_FLY_FOREST,
+    [Adventure.GREAT_LAKE]: SortHopperBy.BASE_FLY_GREAT_LAKE,
+}

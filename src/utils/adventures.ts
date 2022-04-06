@@ -9,9 +9,15 @@ export enum Adventure {
     GREAT_LAKE = "GREAT_LAKE",
 }
 
+/**
+ * Calculate the hopper price if it would be at adventure's max rating (1) with current price rate
+ * @param adventure
+ * @param hopper
+ * @returns
+ */
 export function calculateMaxRatingPrice(adventure: Adventure, hopper: Hopper): number {
     const rating = getRatingByAdventure(adventure, hopper)
-    return hopper.listing.price / rating
+    return (hopper.listing.price - hopper.levelCosts) / rating
 }
 
 export function getRatingByAdventure(adventure: Adventure, hopper: Hopper): number {

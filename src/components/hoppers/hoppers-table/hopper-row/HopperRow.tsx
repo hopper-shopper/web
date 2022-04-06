@@ -5,7 +5,11 @@ import { formatRating } from "formatters/rating"
 import { Hopper } from "models/Hopper"
 import { styled } from "theme"
 import { Adventure, calculateMaxRatingPrice, getBaseFlyByAdventure } from "utils/adventures"
-import { calculateMaxFertilityRatingPrice } from "utils/fertility"
+import {
+    calculateHopperLevelAtTadpoleChange,
+    calculateMaxFertilityRatingPrice,
+} from "utils/fertility"
+import { calculateLevelUpCosts } from "utils/level"
 import { HoppersTableConfiguration } from "../configure-hoppers-table/ConfigureHoppersTable"
 
 type HopperRowProps = {
@@ -138,9 +142,20 @@ export default function HopperRow(props: HopperRowProps) {
             )}
 
             {config.fertility && (
-                <TableCell align="right">
-                    {formatCurrency(calculateMaxFertilityRatingPrice(hopper), Currency.AVAX)}
-                </TableCell>
+                <>
+                    <TableCell align="right">
+                        {formatCurrency(calculateMaxFertilityRatingPrice(hopper), Currency.AVAX)}
+                    </TableCell>
+                    <TableCell align="right">
+                        {formatCurrency(
+                            calculateLevelUpCosts(
+                                hopper.level,
+                                calculateHopperLevelAtTadpoleChange(0.5, hopper),
+                            ),
+                            Currency.FLY,
+                        )}
+                    </TableCell>
+                </>
             )}
         </>
     )

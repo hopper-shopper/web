@@ -5,7 +5,7 @@ export type UseFilterPipeline<T> = FilterFn<T>[] | FilterFn<T>
 
 export default function useFilter<T>(pipeline: UseFilterPipeline<T>, collection: T[]): T[] {
     const pipelineList = Array.isArray(pipeline) ? pipeline : [pipeline]
-    const signature = pipelineList.map(pipeline => pipeline.toString())
+    const signature = pipelineList.map(pipeline => pipeline.signature).join(",")
 
     return useMemo(() => {
         if (collection.length === 0) {

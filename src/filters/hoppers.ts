@@ -17,9 +17,7 @@ export function getHoppersRatingFilter(
             return compareNumber(comparison, rating, value)
         })
     }
-    filter.toString = () => {
-        return `rating-filter-${adventure}-${comparison}-${value}`
-    }
+    filter.signature = `rating-filter-${adventure}-${comparison}-${value}`
     return filter
 }
 
@@ -30,8 +28,6 @@ export function getHoppersAdventureFilter(adventure: Adventure): FilterFn<Hopper
             return rating > 0
         })
     }
-    filter.toString = () => {
-        return `adventure-filter-${adventure}`
-    }
+    filter.signature = `adventure-filter-${adventure}`
     return filter
 }
