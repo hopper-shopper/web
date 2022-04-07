@@ -1,7 +1,9 @@
 export type HoppersFilter = {
-    adventure: AdventureFilter
-    market: MarketFilter
-    permit: PermitFilter
+    adventure?: AdventureFilter
+    market?: MarketFilter
+    permit?: PermitFilter
+    tokenIds?: string[]
+    owner?: string
 }
 
 export enum AdventureFilter {
@@ -65,4 +67,8 @@ export function urlifyPermitFilter(permitFilter: PermitFilter): string {
         case PermitFilter.GREAT_LAKE:
             return "great-lake"
     }
+}
+
+export function urlifyTokenIdsFilter(tokenIds: string[]): string {
+    return tokenIds.join(",")
 }

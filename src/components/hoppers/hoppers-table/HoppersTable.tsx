@@ -1,84 +1,26 @@
-import { HoppersFilter } from "api/filters/hoopers"
-import useHoppers from "api/hooks/useHoppers"
-import SortableTableHeader, {
-    StyledTableHeader,
-} from "components/sorting/sortable-table-header/SortableTableHeader"
-import { getHoppersAdventureFilter, getHoppersRatingFilter } from "filters/hoppers"
-import { NumberComparison } from "filters/_common"
-import useFilter, { UseFilterPipeline } from "hooks/useFilter"
-import useSort, { SortContext } from "hooks/useSort"
+import SortableTableHeader from "components/sorting/sortable-table-header/SortableTableHeader"
 import { Hopper } from "models/Hopper"
-import { useState } from "react"
 import { TableVirtuoso } from "react-virtuoso"
-import { SortHopperBy, sortHoppers } from "sorters/hoppers"
-import { SortDirection } from "sorters/_common"
+import { SortHopperBy } from "sorters/hoppers"
 import { styled } from "theme"
 import { Adventure } from "utils/adventures"
-import ConfigureHoppersTable, {
-    HoppersTableConfiguration,
-} from "./configure-hoppers-table/ConfigureHoppersTable"
-import FloorPrice from "./floor-price/FloorPrice"
+import { HoppersTableConfiguration } from "./configure-hoppers-table/ConfigureHoppersTable"
 import HopperRow from "./hopper-row/HopperRow"
 
 type HoppersTableProps = {
-    filter: HoppersFilter
+    config: HoppersTableConfiguration
+    hoppers: Hopper[]
 }
 
 export default function HoppersTable(props: HoppersTableProps) {
-    const { filter } = props
-
-    const { hoppers } = useHoppers(filter)
-    const [config, setConfig] = useState<HoppersTableConfiguration>({
-        permit: Adventure.RIVER,
-        ratingGe: 0,
-        fertility: false,
-    })
-
-    const { permit: adventure, ratingGe, fertility } = config
-    const hopperFilters: UseFilterPipeline<Hopper> = (() => {
-        if (adventure !== null) {
-            return [
-                getHoppersAdventureFilter(adventure),
-                getHoppersRatingFilter(adventure, NumberComparison.GE, ratingGe),
-            ]
-        }
-
-        return []
-    })()
-
-    const filteredHoppers = useFilter(hopperFilters, hoppers)
-    const {
-        sorted: sortedHoppers,
-        setBy: setSortBy,
-        by: sortBy,
-        direction: sortDirection,
-    } = useSort({
-        collection: filteredHoppers,
-        sorter: sortHoppers,
-        initial: {
-            by: SortHopperBy.TOKEN_ID,
-            direction: SortDirection.ASC,
-        },
-    })
-
-    const updateConfig = (config: Partial<HoppersTableConfiguration>) => {
-        setConfig(prev => ({
-            ...prev,
-            ...config,
-        }))
-    }
+    const { config, hoppers } = props
 
     return (
         <>
-            <TableHeader>
-                <ConfigureHoppersTable configuration={config} onChange={updateConfig} />
-                <FloorPrice hoppers={filteredHoppers} />
-            </TableHeader>
-
             <TableVirtuoso
                 useWindowScroll
-                data={sortedHoppers}
-                totalCount={sortedHoppers.length}
+                data={hoppers}
+                totalCount={hoppers.length}
                 components={{
                     Table: ({ style, ...props }) => <StyledTable {...props} style={style} />,
                     TableRow: props => (
@@ -87,88 +29,79 @@ export default function HoppersTable(props: HoppersTableProps) {
                 }}
                 fixedHeaderContent={() => {
                     return (
-                        <SortContext.Provider
-                            value={{ active: sortBy, direction: sortDirection, update: setSortBy }}>
-                            <tr>
-                                <TableHeaderCell css={{ width: 90 }}>Image</TableHeaderCell>
-                                <SortableTableHeader
-                                    css={{ width: 120 }}
-                                    sortBy={SortHopperBy.TOKEN_ID}>
-                                    Token-Id
+                        <tr>
+                            <TableHeaderCell css={{ width: 90 }}>Image</TableHeaderCell>
+                            <SortableTableHeader
+                                css={{ width: 120 }}
+                                sortBy={SortHopperBy.TOKEN_ID}>
+                                Token-Id
+                            </SortableTableHeader>
+                            <SortableTableHeader css={{ width: 100 }} sortBy={SortHopperBy.LEVEL}>
+                                Level
+                            </SortableTableHeader>
+                            <SortableTableHeader
+                                css={{ width: 135 }}
+                                sortBy={SortHopperBy.STRENGTH}>
+                                Strength
+                            </SortableTableHeader>
+                            <SortableTableHeader css={{ width: 135 }} sortBy={SortHopperBy.AGILITY}>
+                                Agility
+                            </SortableTableHeader>
+                            <SortableTableHeader
+                                css={{ width: 135 }}
+                                sortBy={SortHopperBy.VITALITY}>
+                                Vitality
+                            </SortableTableHeader>
+                            <SortableTableHeader
+                                css={{ width: 135 }}
+                                sortBy={SortHopperBy.INTELLIGENCE}>
+                                Intelligence
+                            </SortableTableHeader>
+                            <SortableTableHeader
+                                css={{ width: 135 }}
+                                sortBy={SortHopperBy.FERTILITY}>
+                                Fertility
+                            </SortableTableHeader>
+                            {config.permit && (
+                                <SortableTableHeader sortBy={RatingSortPreset[config.permit]}>
+                                    Rating
                                 </SortableTableHeader>
-                                <SortableTableHeader
-                                    css={{ width: 100 }}
-                                    sortBy={SortHopperBy.LEVEL}>
-                                    Level
-                                </SortableTableHeader>
-                                <SortableTableHeader
-                                    css={{ width: 135 }}
-                                    sortBy={SortHopperBy.STRENGTH}>
-                                    Strength
-                                </SortableTableHeader>
-                                <SortableTableHeader
-                                    css={{ width: 135 }}
-                                    sortBy={SortHopperBy.AGILITY}>
-                                    Agility
-                                </SortableTableHeader>
-                                <SortableTableHeader
-                                    css={{ width: 135 }}
-                                    sortBy={SortHopperBy.VITALITY}>
-                                    Vitality
-                                </SortableTableHeader>
-                                <SortableTableHeader
-                                    css={{ width: 135 }}
-                                    sortBy={SortHopperBy.INTELLIGENCE}>
-                                    Intelligence
-                                </SortableTableHeader>
-                                <SortableTableHeader
-                                    css={{ width: 135 }}
-                                    sortBy={SortHopperBy.FERTILITY}>
-                                    Fertility
-                                </SortableTableHeader>
-                                {config.permit && (
-                                    <SortableTableHeader sortBy={RatingSortPreset[config.permit]}>
-                                        Rating
-                                    </SortableTableHeader>
-                                )}
-                                <SortableTableHeader align="right" sortBy={SortHopperBy.PRICE}>
-                                    Price
-                                </SortableTableHeader>
+                            )}
+                            <SortableTableHeader align="right" sortBy={SortHopperBy.PRICE}>
+                                Price
+                            </SortableTableHeader>
+                            <SortableTableHeader align="right" sortBy={SortHopperBy.LEVEL_COSTS}>
+                                Level costs
+                            </SortableTableHeader>
+                            {config.permit && (
                                 <SortableTableHeader
                                     align="right"
-                                    sortBy={SortHopperBy.LEVEL_COSTS}>
-                                    Level costs
+                                    sortBy={MaxPriceSortPreset[config.permit]}>
+                                    Max. Price
                                 </SortableTableHeader>
-                                {config.permit && (
+                            )}
+
+                            {config.permit && (
+                                <SortableTableHeader
+                                    align="right"
+                                    sortBy={BaseFlySortPreset[config.permit]}>
+                                    Base Fly
+                                </SortableTableHeader>
+                            )}
+
+                            {config.fertility && (
+                                <>
                                     <SortableTableHeader
                                         align="right"
-                                        sortBy={MaxPriceSortPreset[config.permit]}>
-                                        Max. Price
+                                        sortBy={SortHopperBy.MAX_PRICE_FERTILITY}>
+                                        Max. Price Fertility
                                     </SortableTableHeader>
-                                )}
-
-                                {config.permit && (
-                                    <SortableTableHeader
-                                        align="right"
-                                        sortBy={BaseFlySortPreset[config.permit]}>
-                                        Base Fly
-                                    </SortableTableHeader>
-                                )}
-
-                                {config.fertility && (
-                                    <>
-                                        <SortableTableHeader
-                                            align="right"
-                                            sortBy={SortHopperBy.MAX_PRICE_FERTILITY}>
-                                            Max. Price Fertility
-                                        </SortableTableHeader>
-                                        <TableHeaderCell css={{ textAlign: "right" }}>
-                                            Cost 50 % chance
-                                        </TableHeaderCell>
-                                    </>
-                                )}
-                            </tr>
-                        </SortContext.Provider>
+                                    <TableHeaderCell css={{ textAlign: "right" }}>
+                                        Cost 50 % chance
+                                    </TableHeaderCell>
+                                </>
+                            )}
+                        </tr>
                     )
                 }}
                 itemContent={(index, hopper) => (
@@ -180,12 +113,6 @@ export default function HoppersTable(props: HoppersTableProps) {
 }
 
 // Styles
-const TableHeader = styled("div", {
-    marginBottom: "2rem",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-})
 const StyledTable = styled("table", {
     width: "100%",
     borderSpacing: 0,

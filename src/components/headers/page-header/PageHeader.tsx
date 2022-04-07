@@ -79,6 +79,7 @@ const Right = styled("div", {
 })
 const NavContainer = styled("div", {
     marginLeft: "4rem",
+    height: "100%",
 })
 const Prices = styled("div", {
     display: "flex",

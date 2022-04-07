@@ -6,6 +6,8 @@ import Redirect from "routing/Redirect"
 import { globalCss, styled } from "./theme"
 import * as ROUTES from "routing/routes"
 import WalletPage from "pages/wallet-page/WalletPage"
+import WatchlistPage from "pages/watchlist-page/WatchlistPage"
+import RoiCalculatorPage from "pages/roi-calculator-page/RoiCalculatorPage"
 
 function App() {
     globalStyles()
@@ -16,6 +18,8 @@ function App() {
             <Route path="/" element={<Layout />}>
                 <Route path={ROUTES.SHOP} element={<StorePage />} />
                 <Route path={ROUTES.WALLET} element={<WalletPage />} />
+                <Route path={ROUTES.WATCHLIST} element={<WatchlistPage />} />
+                <Route path={ROUTES.ROI} element={<RoiCalculatorPage />} />
 
                 <Route index element={<Redirect to={ROUTES.SHOP} />} />
             </Route>

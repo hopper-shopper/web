@@ -1,9 +1,13 @@
 import { Hopper } from "models/Hopper"
 import {
+    AdventureFilter,
     HoppersFilter,
+    MarketFilter,
+    PermitFilter,
     urlifyAdventureFilter,
     urlifyMarketFilter,
     urlifyPermitFilter,
+    urlifyTokenIdsFilter,
 } from "./filters/hoopers"
 
 const ENDPOINT = import.meta.env.VITE_API_ENDPOINT
@@ -14,9 +18,11 @@ type GetHoppersResponse = {
 
 export function getHoppersUrl(filter: HoppersFilter): string {
     const params = new URLSearchParams([
-        ["adventure", urlifyAdventureFilter(filter.adventure)],
-        ["market", urlifyMarketFilter(filter.market)],
-        ["permit", urlifyPermitFilter(filter.permit)],
+        ["adventure", urlifyAdventureFilter(filter.adventure ?? AdventureFilter.ANY)],
+        ["market", urlifyMarketFilter(filter.market ?? MarketFilter.ANY)],
+        ["permit", urlifyPermitFilter(filter.permit ?? PermitFilter.ANY)],
+        ["tokenIds", urlifyTokenIdsFilter(filter.tokenIds ?? [])],
+        ["owner", filter.owner ?? ""],
     ])
 
     return `${ENDPOINT}/hoppers?${params.toString()}`
