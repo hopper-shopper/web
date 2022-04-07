@@ -1,24 +1,52 @@
 import usePrices from "api/hooks/usePrices"
 import { Currency, formatCurrency } from "formatters/currency"
 import { styled } from "theme"
+import SettingsDropdown from "./settings-dropdown/SettingsDropdown"
+import useSettingsStore from "stores/settings"
 
 export default function PageHeader() {
     const { price } = usePrices()
+    const currency = useSettingsStore(store => store.currency)
+
+    const avaxLocalePrice = ((): string => {
+        switch (currency) {
+            case Currency.EUR:
+                return formatCurrency(price.AVAX.EUR, Currency.EUR)
+            case Currency.USD:
+                return formatCurrency(price.AVAX.USD, Currency.USD)
+            default:
+                return formatCurrency(price.AVAX.USD, Currency.USD)
+        }
+    })()
+    const flyLocalePrice = ((): string => {
+        switch (currency) {
+            case Currency.EUR:
+                return formatCurrency(price.FLY.EUR, Currency.EUR)
+            case Currency.USD:
+                return formatCurrency(price.FLY.USD, Currency.USD)
+            default:
+                return formatCurrency(price.FLY.USD, Currency.USD)
+        }
+    })()
 
     return (
         <Header>
-            <Title>Hopper Sniper</Title>
+            <Title>Hopper Shopper</Title>
 
-            <Prices>
-                <PriceContainer>
-                    <PriceCoin>AVAX</PriceCoin>
-                    <Price>{formatCurrency(price.AVAX.EUR, Currency.EUR)}</Price>
-                </PriceContainer>
-                <PriceContainer>
-                    <PriceCoin>FLY</PriceCoin>
-                    <Price>{formatCurrency(price.FLY.EUR, Currency.EUR)}</Price>
-                </PriceContainer>
-            </Prices>
+            <Right>
+                <Prices>
+                    <PriceContainer>
+                        <PriceCoin>AVAX</PriceCoin>
+                        <Price>{avaxLocalePrice}</Price>
+                    </PriceContainer>
+                    <PriceContainer>
+                        <PriceCoin>FLY</PriceCoin>
+                        <Price>{flyLocalePrice}</Price>
+                    </PriceContainer>
+                </Prices>
+
+                <SettingsDropdown />
+            </Right>
         </Header>
     )
 }
@@ -38,11 +66,17 @@ const Title = styled("h1", {
     lineHeight: 2,
     color: "$gray12",
 })
+const Right = styled("div", {
+    marginLeft: "auto",
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "center",
+})
 const Prices = styled("div", {
     display: "flex",
     justifyContent: "flex-end",
     alignItems: "center",
-    columnGap: "2rem",
+    columnGap: "1.5rem",
 })
 const PriceContainer = styled("div", {
     display: "flex",

@@ -17,6 +17,10 @@ export const {
             ...red,
             ...blue,
         },
+        radii: {
+            sm: "0.25rem",
+            md: "0.5rem",
+        },
     },
     utils: {
         size: (size: PropertyValue<"width">) => ({
