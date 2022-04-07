@@ -73,6 +73,10 @@ const StyledItemIndicator = styled(DropdownPrimitives.ItemIndicator, {
     display: "inline-flex",
     alignItems: "center",
     justifyContent: "center",
+    "& > svg": {
+        size: "1rem",
+        color: "$blue9",
+    },
 })
 
 const StyledArrow = styled(DropdownPrimitives.Arrow, {

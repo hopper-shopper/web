@@ -3,6 +3,7 @@ import { Currency, formatCurrency } from "formatters/currency"
 import { styled } from "theme"
 import SettingsDropdown from "./settings-dropdown/SettingsDropdown"
 import useSettingsStore from "stores/settings"
+import Nav from "./nav/Nav"
 
 export default function PageHeader() {
     const { price } = usePrices()
@@ -32,6 +33,10 @@ export default function PageHeader() {
     return (
         <Header>
             <Title>Hopper Shopper</Title>
+
+            <NavContainer>
+                <Nav />
+            </NavContainer>
 
             <Right>
                 <Prices>
@@ -71,6 +76,9 @@ const Right = styled("div", {
     display: "flex",
     justifyContent: "flex-end",
     alignItems: "center",
+})
+const NavContainer = styled("div", {
+    marginLeft: "4rem",
 })
 const Prices = styled("div", {
     display: "flex",

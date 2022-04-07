@@ -191,6 +191,7 @@ const StyledTable = styled("table", {
     borderSpacing: 0,
     color: "$gray12",
     tableLayout: "fixed",
+    paddingBottom: "2rem",
     "& thead tr th:first-child": {
         borderTopLeftRadius: "0.5rem",
         borderLeft: "1px solid $gray6",
@@ -208,6 +209,15 @@ const StyledTable = styled("table", {
     },
     "& tbody tr td:last-child": {
         borderRight: "1px solid $gray6",
+    },
+    "& tbody tr:last-child td": {
+        borderBottom: "1px solid $gray6",
+        "&:first-child": {
+            borderBottomLeftRadius: "$md",
+        },
+        "&:last-child": {
+            borderBottomRightRadius: "$md",
+        },
     },
 })
 const TableHeaderCell = styled("th", {

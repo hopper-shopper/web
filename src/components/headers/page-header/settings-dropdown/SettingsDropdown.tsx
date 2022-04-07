@@ -1,11 +1,9 @@
-import { IconCurrencyDollar, IconCurrencyEuro, IconSettings } from "@tabler/icons"
+import { IconChevronRight, IconCurrencyDollar, IconCurrencyEuro, IconSettings } from "@tabler/icons"
 import * as Dropdown from "components/dropdown/Dropdown"
 import IconButton from "components/inputs/buttons/icon-button/IconButton"
-import IconDotFilled from "components/icons/IconDotFilled"
-import { styled } from "theme"
-import useSettingsStore from "stores/settings"
-import { Currency } from "formatters/currency"
 import RightSlot from "components/layout/flex/RightSlot"
+import { Currency } from "formatters/currency"
+import useSettingsStore from "stores/settings"
 
 export default function SettingsDropdown() {
     const [currency, setCurrency] = useSettingsStore(store => [store.currency, store.setCurrency])
@@ -25,7 +23,7 @@ export default function SettingsDropdown() {
                     onValueChange={value => setCurrency(value as Currency)}>
                     <Dropdown.RadioItem value={Currency.EUR}>
                         <Dropdown.ItemIndicator>
-                            <RadioItemIndicatorIcon />
+                            <IconChevronRight />
                         </Dropdown.ItemIndicator>
                         EUR
                         <RightSlot>
@@ -36,7 +34,7 @@ export default function SettingsDropdown() {
                     </Dropdown.RadioItem>
                     <Dropdown.RadioItem value={Currency.USD}>
                         <Dropdown.ItemIndicator>
-                            <RadioItemIndicatorIcon />
+                            <IconChevronRight />
                         </Dropdown.ItemIndicator>
                         USD
                         <RightSlot>
@@ -50,7 +48,3 @@ export default function SettingsDropdown() {
         </Dropdown.Root>
     )
 }
-
-const RadioItemIndicatorIcon = styled(IconDotFilled, {
-    fill: "$blue9",
-})
