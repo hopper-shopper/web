@@ -44,9 +44,9 @@ export function urlifyMarketFilter(marketFilter: MarketFilter): string {
         case MarketFilter.ANY:
             return "any"
         case MarketFilter.ON:
-            return "on"
+            return "yes"
         case MarketFilter.OFF:
-            return "off"
+            return "no"
     }
 }
 

@@ -1,3 +1,4 @@
+import { SoldFilter } from "api/filters/market"
 import useHoppersListings from "api/hooks/useHoppersListings"
 import { formatAdventure } from "formatters/adventure"
 import { Currency, formatCurrency } from "formatters/currency"
@@ -14,7 +15,10 @@ type HoppersTableCompactProps = {
 export default function HoppersTableCompact(props: HoppersTableCompactProps) {
     const { hoppers } = props
 
-    const { listings: hopperListings } = useHoppersListings(hoppers.map(hopper => hopper.tokenId))
+    const { listings: hopperListings } = useHoppersListings({
+        tokenIds: hoppers.map(hopper => hopper.tokenId),
+        sold: SoldFilter.SOLD,
+    })
 
     const getHopperPrice = (hopperId: Hopper["tokenId"]): number => {
         if (hopperListings.length === 0) {
@@ -109,7 +113,7 @@ export default function HoppersTableCompact(props: HoppersTableCompactProps) {
                     <TableHeaderCell css={{ width: 90 }}>Image</TableHeaderCell>
                     <TableHeaderCell css={{ width: 120 }}>Token-ID</TableHeaderCell>
                     <TableHeaderCell css={{ width: 100 }}>Level</TableHeaderCell>
-                    <TableHeaderCell>Adventure</TableHeaderCell>
+                    <TableHeaderCell>In Adventure</TableHeaderCell>
                     <TableHeaderCell>Best Adventure</TableHeaderCell>
                     <TableHeaderCell align="right">Level costs</TableHeaderCell>
                     <TableHeaderCell align="right">Bought for</TableHeaderCell>
