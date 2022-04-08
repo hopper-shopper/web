@@ -52,3 +52,26 @@ export function getBaseFlyByAdventure(adventure: Adventure, hopper: Hopper): num
             return hopper.baseFly.greatLake
     }
 }
+
+export function hopperAdventureToAdventure(hopper: Hopper): Adventure | null {
+    if (!hopper.inAdventure || !hopper.adventure) {
+        return null
+    }
+
+    switch (hopper.adventure) {
+        case "pond":
+            return Adventure.POND
+        case "stream":
+            return Adventure.STREAM
+        case "swamp":
+            return Adventure.SWAMP
+        case "river":
+            return Adventure.RIVER
+        case "forest":
+            return Adventure.FOREST
+        case "great-lake":
+            return Adventure.GREAT_LAKE
+        default:
+            return null
+    }
+}

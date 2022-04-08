@@ -1,6 +1,6 @@
 export type Price = {
-    AVAX: CoinPrices
-    FLY: CoinPrices
+    AVAX: CoinPrices & { FLY: number }
+    FLY: CoinPrices & { AVAX: number }
 }
 
 export type CoinPrices = {

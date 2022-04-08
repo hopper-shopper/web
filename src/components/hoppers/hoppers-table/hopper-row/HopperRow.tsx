@@ -181,8 +181,8 @@ const Center = styled("div", {
 })
 const Image = styled("img", {
     display: "block",
-    width: 50,
-    height: 50,
+    size: 50,
+    borderRadius: "$sm",
 })
 const TableCell = styled("td", {
     color: "$gray12",

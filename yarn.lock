@@ -980,6 +980,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/validator@npm:^13.7.2":
+  version: 13.7.2
+  resolution: "@types/validator@npm:13.7.2"
+  checksum: e679261dd5392adfeb9b20ba2eaf7d668049ad03b24409a6921bb6a3ee4c3135d46cc536a0eafbbda7f642b196696a6e3e1e615b2d1194330d49b22f1f0acb59
+  languageName: node
+  linkType: hard
+
 "@virtuoso.dev/react-urx@npm:^0.2.12":
   version: 0.2.13
   resolution: "@virtuoso.dev/react-urx@npm:0.2.13"
@@ -3275,6 +3282,7 @@ __metadata:
     "@types/d3-scale": ^4.0.2
     "@types/react": ^17.0.33
     "@types/react-dom": ^17.0.10
+    "@types/validator": ^13.7.2
     "@vitejs/plugin-react": ^1.0.7
     d3-scale: ^4.0.2
     prettier: ^2.6.0
@@ -3284,6 +3292,7 @@ __metadata:
     react-use: ^17.3.2
     react-virtuoso: ^2.8.3
     typescript: ^4.5.4
+    validator: ^13.7.0
     vite: ^2.8.0
     vite-tsconfig-paths: ^3.4.1
     vitest: ^0.8.4
@@ -3338,6 +3347,13 @@ __metadata:
   version: 1.0.2
   resolution: "util-deprecate@npm:1.0.2"
   checksum: 474acf1146cb2701fe3b074892217553dfcf9a031280919ba1b8d651a068c9b15d863b7303cb15bd00a862b498e6cf4ad7b4a08fb134edd5a6f7641681cb54a2
+  languageName: node
+  linkType: hard
+
+"validator@npm:^13.7.0":
+  version: 13.7.0
+  resolution: "validator@npm:13.7.0"
+  checksum: 2b83283de1222ca549a7ef57f46e8d49c6669213348db78b7045bce36a3b5843ff1e9f709ebf74574e06223461ee1f264f8cc9a26a0060a79a27de079d8286ef
   languageName: node
   linkType: hard
 

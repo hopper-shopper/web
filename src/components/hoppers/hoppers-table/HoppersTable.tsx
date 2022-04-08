@@ -34,7 +34,7 @@ export default function HoppersTable(props: HoppersTableProps) {
                             <SortableTableHeader
                                 css={{ width: 120 }}
                                 sortBy={SortHopperBy.TOKEN_ID}>
-                                Token-Id
+                                Token-ID
                             </SortableTableHeader>
                             <SortableTableHeader css={{ width: 100 }} sortBy={SortHopperBy.LEVEL}>
                                 Level
