@@ -17,46 +17,36 @@ export default function ConfigureHoppersTable(props: ConfigureHoppersTableProps)
     const handleAdventureChange = (adventure: Adventure) => {
         onChange({ permit: adventure, fertility: false })
     }
-    const handleFertilityChange = (value: boolean) => {
-        const updateData: Partial<HoppersTableConfiguration> = {
-            fertility: value,
-        }
-        if (value) {
-            updateData.permit = null
-        }
-
-        onChange(updateData)
-    }
     const handleRatingGeChange = (event: React.FocusEvent<HTMLInputElement>) => {
         const value = event.target.valueAsNumber
         onChange({ ratingGe: Number.isNaN(value) ? 0 : value })
     }
 
-    const handleFilterChange = (filterValue: string) => {
-        if (filterValue === "fertility") {
+    const handleFilterChange = (filterValue: BaseFilters) => {
+        if (filterValue === BaseFilters.FERTILITY) {
             onChange({
                 fertility: true,
                 permit: null,
             })
-        } else if (filterValue === "adventure") {
+        } else if (filterValue === BaseFilters.PERMIT) {
             onChange({
                 fertility: false,
                 permit: Adventure.POND,
             })
-        } else if (filterValue === "none") {
+        } else if (filterValue === BaseFilters.NONE) {
             onChange({
                 fertility: false,
                 permit: null,
             })
         }
     }
-    const filterValue = ((): string => {
+    const filterValue = ((): BaseFilters => {
         if (configuration.fertility) {
-            return "fertility"
+            return BaseFilters.FERTILITY
         } else if (configuration.permit !== null) {
-            return "adventure"
+            return BaseFilters.PERMIT
         }
-        return "none"
+        return BaseFilters.NONE
     })()
 
     return (
@@ -67,31 +57,31 @@ export default function ConfigureHoppersTable(props: ConfigureHoppersTableProps)
                     <SectionContent>
                         <Column>
                             <Flex gap="sm">
-                                <Radio.Radio value="none" id="none">
+                                <Radio.Radio value={BaseFilters.NONE} id="none">
                                     <Radio.Indicator />
                                 </Radio.Radio>
                                 <Label htmlFor="none">None</Label>
                             </Flex>
 
                             <Flex gap="sm">
-                                <Radio.Radio value="adventure" id="adventure">
-                                    <Radio.Indicator />
-                                </Radio.Radio>
-                                <Label htmlFor="adventure">Adventure</Label>
-                            </Flex>
-
-                            <Flex gap="sm">
-                                <Radio.Radio value="fertility" id="fertility">
+                                <Radio.Radio value={BaseFilters.FERTILITY} id="fertility">
                                     <Radio.Indicator />
                                 </Radio.Radio>
                                 <Label htmlFor="fertility">Fertility</Label>
+                            </Flex>
+
+                            <Flex gap="sm">
+                                <Radio.Radio value={BaseFilters.PERMIT} id="permit">
+                                    <Radio.Indicator />
+                                </Radio.Radio>
+                                <Label htmlFor="permit">Permit</Label>
                             </Flex>
                         </Column>
                     </SectionContent>
                 </Radio.Root>
             </Section>
 
-            {filterValue === "adventure" && (
+            {filterValue === BaseFilters.PERMIT && (
                 <>
                     <Section>
                         <SectionTitle>Permit</SectionTitle>
@@ -199,3 +189,10 @@ const Column = styled("div", {
     display: "grid",
     rowGap: "1rem",
 })
+
+// Filters
+enum BaseFilters {
+    NONE = "NONE",
+    FERTILITY = "FERTILITY",
+    PERMIT = "PERMIT",
+}

@@ -17,17 +17,10 @@ import { styled } from "theme"
 import { Adventure } from "utils/adventures"
 
 export default function StorePage() {
-    const [hoppersFilter, setHoppersFilter] = useState<Required<HoppersFilter>>({
-        adventure: AdventureFilter.ANY,
-        permit: PermitFilter.ANY,
-        market: MarketFilter.ON,
-        tokenIds: [],
-        owner: "",
-    })
-    const { hoppers } = useHoppers(hoppersFilter)
+    const { hoppers } = useHoppers(HOPPERS_FILTER)
 
     const [config, setConfig] = useState<HoppersTableConfiguration>({
-        permit: Adventure.RIVER,
+        permit: Adventure.POND,
         ratingGe: 0,
         fertility: false,
     })
@@ -79,6 +72,16 @@ export default function StorePage() {
     )
 }
 
+// Constants
+const HOPPERS_FILTER: Required<HoppersFilter> = {
+    adventure: AdventureFilter.ANY,
+    permit: PermitFilter.ANY,
+    market: MarketFilter.ON,
+    tokenIds: [],
+    owner: "",
+}
+
+// Components
 const Filter = styled("div", {
     marginBottom: "2rem",
     display: "flex",

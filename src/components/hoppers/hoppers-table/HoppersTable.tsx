@@ -85,7 +85,7 @@ export default function HoppersTable(props: HoppersTableProps) {
                                 <SortableTableHeader
                                     align="right"
                                     sortBy={BaseFlySortPreset[config.permit]}>
-                                    Base Fly
+                                    Base Fly / Level
                                 </SortableTableHeader>
                             )}
 
