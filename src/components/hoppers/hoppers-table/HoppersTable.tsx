@@ -3,7 +3,10 @@ import { Hopper } from "models/Hopper"
 import { TableVirtuoso } from "react-virtuoso"
 import { SortHopperBy } from "sorters/hoppers"
 import { Adventure } from "utils/adventures"
-import { HoppersTableConfiguration } from "./configure-hoppers-table/ConfigureHoppersTable"
+import {
+    HoppersTableConfigFilters,
+    HoppersTableConfiguration,
+} from "./configure-hoppers-table/ConfigureHoppersTable"
 import HopperRow from "./hopper-row/HopperRow"
 
 type HoppersTableProps = {
@@ -65,7 +68,7 @@ export default function HoppersTable(props: HoppersTableProps) {
                                 sortBy={SortHopperBy.FERTILITY}>
                                 Fertility
                             </Table.SortableHeaderCell>
-                            {config.permit && (
+                            {config.type === HoppersTableConfigFilters.PERMIT && config.permit && (
                                 <Table.SortableHeaderCell sortBy={RatingSortPreset[config.permit]}>
                                     Rating
                                 </Table.SortableHeaderCell>
@@ -78,7 +81,7 @@ export default function HoppersTable(props: HoppersTableProps) {
                                 sortBy={SortHopperBy.LEVEL_COSTS}>
                                 Level costs
                             </Table.SortableHeaderCell>
-                            {config.permit && (
+                            {config.type === HoppersTableConfigFilters.PERMIT && config.permit && (
                                 <Table.SortableHeaderCell
                                     align="right"
                                     sortBy={MaxPriceSortPreset[config.permit]}>
@@ -86,7 +89,7 @@ export default function HoppersTable(props: HoppersTableProps) {
                                 </Table.SortableHeaderCell>
                             )}
 
-                            {config.permit && (
+                            {config.type === HoppersTableConfigFilters.PERMIT && config.permit && (
                                 <Table.SortableHeaderCell
                                     align="right"
                                     sortBy={BaseFlySortPreset[config.permit]}>
@@ -94,7 +97,7 @@ export default function HoppersTable(props: HoppersTableProps) {
                                 </Table.SortableHeaderCell>
                             )}
 
-                            {config.fertility && (
+                            {config.type === HoppersTableConfigFilters.FERTILITY && (
                                 <>
                                     <Table.SortableHeaderCell
                                         align="right"

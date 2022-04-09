@@ -15,7 +15,10 @@ import {
     calculateMaxFertilityRatingPrice,
 } from "utils/fertility"
 import { calculateLevelUpCosts } from "utils/level"
-import { HoppersTableConfiguration } from "../configure-hoppers-table/ConfigureHoppersTable"
+import {
+    HoppersTableConfigFilters,
+    HoppersTableConfiguration,
+} from "../configure-hoppers-table/ConfigureHoppersTable"
 
 type HopperRowProps = {
     hopper: Hopper
@@ -60,26 +63,26 @@ export default function HopperRow(props: HopperRowProps) {
                     {hopper.fertility}
                 </Value>
             </Cell>
-            {config.permit && (
+            {config.type === HoppersTableConfigFilters.PERMIT && config.permit && (
                 <StyledRatingCell align="center" striped={index % 2 === 0}>
                     {formatRating(getRatingByAdventure(config.permit, hopper))}
                 </StyledRatingCell>
             )}
             <Cell align="right">{formatCurrency(hopper.listing.price, Currency.AVAX)}</Cell>
             <Cell align="right">{formatCurrency(hopper.levelCosts, Currency.AVAX)}</Cell>
-            {config.permit && (
+            {config.type === HoppersTableConfigFilters.PERMIT && config.permit && (
                 <Cell align="right">
                     {formatCurrency(calculateMaxRatingPrice(config.permit, hopper), Currency.AVAX)}
                 </Cell>
             )}
 
-            {config.permit && (
+            {config.type === HoppersTableConfigFilters.PERMIT && config.permit && (
                 <Cell align="right">
                     {formatCurrency(getBaseFlyByAdventure(config.permit, hopper), Currency.FLY)}
                 </Cell>
             )}
 
-            {config.fertility && (
+            {config.type === HoppersTableConfigFilters.FERTILITY && (
                 <>
                     <Cell align="right">
                         {formatCurrency(calculateMaxFertilityRatingPrice(hopper), Currency.AVAX)}

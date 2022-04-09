@@ -1,42 +1,40 @@
-import { HoppersFilter, AdventureFilter, PermitFilter, MarketFilter } from "api/filters/hoopers"
+import { AdventureFilter, HoppersFilter, MarketFilter, PermitFilter } from "api/filters/hoopers"
 import useHoppers from "api/hooks/useHoppers"
 import ConfigureHoppersTable, {
+    HoppersTableConfigFilters,
     HoppersTableConfiguration,
 } from "components/hoppers/hoppers-table/configure-hoppers-table/ConfigureHoppersTable"
 import FloorPrice from "components/hoppers/hoppers-table/floor-price/FloorPrice"
 import HoppersTable from "components/hoppers/hoppers-table/HoppersTable"
-import { getHoppersAdventureFilter, getHoppersRatingFilter } from "filters/hoppers"
+import {
+    getHoppersAdventureFilter,
+    getHoppersFertilityFilter,
+    getHoppersRatingFilter,
+} from "filters/hoppers"
 import { NumberComparison } from "filters/_common"
 import useFilter, { UseFilterPipeline } from "hooks/useFilter"
 import useSort, { SortContext } from "hooks/useSort"
 import { Hopper } from "models/Hopper"
 import { useState } from "react"
-import { sortHoppers, SortHopperBy } from "sorters/hoppers"
+import { SortHopperBy, sortHoppers } from "sorters/hoppers"
 import { SortDirection } from "sorters/_common"
 import { styled } from "theme"
-import { Adventure } from "utils/adventures"
 
 export default function StorePage() {
     const { hoppers } = useHoppers(HOPPERS_FILTER)
 
     const [config, setConfig] = useState<HoppersTableConfiguration>({
-        permit: Adventure.POND,
-        ratingGe: 0,
-        fertility: false,
+        type: HoppersTableConfigFilters.NONE,
     })
-    const updateConfig = (config: Partial<HoppersTableConfiguration>) => {
-        setConfig(prev => ({
-            ...prev,
-            ...config,
-        }))
-    }
 
     const hopperFilters: UseFilterPipeline<Hopper> = (() => {
-        if (config.permit !== null) {
+        if (config.type === HoppersTableConfigFilters.PERMIT) {
             return [
                 getHoppersAdventureFilter(config.permit),
                 getHoppersRatingFilter(config.permit, NumberComparison.GE, config.ratingGe),
             ]
+        } else if (config.type === HoppersTableConfigFilters.FERTILITY) {
+            return [getHoppersFertilityFilter(NumberComparison.GE, config.fertilityGe)]
         }
 
         return []
@@ -60,7 +58,7 @@ export default function StorePage() {
     return (
         <>
             <Filter>
-                <ConfigureHoppersTable configuration={config} onChange={updateConfig} />
+                <ConfigureHoppersTable configuration={config} onChange={setConfig} />
                 <FloorPrice hoppers={filteredHoppers} />
             </Filter>
 

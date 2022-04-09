@@ -8,70 +8,84 @@ import { Adventure } from "utils/adventures"
 
 type ConfigureHoppersTableProps = {
     configuration: HoppersTableConfiguration
-    onChange: (configuration: Partial<HoppersTableConfiguration>) => void
+    onChange: (configuration: HoppersTableConfiguration) => void
 }
 
 export default function ConfigureHoppersTable(props: ConfigureHoppersTableProps) {
     const { configuration, onChange } = props
 
     const handleAdventureChange = (adventure: Adventure) => {
-        onChange({ permit: adventure, fertility: false })
+        if (configuration.type !== HoppersTableConfigFilters.PERMIT) {
+            return
+        }
+
+        onChange({ ...configuration, permit: adventure })
     }
     const handleRatingGeChange = (event: React.FocusEvent<HTMLInputElement>) => {
+        if (configuration.type !== HoppersTableConfigFilters.PERMIT) {
+            return
+        }
+
         const value = event.target.valueAsNumber
-        onChange({ ratingGe: Number.isNaN(value) ? 0 : value })
+        onChange({ ...configuration, ratingGe: Number.isNaN(value) ? 0 : value })
+    }
+    const handleFertilityGeChange = (event: React.FocusEvent<HTMLInputElement>) => {
+        if (configuration.type !== HoppersTableConfigFilters.FERTILITY) {
+            return
+        }
+
+        const value = event.target.valueAsNumber
+        onChange({ ...configuration, fertilityGe: Number.isNaN(value) ? 0 : value })
     }
 
-    const handleFilterChange = (filterValue: BaseFilters) => {
-        if (filterValue === BaseFilters.FERTILITY) {
+    const handleFilterChange = (filterValue: HoppersTableConfigFilters) => {
+        if (filterValue === configuration.type) {
+            return
+        }
+
+        if (filterValue === HoppersTableConfigFilters.FERTILITY) {
             onChange({
-                fertility: true,
-                permit: null,
-            })
-        } else if (filterValue === BaseFilters.PERMIT) {
+                type: HoppersTableConfigFilters.FERTILITY,
+                fertilityGe: 0,
+            } as HoppersTableConfigurationFertility)
+        } else if (filterValue === HoppersTableConfigFilters.PERMIT) {
             onChange({
-                fertility: false,
+                type: HoppersTableConfigFilters.PERMIT,
                 permit: Adventure.POND,
-            })
-        } else if (filterValue === BaseFilters.NONE) {
+                ratingGe: 0,
+            } as HoppersTableConfigurationPermit)
+        } else if (filterValue === HoppersTableConfigFilters.NONE) {
             onChange({
-                fertility: false,
-                permit: null,
-            })
+                type: HoppersTableConfigFilters.NONE,
+            } as HoppersTableConfigurationNone)
         }
     }
-    const filterValue = ((): BaseFilters => {
-        if (configuration.fertility) {
-            return BaseFilters.FERTILITY
-        } else if (configuration.permit !== null) {
-            return BaseFilters.PERMIT
-        }
-        return BaseFilters.NONE
-    })()
 
     return (
         <Container>
             <Section>
                 <SectionTitle>Filter</SectionTitle>
-                <Radio.Root value={filterValue} onValueChange={handleFilterChange}>
+                <Radio.Root value={configuration.type} onValueChange={handleFilterChange}>
                     <SectionContent>
                         <Column>
                             <Flex gap="sm">
-                                <Radio.Radio value={BaseFilters.NONE} id="none">
+                                <Radio.Radio value={HoppersTableConfigFilters.NONE} id="none">
                                     <Radio.Indicator />
                                 </Radio.Radio>
                                 <Label htmlFor="none">None</Label>
                             </Flex>
 
                             <Flex gap="sm">
-                                <Radio.Radio value={BaseFilters.FERTILITY} id="fertility">
+                                <Radio.Radio
+                                    value={HoppersTableConfigFilters.FERTILITY}
+                                    id="fertility">
                                     <Radio.Indicator />
                                 </Radio.Radio>
                                 <Label htmlFor="fertility">Fertility</Label>
                             </Flex>
 
                             <Flex gap="sm">
-                                <Radio.Radio value={BaseFilters.PERMIT} id="permit">
+                                <Radio.Radio value={HoppersTableConfigFilters.PERMIT} id="permit">
                                     <Radio.Indicator />
                                 </Radio.Radio>
                                 <Label htmlFor="permit">Permit</Label>
@@ -81,7 +95,7 @@ export default function ConfigureHoppersTable(props: ConfigureHoppersTableProps)
                 </Radio.Root>
             </Section>
 
-            {filterValue === BaseFilters.PERMIT && (
+            {configuration.type === HoppersTableConfigFilters.PERMIT && (
                 <>
                     <Section>
                         <SectionTitle>Permit</SectionTitle>
@@ -154,16 +168,49 @@ export default function ConfigureHoppersTable(props: ConfigureHoppersTableProps)
                     </Section>
                 </>
             )}
+
+            {configuration.type === HoppersTableConfigFilters.FERTILITY && (
+                <Section>
+                    <SectionTitle>Refine filter</SectionTitle>
+                    <SectionContent>
+                        <Fieldset>
+                            <Label>Rating greater equals</Label>
+                            <Input
+                                type="number"
+                                placeholder="Rating >="
+                                defaultValue={configuration.fertilityGe || ""}
+                                onBlur={handleFertilityGeChange}
+                            />
+                        </Fieldset>
+                    </SectionContent>
+                </Section>
+            )}
         </Container>
     )
 }
 
 // Types
-export type HoppersTableConfiguration = {
-    permit: Adventure | null
-    ratingGe: number
-    fertility: boolean
+export enum HoppersTableConfigFilters {
+    NONE = "NONE",
+    PERMIT = "PERMIT",
+    FERTILITY = "FERTILITY",
 }
+export type HoppersTableConfigurationNone = {
+    type: HoppersTableConfigFilters.NONE
+}
+export type HoppersTableConfigurationPermit = {
+    type: HoppersTableConfigFilters.PERMIT
+    permit: Adventure
+    ratingGe: number
+}
+export type HoppersTableConfigurationFertility = {
+    type: HoppersTableConfigFilters.FERTILITY
+    fertilityGe: number
+}
+export type HoppersTableConfiguration =
+    | HoppersTableConfigurationNone
+    | HoppersTableConfigurationPermit
+    | HoppersTableConfigurationFertility
 
 // Styles
 const Container = styled("div", {
@@ -189,10 +236,3 @@ const Column = styled("div", {
     display: "grid",
     rowGap: "1rem",
 })
-
-// Filters
-enum BaseFilters {
-    NONE = "NONE",
-    FERTILITY = "FERTILITY",
-    PERMIT = "PERMIT",
-}

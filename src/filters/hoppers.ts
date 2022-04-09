@@ -1,5 +1,6 @@
 import { Hopper } from "models/Hopper"
 import { Adventure, getRatingByAdventure } from "utils/adventures"
+import { clamp } from "utils/numbers"
 import { compareNumber, FilterFn, NumberComparison } from "./_common"
 
 export function getHoppersRatingFilter(
@@ -14,7 +15,7 @@ export function getHoppersRatingFilter(
             }
 
             const rating = getRatingByAdventure(adventure, hopper)
-            return compareNumber(comparison, rating, value)
+            return compareNumber(comparison, rating, clamp(0, 1, value))
         })
     }
     filter.signature = `rating-filter-${adventure}-${comparison}-${value}`
@@ -29,5 +30,18 @@ export function getHoppersAdventureFilter(adventure: Adventure): FilterFn<Hopper
         })
     }
     filter.signature = `adventure-filter-${adventure}`
+    return filter
+}
+
+export function getHoppersFertilityFilter(
+    comparison: NumberComparison,
+    value: number,
+): FilterFn<Hopper> {
+    const filter: FilterFn<Hopper> = hoppers => {
+        return hoppers.filter(hopper => {
+            return compareNumber(comparison, hopper.fertility, clamp(1, 10, value))
+        })
+    }
+    filter.signature = `fertility-filter-${comparison}-${value}`
     return filter
 }
