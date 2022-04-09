@@ -1,9 +1,12 @@
+import { TransferDirection } from "api/filters/transfers"
+import useTransfers from "api/hooks/useTransfers"
 import { fetchHoppers } from "api/hoppers"
 import HoppersTableCompact from "components/hoppers/hoppers-table-compact/HoppersTableCompact"
 import Button from "components/inputs/buttons/button/Button"
 import Fieldset from "components/inputs/fieldset/Fieldset"
 import Input from "components/inputs/input/Input"
 import Label from "components/inputs/label/Label"
+import TransfersTable from "components/transfers/TransfersTable"
 import { Hopper } from "models/Hopper"
 import { useState } from "react"
 import { useLocalStorage, useMount } from "react-use"
@@ -12,8 +15,16 @@ import isEthereumAddress from "validator/es/lib/isEthereumAddress"
 
 export default function WalletPage() {
     const [walletAddress, setWalletAddress] = useLocalStorage(WALLET_ADDRESS_LS, "")
-
     const [walletHoppers, setWalletHoppers] = useState<Hopper[]>([])
+
+    const { transfers: inTransfers } = useTransfers({
+        user: walletAddress || "",
+        direction: TransferDirection.IN,
+    })
+    const { transfers: outTransfers } = useTransfers({
+        user: walletAddress || "",
+        direction: TransferDirection.OUT,
+    })
 
     useMount(() => {
         loadHoppers()
@@ -55,9 +66,12 @@ export default function WalletPage() {
                 <Button>Load</Button>
             </InputContainer>
 
-            <List>
+            <Container>
                 <HoppersTableCompact hoppers={walletHoppers} />
-            </List>
+
+                <TransfersTable transfers={inTransfers} />
+                <TransfersTable transfers={outTransfers} />
+            </Container>
         </>
     )
 }
@@ -73,8 +87,11 @@ const InputContainer = styled("form", {
     alignItems: "flex-end",
     columnGap: "1rem",
 })
-const List = styled("div", {
+const Container = styled("div", {
     maxWidth: 1024,
     margin: "0 auto",
     marginTop: "5rem",
+    display: "flex",
+    flexDirection: "column",
+    rowGap: "3rem",
 })
