@@ -1,6 +1,4 @@
-import { grassDark, tomatoDark } from "@radix-ui/colors"
 import { Cell } from "components/table/Table"
-import { scaleQuantize } from "d3-scale"
 import { Currency, formatCurrency } from "formatters/currency"
 import { formatRating } from "formatters/rating"
 import { Hopper } from "models/Hopper"
@@ -14,6 +12,7 @@ import {
     calculateHopperLevelAtTadpoleChange,
     calculateMaxFertilityRatingPrice,
 } from "utils/fertility"
+import { HOPPER_STATS_SCALE } from "utils/hopper"
 import { calculateLevelUpCosts } from "utils/level"
 import {
     HoppersTableConfigFilters,
@@ -39,27 +38,27 @@ export default function HopperRow(props: HopperRowProps) {
             <Cell align="center">{hopper.tokenId}</Cell>
             <Cell align="center">{hopper.level}</Cell>
             <Cell align="center">
-                <Value style={{ backgroundColor: colorScale(hopper.strength) }}>
+                <Value style={{ backgroundColor: HOPPER_STATS_SCALE(hopper.strength) }}>
                     {hopper.strength}
                 </Value>
             </Cell>
             <Cell align="center">
-                <Value style={{ backgroundColor: colorScale(hopper.agility) }}>
+                <Value style={{ backgroundColor: HOPPER_STATS_SCALE(hopper.agility) }}>
                     {hopper.agility}
                 </Value>
             </Cell>
             <Cell align="center">
-                <Value style={{ backgroundColor: colorScale(hopper.vitality) }}>
+                <Value style={{ backgroundColor: HOPPER_STATS_SCALE(hopper.vitality) }}>
                     {hopper.vitality}
                 </Value>
             </Cell>
             <Cell align="center">
-                <Value style={{ backgroundColor: colorScale(hopper.intelligence) }}>
+                <Value style={{ backgroundColor: HOPPER_STATS_SCALE(hopper.intelligence) }}>
                     {hopper.intelligence}
                 </Value>
             </Cell>
             <Cell align="center">
-                <Value style={{ backgroundColor: colorScale(hopper.fertility) }}>
+                <Value style={{ backgroundColor: HOPPER_STATS_SCALE(hopper.fertility) }}>
                     {hopper.fertility}
                 </Value>
             </Cell>
@@ -102,19 +101,6 @@ export default function HopperRow(props: HopperRowProps) {
     )
 }
 
-const colorScale = scaleQuantize([
-    tomatoDark.tomato5,
-    tomatoDark.tomato6,
-    tomatoDark.tomato7,
-    tomatoDark.tomato8,
-    tomatoDark.tomato9,
-    grassDark.grass5,
-    grassDark.grass6,
-    grassDark.grass7,
-    grassDark.grass8,
-    grassDark.grass9,
-]).domain([1, 10])
-
 const Center = styled("div", {
     display: "flex",
     justifyContent: "center",
@@ -128,7 +114,7 @@ const Image = styled("img", {
 const Value = styled("div", {
     display: "inline-flex",
     width: 100,
-    borderRadius: "0.5rem",
+    borderRadius: "$md",
     alignItems: "center",
     justifyContent: "center",
     padding: "0.25rem 0.5rem",

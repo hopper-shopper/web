@@ -53,25 +53,32 @@ export function getBaseFlyByAdventure(adventure: Adventure, hopper: Hopper): num
     }
 }
 
-export function hopperAdventureToAdventure(hopper: Hopper): Adventure | null {
-    if (!hopper.inAdventure || !hopper.adventure) {
-        return null
-    }
+export function getIdealAdventure(hopper: Hopper): Adventure {
+    const baseFlies = [
+        hopper.baseFly.pond,
+        hopper.baseFly.stream,
+        hopper.baseFly.swamp,
+        hopper.baseFly.river,
+        hopper.baseFly.forest,
+        hopper.baseFly.greatLake,
+    ]
+    const adventures = [
+        Adventure.POND,
+        Adventure.STREAM,
+        Adventure.SWAMP,
+        Adventure.RIVER,
+        Adventure.FOREST,
+        Adventure.GREAT_LAKE,
+    ]
 
-    switch (hopper.adventure) {
-        case "pond":
-            return Adventure.POND
-        case "stream":
-            return Adventure.STREAM
-        case "swamp":
-            return Adventure.SWAMP
-        case "river":
-            return Adventure.RIVER
-        case "forest":
-            return Adventure.FOREST
-        case "great-lake":
-            return Adventure.GREAT_LAKE
-        default:
-            return null
-    }
+    const maxBaseFly = Math.max(...baseFlies)
+    const maxBaseFlyIndex = baseFlies.lastIndexOf(maxBaseFly)
+
+    return adventures[maxBaseFlyIndex]
+}
+
+export function getEarningsByAdventure(adventure: Adventure, hopper: Hopper): number {
+    const baseFly = getBaseFlyByAdventure(adventure, hopper)
+
+    return baseFly * hopper.level
 }
