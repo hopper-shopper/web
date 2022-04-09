@@ -7,6 +7,7 @@ import { sortListings, SortListingBy } from "sorters/listings"
 import { SortDirection } from "sorters/_common"
 import { styled } from "theme"
 import { Adventure, hopperAdventureToAdventure } from "utils/adventures"
+import * as Table from "components/table/Table"
 
 type HoppersTableCompactProps = {
     hoppers: Hopper[]
@@ -83,145 +84,61 @@ export default function HoppersTableCompact(props: HoppersTableCompactProps) {
         const hopperAdventure = hopperAdventureToAdventure(hopper)
 
         return (
-            <TableRow key={hopper.tokenId} even={index % 2 === 0}>
-                <TableCell>
+            <Table.Row key={hopper.tokenId} striped={index % 2 === 0}>
+                <Table.Cell>
                     <Center>
                         <Image src={hopper.image} />
                     </Center>
-                </TableCell>
-                <TableCell>{hopper.tokenId}</TableCell>
-                <TableCell>{hopper.level}</TableCell>
-                <TableCell>{formatAdventure(hopperAdventure)}</TableCell>
-                <TableCell
+                </Table.Cell>
+                <Table.Cell>{hopper.tokenId}</Table.Cell>
+                <Table.Cell>{hopper.level}</Table.Cell>
+                <Table.Cell>{formatAdventure(hopperAdventure)}</Table.Cell>
+                <Table.Cell
                     css={{ color: hopperAdventure === bestAdventure ? "$teal11" : "$red11" }}>
                     {formatAdventure(bestAdventure)}
-                </TableCell>
-                <TableCell align="right">
+                </Table.Cell>
+                <Table.Cell align="right">
                     {formatCurrency(hopper.levelCosts, Currency.AVAX)}
-                </TableCell>
-                <TableCell align="right">
+                </Table.Cell>
+                <Table.Cell align="right">
                     {formatCurrency(getHopperPrice(hopper.tokenId), Currency.AVAX)}
-                </TableCell>
-            </TableRow>
+                </Table.Cell>
+            </Table.Row>
         )
     }
 
     return (
-        <Table>
+        <Table.Root>
             <thead>
-                <TableRow>
-                    <TableHeaderCell css={{ width: 90 }}>Image</TableHeaderCell>
-                    <TableHeaderCell css={{ width: 120 }}>Token-ID</TableHeaderCell>
-                    <TableHeaderCell css={{ width: 100 }}>Level</TableHeaderCell>
-                    <TableHeaderCell>In Adventure</TableHeaderCell>
-                    <TableHeaderCell>Best Adventure</TableHeaderCell>
-                    <TableHeaderCell align="right">Level costs</TableHeaderCell>
-                    <TableHeaderCell align="right">Bought for</TableHeaderCell>
-                </TableRow>
+                <Table.Row>
+                    <Table.HeaderCell css={{ width: 90 }}>Image</Table.HeaderCell>
+                    <Table.HeaderCell css={{ width: 120 }}>Token-ID</Table.HeaderCell>
+                    <Table.HeaderCell css={{ width: 100 }}>Level</Table.HeaderCell>
+                    <Table.HeaderCell>In Adventure</Table.HeaderCell>
+                    <Table.HeaderCell>Best Adventure</Table.HeaderCell>
+                    <Table.HeaderCell align="right">Level costs</Table.HeaderCell>
+                    <Table.HeaderCell align="right">Bought for</Table.HeaderCell>
+                </Table.Row>
             </thead>
 
             <tbody>
                 {hoppers.map(renderRow)}
 
-                <TableRow
-                    css={{
-                        backgroundColor: "$gray3",
-                        fontWeight: 500,
-                    }}>
-                    <TableCell css={{ borderTop: "1px solid $gray6" }} />
-                    <TableCell css={{ borderTop: "1px solid $gray6" }} />
-                    <TableCell css={{ borderTop: "1px solid $gray6" }} />
-                    <TableCell css={{ borderTop: "1px solid $gray6" }}>
-                        {summaryAdventure}
-                    </TableCell>
-                    <TableCell css={{ borderTop: "1px solid $gray6" }} />
-                    <TableCell align="right" css={{ borderTop: "1px solid $gray6" }}>
-                        {summaryLevelCosts}
-                    </TableCell>
-                    <TableCell align="right" css={{ borderTop: "1px solid $gray6" }}>
-                        {summaryBuyPrices}
-                    </TableCell>
-                </TableRow>
+                <Table.Row>
+                    <Table.SummaryCell />
+                    <Table.SummaryCell />
+                    <Table.SummaryCell />
+                    <Table.SummaryCell>{summaryAdventure}</Table.SummaryCell>
+                    <Table.SummaryCell />
+                    <Table.SummaryCell align="right">{summaryLevelCosts}</Table.SummaryCell>
+                    <Table.SummaryCell align="right">{summaryBuyPrices}</Table.SummaryCell>
+                </Table.Row>
             </tbody>
-        </Table>
+        </Table.Root>
     )
 }
 
 // Components
-const Table = styled("table", {
-    width: "100%",
-    borderSpacing: 0,
-    color: "$gray12",
-    tableLayout: "fixed",
-    "& thead tr th:first-child": {
-        borderTopLeftRadius: "0.5rem",
-        borderLeft: "1px solid $gray6",
-    },
-    "& thead tr th:last-child": {
-        borderTopRightRadius: "0.5rem",
-        borderRight: "1px solid $gray6",
-    },
-    "& thead tr th": {
-        borderTop: "1px solid $gray6",
-        borderBottom: "1px solid $gray6",
-    },
-    "& tbody tr td:first-child": {
-        borderLeft: "1px solid $gray6",
-    },
-    "& tbody tr td:last-child": {
-        borderRight: "1px solid $gray6",
-    },
-    "& tbody tr:last-child td": {
-        borderBottom: "1px solid $gray6",
-        "&:first-child": {
-            borderBottomLeftRadius: "$md",
-        },
-        "&:last-child": {
-            borderBottomRightRadius: "$md",
-        },
-    },
-})
-const TableRow = styled("tr", {
-    variants: {
-        even: {
-            true: {
-                backgroundColor: "$gray2",
-            },
-            false: {
-                backgroundColor: "$gray1",
-            },
-        },
-    },
-})
-const TableHeaderCell = styled("th", {
-    color: "$gray11",
-    fontWeight: 500,
-    backgroundColor: "$gray3",
-    padding: "0.5rem 1rem",
-    cursor: "default",
-})
-const TableCell = styled("td", {
-    color: "$gray12",
-    padding: "0.5rem 1rem",
-    whiteSpace: "nowrap",
-    variants: {
-        align: {
-            left: {
-                textAlign: "left",
-            },
-            center: {
-                textAlign: "center",
-            },
-            right: {
-                textAlign: "right",
-            },
-        },
-    },
-    defaultVariants: {
-        align: "center",
-    },
-})
-
 const Center = styled("div", {
     display: "flex",
     justifyContent: "center",

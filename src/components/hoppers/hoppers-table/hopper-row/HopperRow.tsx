@@ -1,10 +1,15 @@
 import { grassDark, tomatoDark } from "@radix-ui/colors"
+import { Cell } from "components/table/Table"
 import { scaleQuantize } from "d3-scale"
 import { Currency, formatCurrency } from "formatters/currency"
 import { formatRating } from "formatters/rating"
 import { Hopper } from "models/Hopper"
 import { styled } from "theme"
-import { Adventure, calculateMaxRatingPrice, getBaseFlyByAdventure } from "utils/adventures"
+import {
+    calculateMaxRatingPrice,
+    getBaseFlyByAdventure,
+    getRatingByAdventure,
+} from "utils/adventures"
 import {
     calculateHopperLevelAtTadpoleChange,
     calculateMaxFertilityRatingPrice,
@@ -23,130 +28,63 @@ export default function HopperRow(props: HopperRowProps) {
 
     return (
         <>
-            <TableCell>
+            <Cell>
                 <Center>
                     <Image src={hopper.image} />
                 </Center>
-            </TableCell>
-            <TableCell>{hopper.tokenId}</TableCell>
-            <TableCell>{hopper.level}</TableCell>
-            <TableCell>
+            </Cell>
+            <Cell align="center">{hopper.tokenId}</Cell>
+            <Cell align="center">{hopper.level}</Cell>
+            <Cell align="center">
                 <Value style={{ backgroundColor: colorScale(hopper.strength) }}>
                     {hopper.strength}
                 </Value>
-            </TableCell>
-            <TableCell>
+            </Cell>
+            <Cell align="center">
                 <Value style={{ backgroundColor: colorScale(hopper.agility) }}>
                     {hopper.agility}
                 </Value>
-            </TableCell>
-            <TableCell>
+            </Cell>
+            <Cell align="center">
                 <Value style={{ backgroundColor: colorScale(hopper.vitality) }}>
                     {hopper.vitality}
                 </Value>
-            </TableCell>
-            <TableCell>
+            </Cell>
+            <Cell align="center">
                 <Value style={{ backgroundColor: colorScale(hopper.intelligence) }}>
                     {hopper.intelligence}
                 </Value>
-            </TableCell>
-            <TableCell>
+            </Cell>
+            <Cell align="center">
                 <Value style={{ backgroundColor: colorScale(hopper.fertility) }}>
                     {hopper.fertility}
                 </Value>
-            </TableCell>
-            {config.permit === Adventure.POND && (
-                <StyledRatingCell even={index % 2 === 0}>
-                    {formatRating(hopper.rating.pond)}
+            </Cell>
+            {config.permit && (
+                <StyledRatingCell align="center" striped={index % 2 === 0}>
+                    {formatRating(getRatingByAdventure(config.permit, hopper))}
                 </StyledRatingCell>
             )}
-            {config.permit === Adventure.STREAM && (
-                <StyledRatingCell even={index % 2 === 0}>
-                    {formatRating(hopper.rating.stream)}
-                </StyledRatingCell>
-            )}
-            {config.permit === Adventure.SWAMP && (
-                <StyledRatingCell even={index % 2 === 0}>
-                    {formatRating(hopper.rating.swamp)}
-                </StyledRatingCell>
-            )}
-            {config.permit === Adventure.RIVER && (
-                <StyledRatingCell even={index % 2 === 0}>
-                    {formatRating(hopper.rating.river)}
-                </StyledRatingCell>
-            )}
-            {config.permit === Adventure.FOREST && (
-                <StyledRatingCell even={index % 2 === 0}>
-                    {formatRating(hopper.rating.forest)}
-                </StyledRatingCell>
-            )}
-            {config.permit === Adventure.GREAT_LAKE && (
-                <StyledRatingCell even={index % 2 === 0}>
-                    {formatRating(hopper.rating.greatLake)}
-                </StyledRatingCell>
-            )}
-            <TableCell align="right">
-                {formatCurrency(hopper.listing.price, Currency.AVAX)}
-            </TableCell>
-            <TableCell align="right">{formatCurrency(hopper.levelCosts, Currency.AVAX)}</TableCell>
-            {config.permit === Adventure.POND && (
-                <TableCell align="right">
-                    {formatCurrency(calculateMaxRatingPrice(Adventure.POND, hopper), Currency.AVAX)}
-                </TableCell>
-            )}
-            {config.permit === Adventure.STREAM && (
-                <TableCell align="right">
-                    {formatCurrency(
-                        calculateMaxRatingPrice(Adventure.STREAM, hopper),
-                        Currency.AVAX,
-                    )}
-                </TableCell>
-            )}
-            {config.permit === Adventure.SWAMP && (
-                <TableCell align="right">
-                    {formatCurrency(
-                        calculateMaxRatingPrice(Adventure.SWAMP, hopper),
-                        Currency.AVAX,
-                    )}
-                </TableCell>
-            )}
-            {config.permit === Adventure.RIVER && (
-                <TableCell align="right">
-                    {formatCurrency(
-                        calculateMaxRatingPrice(Adventure.RIVER, hopper),
-                        Currency.AVAX,
-                    )}
-                </TableCell>
-            )}
-            {config.permit === Adventure.FOREST && (
-                <TableCell align="right">
-                    {formatCurrency(
-                        calculateMaxRatingPrice(Adventure.FOREST, hopper),
-                        Currency.AVAX,
-                    )}
-                </TableCell>
-            )}
-            {config.permit === Adventure.GREAT_LAKE && (
-                <TableCell align="right">
-                    {formatCurrency(
-                        calculateMaxRatingPrice(Adventure.GREAT_LAKE, hopper),
-                        Currency.AVAX,
-                    )}
-                </TableCell>
+            <Cell align="right">{formatCurrency(hopper.listing.price, Currency.AVAX)}</Cell>
+            <Cell align="right">{formatCurrency(hopper.levelCosts, Currency.AVAX)}</Cell>
+            {config.permit && (
+                <Cell align="right">
+                    {formatCurrency(calculateMaxRatingPrice(config.permit, hopper), Currency.AVAX)}
+                </Cell>
             )}
 
             {config.permit && (
-                <TableCell align="right">
+                <Cell align="right">
                     {formatCurrency(getBaseFlyByAdventure(config.permit, hopper), Currency.FLY)}
-                </TableCell>
+                </Cell>
             )}
 
             {config.fertility && (
                 <>
-                    <TableCell align="right">
+                    <Cell align="right">
                         {formatCurrency(calculateMaxFertilityRatingPrice(hopper), Currency.AVAX)}
-                    </TableCell>
-                    <TableCell align="right">
+                    </Cell>
+                    <Cell align="right">
                         {formatCurrency(
                             calculateLevelUpCosts(
                                 hopper.level,
@@ -154,7 +92,7 @@ export default function HopperRow(props: HopperRowProps) {
                             ),
                             Currency.FLY,
                         )}
-                    </TableCell>
+                    </Cell>
                 </>
             )}
         </>
@@ -184,27 +122,6 @@ const Image = styled("img", {
     size: 50,
     borderRadius: "$sm",
 })
-const TableCell = styled("td", {
-    color: "$gray12",
-    padding: "0.5rem 1rem",
-    whiteSpace: "nowrap",
-    variants: {
-        align: {
-            left: {
-                textAlign: "left",
-            },
-            center: {
-                textAlign: "center",
-            },
-            right: {
-                textAlign: "right",
-            },
-        },
-    },
-    defaultVariants: {
-        align: "center",
-    },
-})
 const Value = styled("div", {
     display: "inline-flex",
     width: 100,
@@ -214,10 +131,10 @@ const Value = styled("div", {
     padding: "0.25rem 0.5rem",
 })
 
-const StyledRatingCell = styled(TableCell, {
+const StyledRatingCell = styled(Cell, {
     color: "$blue12",
     variants: {
-        even: {
+        striped: {
             true: {
                 backgroundColor: "$blue2",
             },

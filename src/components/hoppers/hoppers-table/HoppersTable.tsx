@@ -1,8 +1,7 @@
-import SortableTableHeader from "components/sorting/sortable-table-header/SortableTableHeader"
+import * as Table from "components/table/Table"
 import { Hopper } from "models/Hopper"
 import { TableVirtuoso } from "react-virtuoso"
 import { SortHopperBy } from "sorters/hoppers"
-import { styled } from "theme"
 import { Adventure } from "utils/adventures"
 import { HoppersTableConfiguration } from "./configure-hoppers-table/ConfigureHoppersTable"
 import HopperRow from "./hopper-row/HopperRow"
@@ -22,86 +21,92 @@ export default function HoppersTable(props: HoppersTableProps) {
                 data={hoppers}
                 totalCount={hoppers.length}
                 components={{
-                    Table: ({ style, ...props }) => <StyledTable {...props} style={style} />,
+                    Table: ({ style, ...props }) => <Table.Root {...props} style={style} />,
                     TableRow: props => (
-                        <StyledTableRow even={props["data-index"] % 2 === 0} {...props} />
+                        <Table.Row striped={props["data-index"] % 2 === 0} {...props} />
                     ),
                 }}
                 fixedHeaderContent={() => {
                     return (
-                        <tr>
-                            <TableHeaderCell css={{ width: 90 }}>Image</TableHeaderCell>
-                            <SortableTableHeader
+                        <Table.Row>
+                            <Table.HeaderCell css={{ width: 90 }}>Image</Table.HeaderCell>
+                            <Table.SortableHeaderCell
                                 css={{ width: 120 }}
                                 sortBy={SortHopperBy.TOKEN_ID}>
                                 Token-ID
-                            </SortableTableHeader>
-                            <SortableTableHeader css={{ width: 100 }} sortBy={SortHopperBy.LEVEL}>
+                            </Table.SortableHeaderCell>
+                            <Table.SortableHeaderCell
+                                css={{ width: 100 }}
+                                sortBy={SortHopperBy.LEVEL}>
                                 Level
-                            </SortableTableHeader>
-                            <SortableTableHeader
+                            </Table.SortableHeaderCell>
+                            <Table.SortableHeaderCell
                                 css={{ width: 135 }}
                                 sortBy={SortHopperBy.STRENGTH}>
                                 Strength
-                            </SortableTableHeader>
-                            <SortableTableHeader css={{ width: 135 }} sortBy={SortHopperBy.AGILITY}>
+                            </Table.SortableHeaderCell>
+                            <Table.SortableHeaderCell
+                                css={{ width: 135 }}
+                                sortBy={SortHopperBy.AGILITY}>
                                 Agility
-                            </SortableTableHeader>
-                            <SortableTableHeader
+                            </Table.SortableHeaderCell>
+                            <Table.SortableHeaderCell
                                 css={{ width: 135 }}
                                 sortBy={SortHopperBy.VITALITY}>
                                 Vitality
-                            </SortableTableHeader>
-                            <SortableTableHeader
+                            </Table.SortableHeaderCell>
+                            <Table.SortableHeaderCell
                                 css={{ width: 135 }}
                                 sortBy={SortHopperBy.INTELLIGENCE}>
                                 Intelligence
-                            </SortableTableHeader>
-                            <SortableTableHeader
+                            </Table.SortableHeaderCell>
+                            <Table.SortableHeaderCell
                                 css={{ width: 135 }}
                                 sortBy={SortHopperBy.FERTILITY}>
                                 Fertility
-                            </SortableTableHeader>
+                            </Table.SortableHeaderCell>
                             {config.permit && (
-                                <SortableTableHeader sortBy={RatingSortPreset[config.permit]}>
+                                <Table.SortableHeaderCell sortBy={RatingSortPreset[config.permit]}>
                                     Rating
-                                </SortableTableHeader>
+                                </Table.SortableHeaderCell>
                             )}
-                            <SortableTableHeader align="right" sortBy={SortHopperBy.PRICE}>
+                            <Table.SortableHeaderCell align="right" sortBy={SortHopperBy.PRICE}>
                                 Price
-                            </SortableTableHeader>
-                            <SortableTableHeader align="right" sortBy={SortHopperBy.LEVEL_COSTS}>
+                            </Table.SortableHeaderCell>
+                            <Table.SortableHeaderCell
+                                align="right"
+                                sortBy={SortHopperBy.LEVEL_COSTS}>
                                 Level costs
-                            </SortableTableHeader>
+                            </Table.SortableHeaderCell>
                             {config.permit && (
-                                <SortableTableHeader
+                                <Table.SortableHeaderCell
                                     align="right"
                                     sortBy={MaxPriceSortPreset[config.permit]}>
                                     Max. Price
-                                </SortableTableHeader>
+                                </Table.SortableHeaderCell>
                             )}
 
                             {config.permit && (
-                                <SortableTableHeader
+                                <Table.SortableHeaderCell
                                     align="right"
                                     sortBy={BaseFlySortPreset[config.permit]}>
                                     Base Fly / Level
-                                </SortableTableHeader>
+                                </Table.SortableHeaderCell>
                             )}
 
                             {config.fertility && (
                                 <>
-                                    <SortableTableHeader
+                                    <Table.SortableHeaderCell
                                         align="right"
                                         sortBy={SortHopperBy.MAX_PRICE_FERTILITY}>
                                         Max. Price Fertility
-                                    </SortableTableHeader>
-                                    <TableHeaderCell css={{ textAlign: "right" }}>
+                                    </Table.SortableHeaderCell>
+                                    <Table.HeaderCell css={{ textAlign: "right" }}>
                                         Cost 50 % chance
-                                    </TableHeaderCell>
+                                    </Table.HeaderCell>
                                 </>
                             )}
-                        </tr>
+                        </Table.Row>
                     )
                 }}
                 itemContent={(index, hopper) => (
@@ -111,61 +116,6 @@ export default function HoppersTable(props: HoppersTableProps) {
         </>
     )
 }
-
-// Styles
-const StyledTable = styled("table", {
-    width: "100%",
-    borderSpacing: 0,
-    color: "$gray12",
-    tableLayout: "fixed",
-    paddingBottom: "2rem",
-    "& thead tr th:first-child": {
-        borderTopLeftRadius: "0.5rem",
-        borderLeft: "1px solid $gray6",
-    },
-    "& thead tr th:last-child": {
-        borderTopRightRadius: "0.5rem",
-        borderRight: "1px solid $gray6",
-    },
-    "& thead tr th": {
-        borderTop: "1px solid $gray6",
-        borderBottom: "1px solid $gray6",
-    },
-    "& tbody tr td:first-child": {
-        borderLeft: "1px solid $gray6",
-    },
-    "& tbody tr td:last-child": {
-        borderRight: "1px solid $gray6",
-    },
-    "& tbody tr:last-child td": {
-        borderBottom: "1px solid $gray6",
-        "&:first-child": {
-            borderBottomLeftRadius: "$md",
-        },
-        "&:last-child": {
-            borderBottomRightRadius: "$md",
-        },
-    },
-})
-const TableHeaderCell = styled("th", {
-    color: "$gray11",
-    fontWeight: 500,
-    backgroundColor: "$gray3",
-    padding: "0.5rem 1rem",
-    cursor: "default",
-})
-const StyledTableRow = styled("tr", {
-    variants: {
-        even: {
-            true: {
-                backgroundColor: "$gray2",
-            },
-            false: {
-                backgroundColor: "$gray1",
-            },
-        },
-    },
-})
 
 // Sort presets
 type SortPresetByAdventure = {

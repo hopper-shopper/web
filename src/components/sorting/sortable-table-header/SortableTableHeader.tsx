@@ -1,9 +1,10 @@
-import { ComponentProps } from "@stitches/react"
+import { ComponentProps, VariantProps } from "@stitches/react"
 import { useSortContext } from "hooks/useSort"
 import { styled } from "theme"
 import SortArrow from "../sort-arrow/SortArrow"
+import { HeaderCell } from "components/table/Table"
 
-type SortableTableHeaderProps<SortBy> = ComponentProps<typeof StyledTableHeader> & {
+type SortableTableHeaderProps<SortBy> = ComponentProps<typeof HeaderCell> & {
     sortBy: SortBy
     children?: React.ReactNode
 }
@@ -16,51 +17,46 @@ export default function SortableTableHeader<SortBy>(props: SortableTableHeaderPr
         update(sortBy)
     }
 
+    const align = ((): VariantProps<typeof HeaderInner>["align"] => {
+        if (!tableHeaderProps.align) {
+            return
+        }
+
+        if (["left", "center", "right"].includes(tableHeaderProps.align)) {
+            return tableHeaderProps.align as VariantProps<typeof HeaderInner>["align"]
+        }
+    })()
+
     return (
-        <StyledTableHeader {...tableHeaderProps} onClick={handleClick}>
-            <HeaderInner>
+        <HeaderCell {...tableHeaderProps} onClick={handleClick}>
+            <HeaderInner align={align}>
                 <SortArrow active={active === sortBy} direction={direction} />
                 {children}
             </HeaderInner>
-        </StyledTableHeader>
+        </HeaderCell>
     )
 }
-
-export const StyledTableHeader = styled("th", {
-    color: "$gray11",
-    fontWeight: 500,
-    backgroundColor: "$gray3",
-    padding: "0.5rem 1rem",
-    cursor: "default",
-    whiteSpace: "nowrap",
+const HeaderInner = styled("div", {
+    display: "flex",
+    alignItems: "center",
+    columnGap: "0.5rem",
     variants: {
         align: {
             left: {
-                "> *": {
-                    justifyContent: "flex-start",
-                    textAlign: "left",
-                },
+                justifyContent: "flex-start",
+                textAlign: "left",
             },
             center: {
-                "> *": {
-                    justifyContent: "center",
-                    textAlign: "center",
-                },
+                justifyContent: "center",
+                textAlign: "center",
             },
             right: {
-                "> *": {
-                    justifyContent: "flex-end",
-                    textAlign: "right",
-                },
+                justifyContent: "flex-end",
+                textAlign: "right",
             },
         },
     },
     defaultVariants: {
         align: "center",
     },
-})
-const HeaderInner = styled("div", {
-    display: "flex",
-    alignItems: "center",
-    columnGap: "0.5rem",
 })
