@@ -174,10 +174,10 @@ export default function ConfigureHoppersTable(props: ConfigureHoppersTableProps)
                     <SectionTitle>Refine filter</SectionTitle>
                     <SectionContent>
                         <Fieldset>
-                            <Label>Rating greater equals</Label>
+                            <Label>Fertility greater equals</Label>
                             <Input
                                 type="number"
-                                placeholder="Rating >="
+                                placeholder="Fertility >="
                                 defaultValue={configuration.fertilityGe || ""}
                                 onBlur={handleFertilityGeChange}
                             />

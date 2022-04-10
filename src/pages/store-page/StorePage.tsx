@@ -7,7 +7,7 @@ import ConfigureHoppersTable, {
 import FloorPrice from "components/hoppers/hoppers-table/floor-price/FloorPrice"
 import HoppersTable from "components/hoppers/hoppers-table/HoppersTable"
 import {
-    getHoppersAdventureFilter,
+    getHoppersPermitFilter,
     getHoppersFertilityFilter,
     getHoppersRatingFilter,
 } from "filters/hoppers"
@@ -30,7 +30,7 @@ export default function StorePage() {
     const hopperFilters: UseFilterPipeline<Hopper> = (() => {
         if (config.type === HoppersTableConfigFilters.PERMIT) {
             return [
-                getHoppersAdventureFilter(config.permit),
+                getHoppersPermitFilter(config.permit),
                 getHoppersRatingFilter(config.permit, NumberComparison.GE, config.ratingGe),
             ]
         } else if (config.type === HoppersTableConfigFilters.FERTILITY) {
