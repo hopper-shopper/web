@@ -24,11 +24,11 @@ export default function WalletPage() {
     const [walletHoppers, setWalletHoppers] = useState<Hopper[]>([])
     const [selectedTransfers, setSelectedTransfers] = useState<Transfer[]>([])
 
-    const { transfers: inTransfers } = useTransfers({
+    const { transfers: inTransfers, loading: inTransfersLoading } = useTransfers({
         user: walletAddress || "",
         direction: TransferDirection.IN,
     })
-    const { transfers: outTransfers } = useTransfers({
+    const { transfers: outTransfers, loading: outTransfersLoading } = useTransfers({
         user: walletAddress || "",
         direction: TransferDirection.OUT,
     })
@@ -106,6 +106,7 @@ export default function WalletPage() {
                     <TransfersGrid>
                         <div>
                             <TransfersByDaySelect
+                                ready={!inTransfersLoading && !outTransfersLoading}
                                 transfers={combinedTransfers}
                                 onSelect={setSelectedTransfers}
                             />
