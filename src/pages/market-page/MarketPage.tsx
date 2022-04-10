@@ -20,7 +20,7 @@ import { SortHopperBy, sortHoppers } from "sorters/hoppers"
 import { SortDirection } from "sorters/_common"
 import { styled } from "theme"
 
-export default function StorePage() {
+export default function MarketPage() {
     const { hoppers } = useHoppers(HOPPERS_FILTER)
 
     const [config, setConfig] = useState<HoppersTableConfiguration>({

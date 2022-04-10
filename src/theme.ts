@@ -1,4 +1,14 @@
-import { gray, grayDark, blue, blueDark, teal, tealDark, red, redDark } from "@radix-ui/colors"
+import {
+    gray,
+    grayDark,
+    blue,
+    blueDark,
+    teal,
+    tealDark,
+    red,
+    redDark,
+    blackA,
+} from "@radix-ui/colors"
 import { createStitches, CSS, PropertyValue } from "@stitches/react"
 
 export const {
@@ -16,6 +26,7 @@ export const {
             ...teal,
             ...red,
             ...blue,
+            ...blackA,
         },
         radii: {
             sm: "0.25rem",

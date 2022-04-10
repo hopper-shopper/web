@@ -1,6 +1,6 @@
 import PageHeader from "components/headers/page-header/PageHeader"
 import useApplyDarkMode from "hooks/useApplyDarkMode"
-import StorePage from "pages/store-page/StorePage"
+import MarketPage from "pages/market-page/MarketPage"
 import { Outlet, Route, Routes } from "react-router-dom"
 import Redirect from "routing/Redirect"
 import { globalCss, styled } from "./theme"
@@ -16,12 +16,12 @@ function App() {
     return (
         <Routes>
             <Route path="/" element={<Layout />}>
-                <Route path={ROUTES.SHOP} element={<StorePage />} />
+                <Route path={ROUTES.MARKET} element={<MarketPage />} />
                 <Route path={ROUTES.WALLET} element={<WalletPage />} />
                 <Route path={ROUTES.WATCHLIST} element={<WatchlistPage />} />
                 <Route path={ROUTES.ROI} element={<RoiCalculatorPage />} />
 
-                <Route index element={<Redirect to={ROUTES.SHOP} />} />
+                <Route index element={<Redirect to={ROUTES.MARKET} />} />
             </Route>
         </Routes>
     )

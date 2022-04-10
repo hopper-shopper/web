@@ -1,3 +1,4 @@
+import HopperDetailsDialog from "components/hoppers/hopper-details-dialog/HopperDetailsDialog"
 import { Cell } from "components/table/Table"
 import { Currency, formatCurrency } from "formatters/currency"
 import { formatRating } from "formatters/rating"
@@ -31,9 +32,11 @@ export default function HopperRow(props: HopperRowProps) {
     return (
         <>
             <Cell>
-                <Center>
-                    <Image src={hopper.image} />
-                </Center>
+                <HopperDetailsDialog hopper={hopper}>
+                    <Center>
+                        <Image src={hopper.image} />
+                    </Center>
+                </HopperDetailsDialog>
             </Cell>
             <Cell align="center">{hopper.tokenId}</Cell>
             <Cell align="center">{hopper.level}</Cell>

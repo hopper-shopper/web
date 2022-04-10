@@ -1,7 +1,6 @@
 import { styled } from "theme"
 
 const IconButton = styled("button", {
-    size: "2.5rem",
     backgroundColor: "$gray3",
     color: "$gray11",
     borderRadius: "50%",
@@ -9,15 +8,31 @@ const IconButton = styled("button", {
     display: "inline-flex",
     justifyContent: "center",
     alignItems: "center",
-    "> svg": {
-        size: "1.25rem",
-    },
     "&:hover": {
         backgroundColor: "$gray4",
     },
     "&:focus": {
         backgroundColor: "$gray5",
         outline: "2px solid $blue8",
+    },
+    variants: {
+        size: {
+            sm: {
+                size: "1.5rem",
+                "> svg": {
+                    size: "1rem",
+                },
+            },
+            md: {
+                size: "2.5rem",
+                "> svg": {
+                    size: "1.25rem",
+                },
+            },
+        },
+    },
+    defaultVariants: {
+        size: "md",
     },
 })
 

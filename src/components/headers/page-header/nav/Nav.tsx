@@ -1,12 +1,12 @@
+import { useRef } from "react"
 import { Link, LinkProps, useMatch, useResolvedPath } from "react-router-dom"
-import { styled } from "theme"
 import * as ROUTES from "routing/routes"
-import { useRef, useState } from "react"
+import { styled } from "theme"
 
 export default function Nav() {
     return (
         <StyledNav>
-            <ActivatableLink to={ROUTES.SHOP}>Shop</ActivatableLink>
+            <ActivatableLink to={ROUTES.MARKET}>Market</ActivatableLink>
             <ActivatableLink to={ROUTES.WALLET}>Wallet</ActivatableLink>
             <ActivatableLink to={ROUTES.WATCHLIST}>Watchlist</ActivatableLink>
             <ActivatableLink to={ROUTES.ROI}>ROI Calculator</ActivatableLink>

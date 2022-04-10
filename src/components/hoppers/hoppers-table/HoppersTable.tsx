@@ -36,7 +36,7 @@ export default function HoppersTable(props: HoppersTableProps) {
                             <Table.SortableHeaderCell
                                 css={{ width: 120 }}
                                 sortBy={SortHopperBy.TOKEN_ID}>
-                                Token-ID
+                                Hopper-ID
                             </Table.SortableHeaderCell>
                             <Table.SortableHeaderCell
                                 css={{ width: 100 }}
@@ -113,7 +113,7 @@ export default function HoppersTable(props: HoppersTableProps) {
                     )
                 }}
                 itemContent={(index, hopper) => (
-                    <HopperRow index={index} hopper={hopper} config={config} />
+                    <HopperRow key={hopper.tokenId} index={index} hopper={hopper} config={config} />
                 )}
             />
         </>
