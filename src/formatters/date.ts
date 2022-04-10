@@ -22,7 +22,6 @@ export function formatDateTime(
     formatOptions?: Intl.DateTimeFormatOptions,
 ): string {
     const date = dateLikeToDate(dateLike)
-
     if (date === null) {
         return "Unknown date"
     }
@@ -32,6 +31,22 @@ export function formatDateTime(
         timeStyle: "short",
         ...formatOptions,
     })
+    return formatter.format(date)
+}
 
+export function formatMonth(
+    dateLike: DateLike,
+    formatOptions?: Intl.DateTimeFormatOptions,
+): string {
+    const date = dateLikeToDate(dateLike)
+    if (date === null) {
+        return "Unknown month"
+    }
+
+    const formatter = new Intl.DateTimeFormat([], {
+        timeStyle: undefined,
+        month: "long",
+        ...formatOptions,
+    })
     return formatter.format(date)
 }

@@ -1,6 +1,7 @@
 import { fetchPrices } from "api/prices"
 import { Price } from "models/Price"
 import { useAsyncFn, useEffectOnce, useInterval } from "react-use"
+import { DEFAULT_PRICE } from "stores/prices"
 
 export type UsePricesReturn = {
     price: Price
@@ -24,15 +25,4 @@ export default function usePrices(): UsePricesReturn {
         loading,
         error,
     }
-}
-
-const DEFAULT_PRICE: Price = {
-    AVAX: {
-        EUR: 0,
-        USD: 0,
-    },
-    FLY: {
-        EUR: 0,
-        USD: 0,
-    },
 }

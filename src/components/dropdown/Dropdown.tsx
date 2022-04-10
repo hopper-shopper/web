@@ -27,7 +27,7 @@ const itemStyles: ThemeCSS = {
         pointerEvents: "none",
     },
     "&:focus": {
-        backgroundColor: "$gray4",
+        backgroundColor: "$gray5",
         color: "$gray12",
     },
 }
@@ -47,7 +47,7 @@ const StyledRadioItem = styled(DropdownPrimitives.RadioItem, {
 const StyledTriggerItem = styled(DropdownPrimitives.TriggerItem, {
     ...itemStyles,
     '&[data-state="open"]': {
-        backgroundColor: "$gray4",
+        backgroundColor: "$gray5",
         color: "$gray12",
     },
 })

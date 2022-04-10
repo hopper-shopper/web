@@ -1,13 +1,13 @@
-import usePrices from "api/hooks/usePrices"
 import { Currency, formatCurrency } from "formatters/currency"
-import { styled } from "theme"
-import SettingsDropdown from "./settings-dropdown/SettingsDropdown"
+import usePricesStore from "stores/prices"
 import useSettingsStore from "stores/settings"
+import { styled } from "theme"
 import Nav from "./nav/Nav"
+import SettingsDropdown from "./settings-dropdown/SettingsDropdown"
 
 export default function PageHeader() {
-    const { price } = usePrices()
     const currency = useSettingsStore(store => store.currency)
+    const price = usePricesStore(store => store.price)
 
     const avaxLocalePrice = ((): string => {
         switch (currency) {

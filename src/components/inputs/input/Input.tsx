@@ -6,7 +6,7 @@ const Input = styled("input", {
     backgroundColor: "$gray2",
     height: "2.5rem",
     padding: "0 1rem",
-    borderRadius: "0.25rem",
+    borderRadius: "$sm",
     border: "1px solid $gray7",
     color: "$gray11",
     minWidth: 0,

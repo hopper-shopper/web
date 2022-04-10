@@ -8,7 +8,11 @@ import Button from "components/inputs/buttons/button/Button"
 import Fieldset from "components/inputs/fieldset/Fieldset"
 import Input from "components/inputs/input/Input"
 import Label from "components/inputs/label/Label"
+import TransfersBreakdown from "components/transfers/transfers-breakdown/TransfersBreakdown"
+import TransfersByDaySelect from "components/transfers/transfers-by-day-select/TransfersByDaySelect"
+import TransfersTable from "components/transfers/transfers-table/TransfersTable"
 import { Hopper } from "models/Hopper"
+import { Transfer } from "models/Transfer"
 import { useRef, useState } from "react"
 import { useLocalStorage, useMount } from "react-use"
 import { styled } from "theme"
@@ -18,6 +22,7 @@ export default function WalletPage() {
     const hoppersLoadedForAddress = useRef<string | null>(null)
     const [walletAddress, setWalletAddress] = useLocalStorage(WALLET_ADDRESS_LS, "")
     const [walletHoppers, setWalletHoppers] = useState<Hopper[]>([])
+    const [selectedTransfers, setSelectedTransfers] = useState<Transfer[]>([])
 
     const { transfers: inTransfers } = useTransfers({
         user: walletAddress || "",
@@ -56,6 +61,8 @@ export default function WalletPage() {
         }
     }
 
+    const combinedTransfers = [...inTransfers, ...outTransfers]
+
     return (
         <>
             <InputContainer
@@ -78,18 +85,35 @@ export default function WalletPage() {
             </InputContainer>
 
             <Container>
-                <HoppersList>
-                    {walletHoppers.map(hopper => (
-                        <HopperCard
-                            key={hopper.tokenId}
-                            hopper={hopper}
-                            listings={hopperListings}
-                        />
-                    ))}
-                </HoppersList>
+                <Section>
+                    <SectionTitle>Hoppers</SectionTitle>
+                    <HoppersList>
+                        {walletHoppers.map(hopper => (
+                            <HopperCard
+                                key={hopper.tokenId}
+                                hopper={hopper}
+                                listings={hopperListings}
+                            />
+                        ))}
+                    </HoppersList>
+                </Section>
 
-                {/* <TransfersTable transfers={inTransfers} />
-                <TransfersTable transfers={outTransfers} /> */}
+                <Section>
+                    <SectionTitle>FLY Transfers</SectionTitle>
+
+                    <TransfersBreakdown transfers={combinedTransfers} />
+
+                    <TransfersGrid>
+                        <div>
+                            <TransfersByDaySelect
+                                transfers={combinedTransfers}
+                                onSelect={setSelectedTransfers}
+                            />
+                        </div>
+
+                        <TransfersTable transfers={selectedTransfers} />
+                    </TransfersGrid>
+                </Section>
             </Container>
         </>
     )
@@ -108,15 +132,40 @@ const InputContainer = styled("form", {
 })
 const Container = styled("div", {
     maxWidth: 1024,
-    margin: "0 auto",
-    marginTop: "5rem",
+    margin: "5rem auto",
     display: "flex",
     flexDirection: "column",
     rowGap: "3rem",
+})
+const Section = styled("section", {
+    display: "flex",
+    flexDirection: "column",
+    rowGap: "2rem",
+})
+const SectionTitle = styled("h2", {
+    color: "$gray12",
+    fontSize: "1.25rem",
+    lineHeight: 1.5,
+    paddingLeft: "2rem",
+    position: "relative",
+    "&::before": {
+        content: '" "',
+        position: "absolute",
+        left: 0,
+        width: "1.5rem",
+        height: 1,
+        backgroundColor: "$gray12",
+        top: "50%",
+    },
 })
 const HoppersList = styled("div", {
     display: "grid",
     gridTemplateColumns: "repeat(3, 1fr)",
     columnGap: "1rem",
     alignItems: "start",
+})
+const TransfersGrid = styled("div", {
+    display: "grid",
+    alignItems: "start",
+    rowGap: "1rem",
 })
