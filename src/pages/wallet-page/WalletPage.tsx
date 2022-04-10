@@ -24,11 +24,19 @@ export default function WalletPage() {
     const [walletHoppers, setWalletHoppers] = useState<Hopper[]>([])
     const [selectedTransfers, setSelectedTransfers] = useState<Transfer[]>([])
 
-    const { transfers: inTransfers, loading: inTransfersLoading } = useTransfers({
+    const {
+        transfers: inTransfers,
+        loading: inTransfersLoading,
+        dataSignature: inTransfersSignature,
+    } = useTransfers({
         user: walletAddress || "",
         direction: TransferDirection.IN,
     })
-    const { transfers: outTransfers, loading: outTransfersLoading } = useTransfers({
+    const {
+        transfers: outTransfers,
+        loading: outTransfersLoading,
+        dataSignature: outTransfersSignature,
+    } = useTransfers({
         user: walletAddress || "",
         direction: TransferDirection.OUT,
     })
@@ -54,6 +62,7 @@ export default function WalletPage() {
             const hoppers = await fetchHoppers({
                 owner: walletAddress,
             })
+            setSelectedTransfers([])
             setWalletHoppers(hoppers)
             hoppersLoadedForAddress.current = walletAddress
         } catch (error) {
@@ -106,6 +115,7 @@ export default function WalletPage() {
                     <TransfersGrid>
                         <div>
                             <TransfersByDaySelect
+                                key={`${walletAddress}-${inTransfersSignature}-${outTransfersSignature}`}
                                 ready={!inTransfersLoading && !outTransfersLoading}
                                 transfers={combinedTransfers}
                                 onSelect={setSelectedTransfers}

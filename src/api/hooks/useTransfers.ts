@@ -1,31 +1,27 @@
 import { TransfersFilter } from "api/filters/transfers"
 import { fetchTransfers } from "api/transfers"
+import useFetch from "hooks/useFetch"
 import { Transfer } from "models/Transfer"
-import { useAsync } from "react-use"
 
-export type UseTransfersReturn = {
+type UseTransfersReturn = {
     transfers: Transfer[]
+    dataSignature: string | null
     loading: boolean
-    error: Error | undefined
+    error: Error | null
 }
 
 export default function useTransfers(filter: TransfersFilter): UseTransfersReturn {
     const { user, direction } = filter
 
-    const {
-        value: transfers = [],
-        loading,
-        error,
-    } = useAsync(() => {
-        return fetchTransfers({
-            user,
-            direction,
-        })
-    }, [user, direction])
+    const signature = `${user}-${direction}`
+    const { data, dataSignature, loading, error } = useFetch(() => {
+        return fetchTransfers({ user, direction })
+    }, signature)
 
     return {
-        transfers,
+        transfers: data ?? [],
         loading,
         error,
+        dataSignature,
     }
 }
