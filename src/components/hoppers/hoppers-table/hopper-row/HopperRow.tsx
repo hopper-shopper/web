@@ -1,6 +1,4 @@
-import { IconStar } from "@tabler/icons"
-import HopperDetailsDialog from "components/hoppers/hopper-details-dialog/HopperDetailsDialog"
-import IconButton from "components/inputs/buttons/icon-button/IconButton"
+import HopperDetailsHoverCard from "components/hoppers/hopper-details-hover-card/HopperDetailsHoverCard"
 import { Cell } from "components/table/Table"
 import WatchlistButton from "components/watchlist/watchlist-button/WatchlistButton"
 import { Currency, formatCurrency } from "formatters/currency"
@@ -35,11 +33,13 @@ export default function HopperRow(props: HopperRowProps) {
     return (
         <>
             <Cell>
-                <HopperDetailsDialog hopper={hopper}>
-                    <Center>
-                        <Image src={hopper.image} />
-                    </Center>
-                </HopperDetailsDialog>
+                <HopperDetailsHoverCard hopper={hopper} side="left">
+                    <a href={`https://hoppersgame.io/market#h${hopper.tokenId}`} target="_blank">
+                        <Center>
+                            <Image src={hopper.image} />
+                        </Center>
+                    </a>
+                </HopperDetailsHoverCard>
             </Cell>
             <Cell align="center">{hopper.tokenId}</Cell>
             <Cell align="center">{hopper.level}</Cell>

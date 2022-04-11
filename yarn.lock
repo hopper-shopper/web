@@ -585,6 +585,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@radix-ui/react-hover-card@npm:^0.1.5":
+  version: 0.1.5
+  resolution: "@radix-ui/react-hover-card@npm:0.1.5"
+  dependencies:
+    "@babel/runtime": ^7.13.10
+    "@radix-ui/primitive": 0.1.0
+    "@radix-ui/react-compose-refs": 0.1.0
+    "@radix-ui/react-context": 0.1.1
+    "@radix-ui/react-dismissable-layer": 0.1.5
+    "@radix-ui/react-popper": 0.1.4
+    "@radix-ui/react-portal": 0.1.4
+    "@radix-ui/react-presence": 0.1.2
+    "@radix-ui/react-primitive": 0.1.4
+    "@radix-ui/react-use-controllable-state": 0.1.0
+  peerDependencies:
+    react: ^16.8 || ^17.0
+    react-dom: ^16.8 || ^17.0
+  checksum: b2dddeaf0786c0eedbf869330b7c0b27f6d860dfe349f5cd61d860ec4e98ce22bb3f63ac2e2238887d113e6e64bcfa2c400206e44277753d603444fcb5f1815a
+  languageName: node
+  linkType: hard
+
 "@radix-ui/react-id@npm:0.1.5":
   version: 0.1.5
   resolution: "@radix-ui/react-id@npm:0.1.5"
@@ -3373,6 +3394,7 @@ __metadata:
     "@radix-ui/react-checkbox": ^0.1.5
     "@radix-ui/react-dialog": ^0.1.7
     "@radix-ui/react-dropdown-menu": ^0.1.6
+    "@radix-ui/react-hover-card": ^0.1.5
     "@radix-ui/react-progress": ^0.1.4
     "@radix-ui/react-radio-group": ^0.1.5
     "@radix-ui/react-select": ^0.1.1

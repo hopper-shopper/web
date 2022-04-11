@@ -1,5 +1,5 @@
-import { DialogProps } from "@radix-ui/react-dialog"
-import * as Dialog from "components/dialog/Dialog"
+import { HoverCardContentProps } from "@radix-ui/react-hover-card"
+import * as HoverCard from "components/hover-card/HoverCard"
 import { Hopper } from "models/Hopper"
 import { styled } from "theme"
 import BaseStatsList from "../hopper-card/hopper-card-features/base-stats-list/BaseStatsList"
@@ -7,17 +7,17 @@ import FlyEarnings from "../hopper-card/hopper-card-features/fly-earnings/FlyEar
 import PermitDetails from "../hopper-card/hopper-card-features/permit-details/PermitDetails"
 import HopperCardContext from "../hopper-card/HopperCardContext"
 
-type HopperDetailsDialogProps = DialogProps & {
+type HopperDetailsHoverCardProps = HoverCardContentProps & {
     hopper: Hopper
 }
 
-export default function HopperDetailsDialog(props: HopperDetailsDialogProps) {
-    const { hopper, children, ...restDialogProps } = props
+export default function HopperDetailsHoverCard(props: HopperDetailsHoverCardProps) {
+    const { hopper, children, ...restHoverCardProps } = props
 
     return (
-        <Dialog.Root {...restDialogProps}>
-            <Dialog.Trigger asChild>{children}</Dialog.Trigger>
-            <Dialog.Content css={{ maxWidth: 375 }}>
+        <HoverCard.Root>
+            <HoverCard.Trigger asChild>{children}</HoverCard.Trigger>
+            <HoverCard.Content {...restHoverCardProps} css={{ width: 350 }}>
                 <Details>
                     <HopperInfo>
                         <HopperImage src={hopper.image} />
@@ -34,9 +34,9 @@ export default function HopperDetailsDialog(props: HopperDetailsDialogProps) {
                     </HopperCardContext.Provider>
                 </Details>
 
-                <Dialog.Close />
-            </Dialog.Content>
-        </Dialog.Root>
+                <HoverCard.Arrow />
+            </HoverCard.Content>
+        </HoverCard.Root>
     )
 }
 
@@ -66,14 +66,4 @@ const HopperImage = styled("img", {
 const Details = styled("div", {
     display: "grid",
     rowGap: "1rem",
-})
-const Feature = styled("div", {
-    display: "grid",
-    rowGap: "0.25rem",
-})
-const FeatureTitle = styled("h4", {
-    color: "$gray11",
-    fontSize: "0.875rem",
-    lineHeight: 1.5,
-    fontWeight: 400,
 })
