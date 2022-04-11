@@ -1,16 +1,14 @@
 import { formatRating } from "formatters/rating"
-import { Hopper } from "models/Hopper"
 import { styled } from "theme"
+import { useHopperCardContext } from "../../HopperCardContext"
+import * as Feature from "../HopperCardFeature"
 
-type PermitDetailsProps = {
-    hopper: Hopper
-}
-
-export default function PermitDetails(props: PermitDetailsProps) {
-    const { hopper } = props
+export default function PermitDetails() {
+    const { hopper } = useHopperCardContext()
 
     return (
-        <>
+        <Feature.Root>
+            <Feature.Title>Adventure Permit</Feature.Title>
             <TierItem allowed={hopper.rating.river > 0}>
                 <span>Tier 2</span>
                 <span>{formatRating(hopper.rating.river)} / 100</span>
@@ -23,7 +21,7 @@ export default function PermitDetails(props: PermitDetailsProps) {
                 <span>Tier 4</span>
                 <span>{formatRating(hopper.rating.greatLake)} / 100</span>
             </TierItem>
-        </>
+        </Feature.Root>
     )
 }
 

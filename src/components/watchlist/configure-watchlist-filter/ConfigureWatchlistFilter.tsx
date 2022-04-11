@@ -2,6 +2,8 @@ import { styled } from "theme"
 import * as Radio from "components/inputs/radio/Radio"
 import Flex from "components/layout/flex/Flex"
 import Label from "components/inputs/label/Label"
+import * as Checkbox from "components/inputs/checkbox/Checkbox"
+import { CheckboxProps } from "@radix-ui/react-checkbox"
 
 type ConfigureWatchlistFilterProps = {
     filter: WatchlistFilter
@@ -13,8 +15,33 @@ export default function ConfigureWatchlistFilter(props: ConfigureWatchlistFilter
 
     const handleMarketChange = (marketFilter: WatchlistMarketFilter) => {
         onChange({
+            ...filter,
             market: marketFilter,
         })
+    }
+    const getFeatureCheckboxProps = (forFeature: WatchlistCardFeature): CheckboxProps => {
+        return {
+            checked: filter.features.includes(forFeature),
+            onCheckedChange: checked => {
+                if (typeof checked !== "boolean") {
+                    return
+                }
+
+                if (checked) {
+                    onChange({
+                        ...filter,
+                        features: Array.from(new Set([...filter.features, forFeature])),
+                    })
+                } else {
+                    onChange({
+                        ...filter,
+                        features: Array.from(
+                            new Set([...filter.features.filter(feature => feature !== forFeature)]),
+                        ),
+                    })
+                }
+            },
+        }
     }
 
     return (
@@ -46,6 +73,44 @@ export default function ConfigureWatchlistFilter(props: ConfigureWatchlistFilter
                     </Column>
                 </Radio.Root>
             </Section>
+
+            <Section>
+                <SectionTitle>Configure View</SectionTitle>
+                <Column>
+                    <Flex gap="sm">
+                        <Checkbox.Root
+                            id="feature-adventure-permit"
+                            {...getFeatureCheckboxProps(WatchlistCardFeature.ADVENTURE_PERMIT)}>
+                            <Checkbox.Indicator>
+                                <Checkbox.Icon />
+                            </Checkbox.Indicator>
+                        </Checkbox.Root>
+                        <Label htmlFor="feature-adventure-permit">Adventure permit</Label>
+                    </Flex>
+
+                    <Flex gap="sm">
+                        <Checkbox.Root
+                            id="feature-fly-earnings"
+                            {...getFeatureCheckboxProps(WatchlistCardFeature.FLY_EARNINGS)}>
+                            <Checkbox.Indicator>
+                                <Checkbox.Icon />
+                            </Checkbox.Indicator>
+                        </Checkbox.Root>
+                        <Label htmlFor="feature-fly-earnings">FLY earnings</Label>
+                    </Flex>
+
+                    <Flex gap="sm">
+                        <Checkbox.Root
+                            id="feature-market-price"
+                            {...getFeatureCheckboxProps(WatchlistCardFeature.MARKET_PRICE)}>
+                            <Checkbox.Indicator>
+                                <Checkbox.Icon />
+                            </Checkbox.Indicator>
+                        </Checkbox.Root>
+                        <Label htmlFor="feature-market-price">Market price</Label>
+                    </Flex>
+                </Column>
+            </Section>
         </Container>
     )
 }
@@ -55,8 +120,14 @@ export enum WatchlistMarketFilter {
     ON_MARKET = "ON_MARKET",
     OFF_MARKET = "OFF_MARKET",
 }
+export enum WatchlistCardFeature {
+    ADVENTURE_PERMIT = "ADVENTURE_PERMIT",
+    FLY_EARNINGS = "FLY_EARNINGS",
+    MARKET_PRICE = "MARKET_PRICE",
+}
 export type WatchlistFilter = {
     market: WatchlistMarketFilter
+    features: WatchlistCardFeature[]
 }
 
 const Container = styled("div", {

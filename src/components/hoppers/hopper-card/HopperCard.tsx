@@ -1,69 +1,48 @@
 import { formatAdventure } from "formatters/adventure"
 import { Hopper } from "models/Hopper"
-import { Listing } from "models/Listing"
+import { PropsWithChildren } from "react"
 import { styled } from "theme"
 import { getIdealAdventure } from "utils/adventures"
 import { hopperAdventureToAdventure } from "utils/hopper"
-import BaseStatsList from "./base-stats-list/BaseStatsList"
-import BoughtFor from "./bought-for/BoughtFor"
-import FlyEarnings from "./fly-earnings/FlyEarnings"
-import PermitDetails from "./permit-details/PermitDetails"
+import HopperCardContext from "./HopperCardContext"
 
 type HopperCardProps = {
     hopper: Hopper
-    listings?: Listing[]
 }
 
-export default function HopperCard(props: HopperCardProps) {
-    const { hopper, listings } = props
+export default function HopperCard(props: PropsWithChildren<HopperCardProps>) {
+    const { hopper, children } = props
 
     const hopperAdventure = hopperAdventureToAdventure(hopper)
     const idealAdventure = getIdealAdventure(hopper)
 
     return (
-        <StyledCard>
-            <CardHeader>
-                <HopperImage src={hopper.image} />
-                <HopperStats>
-                    <HopperId>{hopper.tokenId}</HopperId>
-                    <HopperLevel>Level: {hopper.level}</HopperLevel>
-                </HopperStats>
+        <HopperCardContext.Provider value={{ hopper }}>
+            <StyledCard>
+                <CardHeader>
+                    <HopperImage src={hopper.image} />
+                    <HopperStats>
+                        <HopperId>{hopper.tokenId}</HopperId>
+                        <HopperLevel>Level: {hopper.level}</HopperLevel>
+                    </HopperStats>
 
-                <RightSlot>
-                    <StyledAdventure
-                        ideal={
-                            hopperAdventure === null
-                                ? undefined
-                                : hopperAdventure === idealAdventure
-                        }>
-                        {formatAdventure(hopperAdventure)}
-                    </StyledAdventure>
-                </RightSlot>
-            </CardHeader>
+                    <RightSlot>
+                        <StyledAdventure
+                            ideal={
+                                hopperAdventure === null
+                                    ? undefined
+                                    : hopperAdventure === idealAdventure
+                            }>
+                            {formatAdventure(hopperAdventure)}
+                        </StyledAdventure>
+                    </RightSlot>
+                </CardHeader>
 
-            <Divider />
+                <Divider />
 
-            <Details>
-                <BaseStatsList hopper={hopper} />
-
-                {listings && (
-                    <Feature>
-                        <FeatureTitle>Bought for</FeatureTitle>
-                        <BoughtFor hopper={hopper} listings={listings} />
-                    </Feature>
-                )}
-
-                <Feature>
-                    <FeatureTitle>Adventure Permit</FeatureTitle>
-                    <PermitDetails hopper={hopper} />
-                </Feature>
-
-                <Feature>
-                    <FeatureTitle>FLY Earnings / Day</FeatureTitle>
-                    <FlyEarnings hopper={hopper} />
-                </Feature>
-            </Details>
-        </StyledCard>
+                <Details>{children}</Details>
+            </StyledCard>
+        </HopperCardContext.Provider>
     )
 }
 
@@ -125,14 +104,4 @@ const Details = styled("div", {
     padding: "1rem",
     display: "grid",
     rowGap: "1rem",
-})
-const Feature = styled("div", {
-    display: "grid",
-    rowGap: "0.25rem",
-})
-const FeatureTitle = styled("h4", {
-    color: "$gray11",
-    fontSize: "0.875rem",
-    lineHeight: 1.5,
-    fontWeight: 400,
 })

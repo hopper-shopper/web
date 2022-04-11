@@ -5,10 +5,12 @@ import Fieldset from "components/inputs/fieldset/Fieldset"
 import Input from "components/inputs/input/Input"
 import Label from "components/inputs/label/Label"
 import ConfigureWatchlistFilter, {
+    WatchlistCardFeature,
     WatchlistFilter,
     WatchlistMarketFilter,
 } from "components/watchlist/configure-watchlist-filter/ConfigureWatchlistFilter"
 import WatchlistCard from "components/watchlist/watchlist-card/WatchlistCard"
+import WatchlistHopperCard from "components/watchlist/watchlist-hopper-card/WatchlistHopperCard"
 import { getHoppersMarketFilter, getHoppersOnWatchlistFilter } from "filters/hoppers"
 import useFilter from "hooks/useFilter"
 import { useRef, useState } from "react"
@@ -19,6 +21,7 @@ export default function WatchlistPage() {
     const [watchlist, toggle] = useWatchlistStore(store => [store.watchlist, store.toggle])
     const [watchlistFilter, setWatchlistFilter] = useState<WatchlistFilter>({
         market: WatchlistMarketFilter.ANY,
+        features: [WatchlistCardFeature.ADVENTURE_PERMIT],
     })
 
     const addHopperIdRef = useRef<HTMLInputElement | null>(null)
@@ -98,7 +101,11 @@ export default function WatchlistPage() {
                         {filteredHoppers.length > 0 && (
                             <HoppersGrid>
                                 {filteredHoppers.map(hopper => (
-                                    <HopperCard key={hopper.tokenId} hopper={hopper} />
+                                    <WatchlistHopperCard
+                                        key={hopper.tokenId}
+                                        hopper={hopper}
+                                        features={watchlistFilter.features}
+                                    />
                                 ))}
                             </HoppersGrid>
                         )}

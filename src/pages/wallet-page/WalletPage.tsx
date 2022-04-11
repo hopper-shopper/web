@@ -3,7 +3,6 @@ import { TransferDirection } from "api/filters/transfers"
 import useHoppersListings from "api/hooks/useHoppersListings"
 import useTransfers from "api/hooks/useTransfers"
 import { fetchHoppers } from "api/hoppers"
-import HopperCard from "components/hoppers/hopper-card/HopperCard"
 import Button from "components/inputs/buttons/button/Button"
 import Fieldset from "components/inputs/fieldset/Fieldset"
 import Input from "components/inputs/input/Input"
@@ -12,6 +11,7 @@ import TransfersBreakdown from "components/transfers/transfers-breakdown/Transfe
 import TransfersByDaySelect from "components/transfers/transfers-by-day-select/TransfersByDaySelect"
 import TransfersTable from "components/transfers/transfers-table/TransfersTable"
 import FlyCap from "components/user/fly-cap/FlyCap"
+import WalletHopperCard from "components/wallet/wallet-hopper-card/WalletHopperCard"
 import { Hopper } from "models/Hopper"
 import { Transfer } from "models/Transfer"
 import { useRef, useState } from "react"
@@ -120,7 +120,7 @@ export default function WalletPage() {
                     <SectionTitle>Hoppers</SectionTitle>
                     <HoppersList>
                         {walletHoppers.map(hopper => (
-                            <HopperCard
+                            <WalletHopperCard
                                 key={hopper.tokenId}
                                 hopper={hopper}
                                 listings={hopperListings}

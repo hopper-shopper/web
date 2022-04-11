@@ -1,17 +1,18 @@
 import { Currency, formatCurrency } from "formatters/currency"
-import { Hopper } from "models/Hopper"
 import { Listing } from "models/Listing"
 import { SortListingBy, sortListings } from "sorters/listings"
 import { SortDirection } from "sorters/_common"
 import { styled } from "theme"
+import { useHopperCardContext } from "../../HopperCardContext"
+import * as Features from "../HopperCardFeature"
 
 type BoughtForProps = {
-    hopper: Hopper
     listings: Listing[]
 }
 
 export default function BoughtFor(props: BoughtForProps) {
-    const { hopper, listings } = props
+    const { hopper } = useHopperCardContext()
+    const { listings } = props
 
     const boughtForPrice = ((): number => {
         if (listings.length === 0) {
@@ -30,7 +31,12 @@ export default function BoughtFor(props: BoughtForProps) {
         return latestPrice
     })()
 
-    return <StyledPrice>{formatCurrency(boughtForPrice, Currency.AVAX)}</StyledPrice>
+    return (
+        <Features.Root>
+            <Features.Title>Bought for</Features.Title>
+            <StyledPrice>{formatCurrency(boughtForPrice, Currency.AVAX)}</StyledPrice>
+        </Features.Root>
+    )
 }
 
 const StyledPrice = styled("span", {

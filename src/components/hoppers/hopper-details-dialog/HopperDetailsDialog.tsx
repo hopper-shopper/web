@@ -2,9 +2,10 @@ import { DialogProps } from "@radix-ui/react-dialog"
 import * as Dialog from "components/dialog/Dialog"
 import { Hopper } from "models/Hopper"
 import { styled } from "theme"
-import BaseStatsList from "../hopper-card/base-stats-list/BaseStatsList"
-import FlyEarnings from "../hopper-card/fly-earnings/FlyEarnings"
-import PermitDetails from "../hopper-card/permit-details/PermitDetails"
+import BaseStatsList from "../hopper-card/hopper-card-features/base-stats-list/BaseStatsList"
+import FlyEarnings from "../hopper-card/hopper-card-features/fly-earnings/FlyEarnings"
+import PermitDetails from "../hopper-card/hopper-card-features/permit-details/PermitDetails"
+import HopperCardContext from "../hopper-card/HopperCardContext"
 
 type HopperDetailsDialogProps = DialogProps & {
     hopper: Hopper
@@ -26,17 +27,11 @@ export default function HopperDetailsDialog(props: HopperDetailsDialogProps) {
                         </HopperStats>
                     </HopperInfo>
 
-                    <BaseStatsList hopper={hopper} />
-
-                    <Feature>
-                        <FeatureTitle>Adventure Permit</FeatureTitle>
-                        <PermitDetails hopper={hopper} />
-                    </Feature>
-
-                    <Feature>
-                        <FeatureTitle>FLY Earnings / Day</FeatureTitle>
-                        <FlyEarnings hopper={hopper} />
-                    </Feature>
+                    <HopperCardContext.Provider value={{ hopper }}>
+                        <BaseStatsList />
+                        <PermitDetails />
+                        <FlyEarnings />
+                    </HopperCardContext.Provider>
                 </Details>
 
                 <Dialog.Close />

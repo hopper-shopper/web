@@ -1,20 +1,18 @@
 import { formatAdventure } from "formatters/adventure"
 import { Currency, formatCurrency } from "formatters/currency"
-import { Hopper } from "models/Hopper"
 import { styled } from "theme"
 import { Adventure, getEarningsByAdventure, getIdealAdventure } from "utils/adventures"
+import { useHopperCardContext } from "../../HopperCardContext"
+import * as Feature from "../HopperCardFeature"
 
-type FlyEarningsProps = {
-    hopper: Hopper
-}
-
-export default function FlyEarnings(props: FlyEarningsProps) {
-    const { hopper } = props
+export default function FlyEarnings() {
+    const { hopper } = useHopperCardContext()
 
     const idealAdventure = getIdealAdventure(hopper)
 
     return (
-        <>
+        <Feature.Root>
+            <Feature.Title>FLY Earnings / Day</Feature.Title>
             <EarningsItem highest={Adventure.POND === idealAdventure}>
                 <span>{formatAdventure(Adventure.POND)}</span>
                 <span>
@@ -54,7 +52,7 @@ export default function FlyEarnings(props: FlyEarningsProps) {
                     )}
                 </span>
             </EarningsItem>
-        </>
+        </Feature.Root>
     )
 }
 
