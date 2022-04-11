@@ -3,11 +3,20 @@ import { HOPPER_STATS_SCALE } from "utils/hopper"
 import { useHopperCardContext } from "../../HopperCardContext"
 import * as Feature from "../HopperCardFeature"
 
-export default function BaseStatsList() {
+type BaseStatsListProps = {
+    /**
+     * @default false
+     */
+    title?: boolean
+}
+
+export default function BaseStatsList(props: BaseStatsListProps) {
+    const { title = false } = props
     const { hopper } = useHopperCardContext()
 
     return (
         <Feature.Root>
+            {title && <Feature.Title>Base stats</Feature.Title>}
             <StyledBaseStatsList>
                 <BaseStat style={{ backgroundColor: HOPPER_STATS_SCALE(hopper.strength) }}>
                     {hopper.strength}

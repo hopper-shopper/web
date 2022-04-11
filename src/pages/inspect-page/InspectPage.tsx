@@ -1,65 +1,67 @@
+import useUrlState from "@ahooksjs/use-url-state"
 import { fetchHoppers } from "api/hoppers"
 import { fetchHoppersListings } from "api/market"
+import BaseStatsList from "components/hoppers/hopper-card/hopper-card-features/base-stats-list/BaseStatsList"
+import FlyEarnings from "components/hoppers/hopper-card/hopper-card-features/fly-earnings/FlyEarnings"
+import PermitDetails from "components/hoppers/hopper-card/hopper-card-features/permit-details/PermitDetails"
+import HopperCardContext from "components/hoppers/hopper-card/HopperCardContext"
 import Button from "components/inputs/buttons/button/Button"
 import Fieldset from "components/inputs/fieldset/Fieldset"
 import Input from "components/inputs/input/Input"
 import Label from "components/inputs/label/Label"
-import { Hopper, HopperId } from "models/Hopper"
-import { Listing } from "models/Listing"
-import { useRef, useState } from "react"
-import { useSearchParams } from "react-router-dom"
-import { useMount } from "react-use"
-import { styled } from "theme"
+import Flex from "components/layout/flex/Flex"
 import * as Section from "components/layout/section/Section"
 import ListingsTable from "components/listings/listings-table/ListingsTable"
-import HopperCardContext from "components/hoppers/hopper-card/HopperCardContext"
-import BaseStatsList from "components/hoppers/hopper-card/hopper-card-features/base-stats-list/BaseStatsList"
-import PermitDetails from "components/hoppers/hopper-card/hopper-card-features/permit-details/PermitDetails"
-import FlyEarnings from "components/hoppers/hopper-card/hopper-card-features/fly-earnings/FlyEarnings"
+import WatchlistButton from "components/watchlist/watchlist-button/WatchlistButton"
+import { Hopper, HopperId } from "models/Hopper"
+import { Listing } from "models/Listing"
+import { useEffect, useRef, useState } from "react"
+import useWatchlistStore from "stores/watchlist"
+import { styled } from "theme"
 
 export default function InspectPage() {
-    const [searchParams, setSearchParams] = useSearchParams()
+    const watchlist = useWatchlistStore(store => store.watchlist)
+    const [state, setState] = useUrlState({ hopperId: "" })
 
-    const hopperId = searchParams.get("hopper")
     const lastLoadedForHopperId = useRef<HopperId | null>(null)
 
     const [listings, setListings] = useState<Listing[]>([])
     const [hopper, setHopper] = useState<Hopper | null>(null)
 
-    const fetchData = async () => {
-        if (!hopperId || lastLoadedForHopperId.current === hopperId) {
-            return
-        }
+    useEffect(() => {
+        ;(async () => {
+            if (!state.hopperId || lastLoadedForHopperId.current === state.hopperId) {
+                return
+            }
 
-        const tokenId = parseInt(hopperId)
-        if (Number.isNaN(tokenId) || tokenId < 0 || tokenId > 9999) {
-            return
-        }
-        const tokenIdStr = `${tokenId}`
+            const tokenId = parseInt(state.hopperId)
+            if (Number.isNaN(tokenId) || tokenId < 0 || tokenId > 9999) {
+                return
+            }
+            const tokenIdStr = `${tokenId}`
 
-        try {
-            const fetchHopper = fetchHoppers({ tokenIds: [tokenIdStr] }).then(hoppers => {
-                setHopper(hoppers[0])
-            })
-            const fetchListings = fetchHoppersListings({ tokenIds: [tokenIdStr] }).then(
-                listings => {
-                    setListings(listings)
-                },
-            )
+            try {
+                const fetchHopper = fetchHoppers({ tokenIds: [tokenIdStr] }).then(hoppers => {
+                    setHopper(hoppers[0])
+                })
+                const fetchListings = fetchHoppersListings({ tokenIds: [tokenIdStr] }).then(
+                    listings => {
+                        setListings(listings)
+                    },
+                )
 
-            await Promise.all([fetchHopper, fetchListings])
-        } catch (error) {
-            console.error(error)
-        }
-    }
-    useMount(fetchData)
+                await Promise.all([fetchHopper, fetchListings])
+            } catch (error) {
+                console.error(error)
+            }
+        })()
+    }, [state.hopperId])
 
     return (
         <>
             <InputContainer
                 onSubmit={event => {
                     event.preventDefault()
-                    fetchData()
                 }}>
                 <Fieldset css={{ flex: 1 }}>
                     <Label htmlFor="hopper-id">Hopper-ID</Label>
@@ -69,19 +71,19 @@ export default function InspectPage() {
                         min={0}
                         max={9999}
                         placeholder="Hopper-ID"
-                        defaultValue={hopperId || ""}
-                        onBlur={value =>
-                            setSearchParams({
-                                hopper: value.target.value,
+                        defaultValue={state.hopperId || ""}
+                        onBlur={value => {
+                            setState({
+                                hopperId: value.target.value,
                             })
-                        }
+                        }}
                     />
                 </Fieldset>
 
                 <Button type="submit">Load</Button>
             </InputContainer>
 
-            {hopperId && (
+            {state.hopperId && (
                 <Container>
                     <Section.Root>
                         <Section.Title>Hopper</Section.Title>
@@ -90,11 +92,22 @@ export default function InspectPage() {
                                 <HopperPreview>
                                     <HopperBaseInfo>
                                         <HopperImage src={hopper.image} />
-                                        <BaseStatsList />
+                                        <Flex gap="md">
+                                            <WatchlistButton hopperId={hopper.tokenId} />
+                                            <WatchlistText>
+                                                {watchlist.includes(hopper.tokenId)
+                                                    ? "Remove from"
+                                                    : "Add to"}{" "}
+                                                watchlist
+                                            </WatchlistText>
+                                        </Flex>
                                     </HopperBaseInfo>
 
                                     <HopperAnalysis>
-                                        <PermitDetails />
+                                        <Column>
+                                            <BaseStatsList title />
+                                            <PermitDetails />
+                                        </Column>
                                         <FlyEarnings />
                                     </HopperAnalysis>
                                 </HopperPreview>
@@ -131,6 +144,10 @@ const HopperImage = styled("img", {
     width: 200,
     borderRadius: "$md",
 })
+const WatchlistText = styled("span", {
+    fontSize: "0.75rem",
+    color: "$gray12",
+})
 const HopperBaseInfo = styled("div", {
     display: "flex",
     flexDirection: "column",
@@ -141,6 +158,11 @@ const HopperAnalysis = styled("div", {
     gridTemplateColumns: "repeat(2, 1fr)",
     columnGap: "2rem",
     alignItems: "start",
+})
+const Column = styled("div", {
+    display: "flex",
+    flexDirection: "column",
+    rowGap: "2rem",
 })
 const EmptyText = styled("p", {
     color: "$gray11",

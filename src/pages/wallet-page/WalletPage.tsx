@@ -7,6 +7,7 @@ import Button from "components/inputs/buttons/button/Button"
 import Fieldset from "components/inputs/fieldset/Fieldset"
 import Input from "components/inputs/input/Input"
 import Label from "components/inputs/label/Label"
+import * as Section from "components/layout/section/Section"
 import TransfersBreakdown from "components/transfers/transfers-breakdown/TransfersBreakdown"
 import TransfersByDaySelect from "components/transfers/transfers-by-day-select/TransfersByDaySelect"
 import TransfersTable from "components/transfers/transfers-table/TransfersTable"
@@ -20,7 +21,6 @@ import { styled } from "theme"
 import { Adventure } from "utils/adventures"
 import { hopperAdventureToAdventure } from "utils/hopper"
 import isEthereumAddress from "validator/es/lib/isEthereumAddress"
-import * as Section from "components/layout/section/Section"
 
 export default function WalletPage() {
     const hoppersLoadedForAddress = useRef<string | null>(null)

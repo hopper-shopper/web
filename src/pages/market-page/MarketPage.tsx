@@ -4,18 +4,18 @@ import ConfigureHoppersTable, {
     HoppersTableConfigFilters,
     HoppersTableConfiguration,
 } from "components/hoppers/hoppers-table/configure-hoppers-table/ConfigureHoppersTable"
+import useHoppersTableConfiguration from "components/hoppers/hoppers-table/configure-hoppers-table/useHoppersTableConfiguration"
 import FloorPrice from "components/hoppers/hoppers-table/floor-price/FloorPrice"
 import HoppersTable from "components/hoppers/hoppers-table/HoppersTable"
 import {
-    getHoppersPermitFilter,
     getHoppersFertilityFilter,
+    getHoppersPermitFilter,
     getHoppersRatingFilter,
 } from "filters/hoppers"
 import { NumberComparison } from "filters/_common"
 import useFilter, { UseFilterPipeline } from "hooks/useFilter"
 import useSort, { SortContext } from "hooks/useSort"
 import { Hopper } from "models/Hopper"
-import { useState } from "react"
 import { SortHopperBy, sortHoppers } from "sorters/hoppers"
 import { SortDirection } from "sorters/_common"
 import { styled } from "theme"
@@ -23,9 +23,8 @@ import { styled } from "theme"
 export default function MarketPage() {
     const { hoppers } = useHoppers(HOPPERS_FILTER)
 
-    const [config, setConfig] = useState<HoppersTableConfiguration>({
-        type: HoppersTableConfigFilters.NONE,
-    })
+    const [configState, setConfig] = useHoppersTableConfiguration(DEFAULT_TABLE_CONFIGURATION)
+    const config = configState as HoppersTableConfiguration
 
     const hopperFilters: UseFilterPipeline<Hopper> = (() => {
         if (config.type === HoppersTableConfigFilters.PERMIT) {
@@ -77,6 +76,9 @@ const HOPPERS_FILTER: Required<HoppersFilter> = {
     market: MarketFilter.ON,
     tokenIds: [],
     owner: "",
+}
+const DEFAULT_TABLE_CONFIGURATION: HoppersTableConfiguration = {
+    type: HoppersTableConfigFilters.NONE,
 }
 
 // Components

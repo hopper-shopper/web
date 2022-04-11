@@ -2,8 +2,8 @@ import { HoverCardContentProps } from "@radix-ui/react-hover-card"
 import * as HoverCard from "components/hover-card/HoverCard"
 import { Hopper } from "models/Hopper"
 import { Link } from "react-router-dom"
-import { INSPECT } from "routing/routes"
 import { styled } from "theme"
+import { getInspectPageUrl } from "utils/url"
 import BaseStatsList from "../hopper-card/hopper-card-features/base-stats-list/BaseStatsList"
 import FlyEarnings from "../hopper-card/hopper-card-features/fly-earnings/FlyEarnings"
 import PermitDetails from "../hopper-card/hopper-card-features/permit-details/PermitDetails"
@@ -29,7 +29,7 @@ export default function HopperDetailsHoverCard(props: HopperDetailsHoverCardProp
                         </HopperStats>
 
                         <RightSlot>
-                            <StyledLink to={`${INSPECT}?hopper=${hopper.tokenId}`}>
+                            <StyledLink to={getInspectPageUrl({ hopper: hopper.tokenId })}>
                                 Inspect
                             </StyledLink>
                         </RightSlot>
