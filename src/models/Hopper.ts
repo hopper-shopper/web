@@ -1,7 +1,9 @@
 export type HopperAdventure = "pond" | "stream" | "swamp" | "river" | "forest" | "great-lake"
 
+export type HopperId = string
+
 export type Hopper = {
-    tokenId: string
+    tokenId: HopperId
     strength: number
     agility: number
     vitality: number

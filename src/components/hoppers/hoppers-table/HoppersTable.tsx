@@ -1,3 +1,5 @@
+import { IconStar } from "@tabler/icons"
+import IconButton from "components/inputs/buttons/icon-button/IconButton"
 import * as Table from "components/table/Table"
 import { Hopper } from "models/Hopper"
 import { TableVirtuoso } from "react-virtuoso"
@@ -109,6 +111,8 @@ export default function HoppersTable(props: HoppersTableProps) {
                                     </Table.HeaderCell>
                                 </>
                             )}
+
+                            <Table.HeaderCell css={{ width: 80 }} />
                         </Table.Row>
                     )
                 }}

@@ -1,5 +1,8 @@
+import { IconStar } from "@tabler/icons"
 import HopperDetailsDialog from "components/hoppers/hopper-details-dialog/HopperDetailsDialog"
+import IconButton from "components/inputs/buttons/icon-button/IconButton"
 import { Cell } from "components/table/Table"
+import WatchlistButton from "components/watchlist/watchlist-button/WatchlistButton"
 import { Currency, formatCurrency } from "formatters/currency"
 import { formatRating } from "formatters/rating"
 import { Hopper } from "models/Hopper"
@@ -100,6 +103,9 @@ export default function HopperRow(props: HopperRowProps) {
                     </Cell>
                 </>
             )}
+            <Cell align="right">
+                <WatchlistButton hopperId={hopper.tokenId} />
+            </Cell>
         </>
     )
 }

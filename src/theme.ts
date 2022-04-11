@@ -8,6 +8,8 @@ import {
     red,
     redDark,
     blackA,
+    yellow,
+    yellowDark,
 } from "@radix-ui/colors"
 import { createStitches, CSS, PropertyValue } from "@stitches/react"
 
@@ -26,6 +28,7 @@ export const {
             ...teal,
             ...red,
             ...blue,
+            ...yellow,
             ...blackA,
         },
         radii: {
@@ -49,5 +52,6 @@ export const darkTheme = createTheme({
         ...tealDark,
         ...redDark,
         ...blueDark,
+        ...yellowDark,
     },
 })
