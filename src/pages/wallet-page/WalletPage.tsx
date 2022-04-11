@@ -11,11 +11,14 @@ import Label from "components/inputs/label/Label"
 import TransfersBreakdown from "components/transfers/transfers-breakdown/TransfersBreakdown"
 import TransfersByDaySelect from "components/transfers/transfers-by-day-select/TransfersByDaySelect"
 import TransfersTable from "components/transfers/transfers-table/TransfersTable"
+import FlyCap from "components/user/fly-cap/FlyCap"
 import { Hopper } from "models/Hopper"
 import { Transfer } from "models/Transfer"
 import { useRef, useState } from "react"
 import { useLocalStorage, useMount } from "react-use"
 import { styled } from "theme"
+import { Adventure } from "utils/adventures"
+import { hopperAdventureToAdventure } from "utils/hopper"
 import isEthereumAddress from "validator/es/lib/isEthereumAddress"
 
 export default function WalletPage() {
@@ -72,6 +75,10 @@ export default function WalletPage() {
 
     const combinedTransfers = [...inTransfers, ...outTransfers]
 
+    const adventuresOfStakedHoppers = new Set(
+        walletHoppers.map(hopperAdventureToAdventure).filter(Boolean) as Adventure[],
+    )
+
     return (
         <>
             <InputContainer
@@ -94,6 +101,21 @@ export default function WalletPage() {
             </InputContainer>
 
             <Container>
+                {adventuresOfStakedHoppers.size > 0 && walletAddress && (
+                    <Section>
+                        <SectionTitle>FLY cap</SectionTitle>
+                        <UserCapList>
+                            {Array.from(adventuresOfStakedHoppers).map(adventure => (
+                                <FlyCap
+                                    key={adventure}
+                                    user={walletAddress}
+                                    adventure={adventure}
+                                />
+                            ))}
+                        </UserCapList>
+                    </Section>
+                )}
+
                 <Section>
                     <SectionTitle>Hoppers</SectionTitle>
                     <HoppersList>
@@ -168,6 +190,10 @@ const SectionTitle = styled("h2", {
         backgroundColor: "$gray12",
         top: "50%",
     },
+})
+const UserCapList = styled("div", {
+    display: "grid",
+    rowGap: "1rem",
 })
 const HoppersList = styled("div", {
     display: "grid",

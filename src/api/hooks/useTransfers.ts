@@ -20,8 +20,8 @@ export default function useTransfers(filter: TransfersFilter): UseTransfersRetur
 
     return {
         transfers: data ?? [],
+        dataSignature,
         loading,
         error,
-        dataSignature,
     }
 }

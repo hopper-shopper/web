@@ -1,9 +1,11 @@
+import { WalletAddress } from "models/User"
+
 export type HoppersFilter = {
     adventure?: AdventureFilter
     market?: MarketFilter
     permit?: PermitFilter
     tokenIds?: string[]
-    owner?: string
+    owner?: WalletAddress
 }
 
 export enum AdventureFilter {

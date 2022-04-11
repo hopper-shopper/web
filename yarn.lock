@@ -699,6 +699,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@radix-ui/react-progress@npm:^0.1.4":
+  version: 0.1.4
+  resolution: "@radix-ui/react-progress@npm:0.1.4"
+  dependencies:
+    "@babel/runtime": ^7.13.10
+    "@radix-ui/react-context": 0.1.1
+    "@radix-ui/react-primitive": 0.1.4
+  peerDependencies:
+    react: ^16.8 || ^17.0
+  checksum: fbcf40cdb2e8e80683fce66238cb0274dd353134cbf58525887b8dc7c3e378b8e2c23ab74d178f187666f4377d64f355f0f16cb6fdd0ac5ca298ae3300cc31dd
+  languageName: node
+  linkType: hard
+
 "@radix-ui/react-radio-group@npm:^0.1.5":
   version: 0.1.5
   resolution: "@radix-ui/react-radio-group@npm:0.1.5"
@@ -3360,6 +3373,7 @@ __metadata:
     "@radix-ui/react-checkbox": ^0.1.5
     "@radix-ui/react-dialog": ^0.1.7
     "@radix-ui/react-dropdown-menu": ^0.1.6
+    "@radix-ui/react-progress": ^0.1.4
     "@radix-ui/react-radio-group": ^0.1.5
     "@radix-ui/react-select": ^0.1.1
     "@radix-ui/react-toggle-group": ^0.1.5

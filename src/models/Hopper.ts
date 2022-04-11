@@ -10,7 +10,7 @@ export type Hopper = {
     level: number
     levelCosts: number
     listing: HopperListing
-    adventure: HopperAdventure
+    adventure: HopperAdventure | ""
     inAdventure: boolean
     rating: HopperRating
     baseFly: HopperBaseFly

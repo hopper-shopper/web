@@ -9,6 +9,23 @@ export enum Adventure {
     GREAT_LAKE = "GREAT_LAKE",
 }
 
+export function urlifyAdventure(adventure: Adventure): string {
+    switch (adventure) {
+        case Adventure.POND:
+            return "pond"
+        case Adventure.STREAM:
+            return "stream"
+        case Adventure.SWAMP:
+            return "swamp"
+        case Adventure.RIVER:
+            return "river"
+        case Adventure.FOREST:
+            return "forest"
+        case Adventure.GREAT_LAKE:
+            return "great-lake"
+    }
+}
+
 /**
  * Calculate the hopper price if it would be at adventure's max rating (1) with current price rate
  * @param adventure
