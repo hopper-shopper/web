@@ -1,4 +1,7 @@
+import { IconExternalLink } from "@tabler/icons"
+import useCurrentGas from "api/hooks/useCurrentGas"
 import { Currency, formatCurrency } from "formatters/currency"
+import { formatGwei } from "formatters/gas"
 import usePricesStore from "stores/prices"
 import useSettingsStore from "stores/settings"
 import { styled } from "theme"
@@ -8,6 +11,7 @@ import SettingsDropdown from "./settings-dropdown/SettingsDropdown"
 export default function PageHeader() {
     const currency = useSettingsStore(store => store.currency)
     const price = usePricesStore(store => store.price)
+    const { gas } = useCurrentGas()
 
     const avaxLocalePrice = ((): string => {
         switch (currency) {
@@ -39,16 +43,23 @@ export default function PageHeader() {
             </NavContainer>
 
             <Right>
-                <Prices>
-                    <PriceContainer>
-                        <PriceCoin>AVAX</PriceCoin>
-                        <Price>{avaxLocalePrice}</Price>
-                    </PriceContainer>
-                    <PriceContainer>
-                        <PriceCoin>FLY</PriceCoin>
-                        <Price>{flyLocalePrice}</Price>
-                    </PriceContainer>
-                </Prices>
+                <InfoContainer>
+                    <Info>
+                        <InfoLabel>Gas</InfoLabel>
+                        <InfoValue>{formatGwei(gas?.gwei ?? 0)}</InfoValue>
+                        <InfoExternal href="https://howmuchgas.xyz" target="_blank">
+                            <IconExternalLink />
+                        </InfoExternal>
+                    </Info>
+                    <Info>
+                        <InfoLabel>AVAX</InfoLabel>
+                        <InfoValue>{avaxLocalePrice}</InfoValue>
+                    </Info>
+                    <Info>
+                        <InfoLabel>FLY</InfoLabel>
+                        <InfoValue>{flyLocalePrice}</InfoValue>
+                    </Info>
+                </InfoContainer>
 
                 <SettingsDropdown />
             </Right>
@@ -81,23 +92,29 @@ const NavContainer = styled("div", {
     marginLeft: "4rem",
     height: "100%",
 })
-const Prices = styled("div", {
+const InfoContainer = styled("div", {
     display: "flex",
-    justifyContent: "flex-end",
     alignItems: "center",
     columnGap: "1.5rem",
 })
-const PriceContainer = styled("div", {
+const Info = styled("div", {
     display: "flex",
     alignItems: "center",
     columnGap: "0.5rem",
 })
-const PriceCoin = styled("span", {
+const InfoLabel = styled("span", {
     color: "$gray11",
     fontSize: "0.75rem",
     lineHeight: 1.25,
 })
-const Price = styled("span", {
+const InfoValue = styled("span", {
     color: "$gray12",
     fontSize: "1rem",
+})
+const InfoExternal = styled("a", {
+    textDecoration: "none",
+    color: "$blue11",
+    "& > svg": {
+        size: "0.75rem",
+    },
 })
