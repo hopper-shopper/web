@@ -155,7 +155,7 @@ export default function ConfigureHoppersTable(props: ConfigureHoppersTableProps)
                                 <Label>Rating greater equals</Label>
                                 <Input
                                     type="number"
-                                    placeholder="Rating >="
+                                    placeholder="Rating 0 - 100"
                                     defaultValue={configuration.ratingGe || ""}
                                     onBlur={handleRatingGeChange}
                                 />
@@ -173,7 +173,7 @@ export default function ConfigureHoppersTable(props: ConfigureHoppersTableProps)
                             <Label>Fertility greater equals</Label>
                             <Input
                                 type="number"
-                                placeholder="Fertility >="
+                                placeholder="Fertility 1 - 10"
                                 defaultValue={configuration.fertilityGe || ""}
                                 onBlur={handleFertilityGeChange}
                             />

@@ -20,6 +20,7 @@ import { styled } from "theme"
 import { Adventure } from "utils/adventures"
 import { hopperAdventureToAdventure } from "utils/hopper"
 import isEthereumAddress from "validator/es/lib/isEthereumAddress"
+import * as Section from "components/layout/section/Section"
 
 export default function WalletPage() {
     const hoppersLoadedForAddress = useRef<string | null>(null)
@@ -48,10 +49,6 @@ export default function WalletPage() {
         sold: SoldFilter.SOLD,
     })
 
-    useMount(() => {
-        loadHoppers()
-    })
-
     const loadHoppers = async () => {
         if (
             !walletAddress ||
@@ -72,6 +69,7 @@ export default function WalletPage() {
             console.error(error)
         }
     }
+    useMount(loadHoppers)
 
     const combinedTransfers = [...inTransfers, ...outTransfers]
 
@@ -102,8 +100,8 @@ export default function WalletPage() {
 
             <Container>
                 {adventuresOfStakedHoppers.size > 0 && walletAddress && (
-                    <Section>
-                        <SectionTitle>FLY cap</SectionTitle>
+                    <Section.Root>
+                        <Section.Title>FLY cap</Section.Title>
                         <UserCapList>
                             {Array.from(adventuresOfStakedHoppers).map(adventure => (
                                 <FlyCap
@@ -113,11 +111,11 @@ export default function WalletPage() {
                                 />
                             ))}
                         </UserCapList>
-                    </Section>
+                    </Section.Root>
                 )}
 
-                <Section>
-                    <SectionTitle>Hoppers</SectionTitle>
+                <Section.Root>
+                    <Section.Title>Hoppers</Section.Title>
                     <HoppersList>
                         {walletHoppers.map(hopper => (
                             <WalletHopperCard
@@ -127,10 +125,10 @@ export default function WalletPage() {
                             />
                         ))}
                     </HoppersList>
-                </Section>
+                </Section.Root>
 
-                <Section>
-                    <SectionTitle>FLY Transfers</SectionTitle>
+                <Section.Root>
+                    <Section.Title>FLY Transfers</Section.Title>
 
                     <TransfersBreakdown transfers={combinedTransfers} />
 
@@ -146,7 +144,7 @@ export default function WalletPage() {
 
                         <TransfersTable transfers={selectedTransfers} />
                     </TransfersGrid>
-                </Section>
+                </Section.Root>
             </Container>
         </>
     )
@@ -169,27 +167,6 @@ const Container = styled("div", {
     display: "flex",
     flexDirection: "column",
     rowGap: "3rem",
-})
-const Section = styled("section", {
-    display: "flex",
-    flexDirection: "column",
-    rowGap: "2rem",
-})
-const SectionTitle = styled("h2", {
-    color: "$gray12",
-    fontSize: "1.25rem",
-    lineHeight: 1.5,
-    paddingLeft: "2rem",
-    position: "relative",
-    "&::before": {
-        content: '" "',
-        position: "absolute",
-        left: 0,
-        width: "1.5rem",
-        height: 1,
-        backgroundColor: "$gray12",
-        top: "50%",
-    },
 })
 const UserCapList = styled("div", {
     display: "grid",

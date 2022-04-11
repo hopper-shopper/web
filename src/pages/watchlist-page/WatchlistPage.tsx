@@ -21,7 +21,7 @@ export default function WatchlistPage() {
     const [watchlist, toggle] = useWatchlistStore(store => [store.watchlist, store.toggle])
     const [watchlistFilter, setWatchlistFilter] = useState<WatchlistFilter>({
         market: WatchlistMarketFilter.ANY,
-        features: [WatchlistCardFeature.ADVENTURE_PERMIT],
+        features: [WatchlistCardFeature.MARKET_PRICE, WatchlistCardFeature.ADVENTURE_PERMIT],
     })
 
     const addHopperIdRef = useRef<HTMLInputElement | null>(null)

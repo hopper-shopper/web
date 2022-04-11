@@ -79,6 +79,17 @@ export default function ConfigureWatchlistFilter(props: ConfigureWatchlistFilter
                 <Column>
                     <Flex gap="sm">
                         <Checkbox.Root
+                            id="feature-market-price"
+                            {...getFeatureCheckboxProps(WatchlistCardFeature.MARKET_PRICE)}>
+                            <Checkbox.Indicator>
+                                <Checkbox.Icon />
+                            </Checkbox.Indicator>
+                        </Checkbox.Root>
+                        <Label htmlFor="feature-market-price">Market price</Label>
+                    </Flex>
+
+                    <Flex gap="sm">
+                        <Checkbox.Root
                             id="feature-adventure-permit"
                             {...getFeatureCheckboxProps(WatchlistCardFeature.ADVENTURE_PERMIT)}>
                             <Checkbox.Indicator>
@@ -97,17 +108,6 @@ export default function ConfigureWatchlistFilter(props: ConfigureWatchlistFilter
                             </Checkbox.Indicator>
                         </Checkbox.Root>
                         <Label htmlFor="feature-fly-earnings">FLY earnings</Label>
-                    </Flex>
-
-                    <Flex gap="sm">
-                        <Checkbox.Root
-                            id="feature-market-price"
-                            {...getFeatureCheckboxProps(WatchlistCardFeature.MARKET_PRICE)}>
-                            <Checkbox.Indicator>
-                                <Checkbox.Icon />
-                            </Checkbox.Indicator>
-                        </Checkbox.Root>
-                        <Label htmlFor="feature-market-price">Market price</Label>
                     </Flex>
                 </Column>
             </Section>

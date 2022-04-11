@@ -1,20 +1,15 @@
-import { formatAdventure } from "formatters/adventure"
 import { Hopper } from "models/Hopper"
 import { PropsWithChildren } from "react"
 import { styled } from "theme"
-import { getIdealAdventure } from "utils/adventures"
-import { hopperAdventureToAdventure } from "utils/hopper"
 import HopperCardContext from "./HopperCardContext"
 
 type HopperCardProps = {
     hopper: Hopper
+    rightSlot?: React.ReactNode
 }
 
 export default function HopperCard(props: PropsWithChildren<HopperCardProps>) {
-    const { hopper, children } = props
-
-    const hopperAdventure = hopperAdventureToAdventure(hopper)
-    const idealAdventure = getIdealAdventure(hopper)
+    const { hopper, rightSlot, children } = props
 
     return (
         <HopperCardContext.Provider value={{ hopper }}>
@@ -26,16 +21,7 @@ export default function HopperCard(props: PropsWithChildren<HopperCardProps>) {
                         <HopperLevel>Level: {hopper.level}</HopperLevel>
                     </HopperStats>
 
-                    <RightSlot>
-                        <StyledAdventure
-                            ideal={
-                                hopperAdventure === null
-                                    ? undefined
-                                    : hopperAdventure === idealAdventure
-                            }>
-                            {formatAdventure(hopperAdventure)}
-                        </StyledAdventure>
-                    </RightSlot>
+                    {rightSlot && <RightSlot>{rightSlot}</RightSlot>}
                 </CardHeader>
 
                 <Divider />
@@ -81,20 +67,6 @@ const HopperLevel = styled("span", {
 const RightSlot = styled("div", {
     marginLeft: "auto",
     textAlign: "right",
-})
-const StyledAdventure = styled("span", {
-    fontSize: "1rem",
-    color: "$gray11",
-    variants: {
-        ideal: {
-            true: {
-                color: "$teal11",
-            },
-            false: {
-                color: "$red11",
-            },
-        },
-    },
 })
 const Divider = styled("div", {
     height: 1,

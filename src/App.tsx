@@ -1,6 +1,7 @@
 import { fetchPrices } from "api/prices"
 import PageHeader from "components/headers/page-header/PageHeader"
 import useApplyDarkMode from "hooks/useApplyDarkMode"
+import InspectPage from "pages/inspect-page/InspectPage"
 import MarketPage from "pages/market-page/MarketPage"
 import RoiCalculatorPage from "pages/roi-calculator-page/RoiCalculatorPage"
 import WalletPage from "pages/wallet-page/WalletPage"
@@ -37,6 +38,7 @@ function App() {
         <Routes>
             <Route path="/" element={<Layout />}>
                 <Route path={ROUTES.MARKET} element={<MarketPage />} />
+                <Route path={ROUTES.INSPECT} element={<InspectPage />} />
                 <Route path={ROUTES.WALLET} element={<WalletPage />} />
                 <Route path={ROUTES.WATCHLIST} element={<WatchlistPage />} />
                 <Route path={ROUTES.ROI} element={<RoiCalculatorPage />} />

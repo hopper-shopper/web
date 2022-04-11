@@ -69,7 +69,7 @@ export default function HopperRow(props: HopperRowProps) {
                 </Value>
             </Cell>
             {config.type === HoppersTableConfigFilters.PERMIT && config.permit && (
-                <StyledRatingCell align="center" striped={index % 2 === 0}>
+                <StyledRatingCell align="center" striped={index % 2 === 1}>
                     {formatRating(getRatingByAdventure(config.permit, hopper))}
                 </StyledRatingCell>
             )}

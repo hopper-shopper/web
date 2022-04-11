@@ -1,6 +1,8 @@
 import { HoverCardContentProps } from "@radix-ui/react-hover-card"
 import * as HoverCard from "components/hover-card/HoverCard"
 import { Hopper } from "models/Hopper"
+import { Link } from "react-router-dom"
+import { INSPECT } from "routing/routes"
 import { styled } from "theme"
 import BaseStatsList from "../hopper-card/hopper-card-features/base-stats-list/BaseStatsList"
 import FlyEarnings from "../hopper-card/hopper-card-features/fly-earnings/FlyEarnings"
@@ -25,6 +27,12 @@ export default function HopperDetailsHoverCard(props: HopperDetailsHoverCardProp
                             <HopperId>Hopper-ID: {hopper.tokenId}</HopperId>
                             <HopperLevel>Level: {hopper.level}</HopperLevel>
                         </HopperStats>
+
+                        <RightSlot>
+                            <StyledLink to={`${INSPECT}?hopper=${hopper.tokenId}`}>
+                                Inspect
+                            </StyledLink>
+                        </RightSlot>
                     </HopperInfo>
 
                     <HopperCardContext.Provider value={{ hopper }}>
@@ -45,6 +53,14 @@ const HopperInfo = styled("div", {
     alignItems: "center",
     columnGap: "1rem",
 })
+const RightSlot = styled("div", {
+    marginLeft: "auto",
+})
+const StyledLink = styled(Link, {
+    color: "$blue11",
+    fontSize: "0.75rem",
+    textDecoration: "none",
+})
 const HopperStats = styled("div", {
     display: "flex",
     flexDirection: "column",
@@ -54,6 +70,7 @@ const HopperId = styled("h3", {
     fontSize: "1rem",
     fontWeight: 400,
     lineHeight: 1.5,
+    whiteSpace: "nowrap",
 })
 const HopperLevel = styled("span", {
     color: "$gray11",

@@ -1,27 +1,31 @@
 import { ListingsFilter } from "api/filters/market"
 import { fetchHoppersListings } from "api/market"
+import useFetch from "hooks/useFetch"
 import { Listing } from "models/Listing"
-import { useAsync } from "react-use"
 
 export type UseHoppersListingsReturn = {
     listings: Listing[]
+    dataSignature: string | null
     loading: boolean
-    error: Error | undefined
+    error: Error | null
 }
 
 export default function useHoppersListings(filter: ListingsFilter): UseHoppersListingsReturn {
-    const signature = `${filter.tokenIds.join("-")}-${filter.sold}`
+    const { tokenIds, sold } = filter
 
+    const signature = `${tokenIds.join("-")}-${sold}`
     const {
-        value: listings = [],
+        data: listings,
+        dataSignature,
         loading,
         error,
-    } = useAsync(() => {
+    } = useFetch(() => {
         return fetchHoppersListings(filter)
-    }, [signature])
+    }, signature)
 
     return {
-        listings,
+        listings: listings ?? [],
+        dataSignature,
         loading,
         error,
     }

@@ -2,6 +2,7 @@ import BaseStatsList from "components/hoppers/hopper-card/hopper-card-features/b
 import BoughtFor from "components/hoppers/hopper-card/hopper-card-features/bought-for/BoughtFor"
 import FlyEarnings from "components/hoppers/hopper-card/hopper-card-features/fly-earnings/FlyEarnings"
 import PermitDetails from "components/hoppers/hopper-card/hopper-card-features/permit-details/PermitDetails"
+import CurrentAdventure from "components/hoppers/hopper-card/hopper-card-slots/current-adventure/CurrentAdventure"
 import HopperCard from "components/hoppers/hopper-card/HopperCard"
 import { Hopper } from "models/Hopper"
 import { Listing } from "models/Listing"
@@ -15,7 +16,7 @@ export default function WalletHopperCard(props: WalletHopperCardProps) {
     const { hopper, listings } = props
 
     return (
-        <HopperCard hopper={hopper}>
+        <HopperCard hopper={hopper} rightSlot={<CurrentAdventure />}>
             <BaseStatsList />
             <BoughtFor listings={listings} />
             <PermitDetails />

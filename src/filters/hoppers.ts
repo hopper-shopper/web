@@ -11,12 +11,10 @@ export function getHoppersRatingFilter(
 ): FilterFn<Hopper> {
     const filter: FilterFn<Hopper> = hoppers => {
         return hoppers.filter(hopper => {
-            if (value > 1) {
-                value = normalize(0, 1, value)
-            }
+            value = normalize(0, 100, value)
 
             const rating = getRatingByAdventure(adventure, hopper)
-            return compareNumber(comparison, rating, value)
+            return compareNumber(comparison, rating * 100, value)
         })
     }
     filter.signature = `rating-filter-${adventure}-${comparison}-${value}`

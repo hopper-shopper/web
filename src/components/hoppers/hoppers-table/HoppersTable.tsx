@@ -28,7 +28,7 @@ export default function HoppersTable(props: HoppersTableProps) {
                 components={{
                     Table: ({ style, ...props }) => <Table.Root {...props} style={style} />,
                     TableRow: props => (
-                        <Table.Row striped={props["data-index"] % 2 === 0} {...props} />
+                        <Table.Row striped={props["data-index"] % 2 === 1} {...props} />
                     ),
                 }}
                 fixedHeaderContent={() => {
