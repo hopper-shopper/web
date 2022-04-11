@@ -11,7 +11,7 @@ import PermitDetails from "./permit-details/PermitDetails"
 
 type HopperCardProps = {
     hopper: Hopper
-    listings: Listing[]
+    listings?: Listing[]
 }
 
 export default function HopperCard(props: HopperCardProps) {
@@ -46,10 +46,12 @@ export default function HopperCard(props: HopperCardProps) {
             <Details>
                 <BaseStatsList hopper={hopper} />
 
-                <Feature>
-                    <FeatureTitle>Bought for</FeatureTitle>
-                    <BoughtFor hopper={hopper} listings={listings} />
-                </Feature>
+                {listings && (
+                    <Feature>
+                        <FeatureTitle>Bought for</FeatureTitle>
+                        <BoughtFor hopper={hopper} listings={listings} />
+                    </Feature>
+                )}
 
                 <Feature>
                     <FeatureTitle>Adventure Permit</FeatureTitle>
@@ -103,6 +105,7 @@ const RightSlot = styled("div", {
 })
 const StyledAdventure = styled("span", {
     fontSize: "1rem",
+    color: "$gray11",
     variants: {
         ideal: {
             true: {

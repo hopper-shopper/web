@@ -2,7 +2,7 @@ import { Adventure } from "utils/adventures"
 
 export function formatAdventure(adventure: Adventure | null): string {
     if (adventure === null) {
-        return "-"
+        return "No adventure"
     }
 
     switch (adventure) {

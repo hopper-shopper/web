@@ -1,4 +1,5 @@
-import { Hopper } from "models/Hopper"
+import { WatchlistMarketFilter } from "components/watchlist/configure-watchlist-filter/ConfigureWatchlistFilter"
+import { Hopper, HopperId } from "models/Hopper"
 import { Adventure, getRatingByAdventure } from "utils/adventures"
 import { normalize } from "utils/numbers"
 import { compareNumber, FilterFn, NumberComparison } from "./_common"
@@ -43,5 +44,32 @@ export function getHoppersFertilityFilter(
         })
     }
     filter.signature = `fertility-filter-${comparison}-${value}`
+    return filter
+}
+
+export function getHoppersMarketFilter(marketFilter: WatchlistMarketFilter): FilterFn<Hopper> {
+    const filter: FilterFn<Hopper> = hoppers => {
+        return hoppers.filter(hopper => {
+            switch (marketFilter) {
+                case WatchlistMarketFilter.ANY:
+                    return true
+                case WatchlistMarketFilter.ON_MARKET:
+                    return hopper.listing.active
+                case WatchlistMarketFilter.OFF_MARKET:
+                    return !hopper.listing.active
+            }
+        })
+    }
+    filter.signature = `market-filter-${marketFilter}`
+    return filter
+}
+
+export function getHoppersOnWatchlistFilter(watchlist: HopperId[]): FilterFn<Hopper> {
+    const filter: FilterFn<Hopper> = hoppers => {
+        return hoppers.filter(hopper => {
+            return watchlist.includes(hopper.tokenId)
+        })
+    }
+    filter.signature = `watchlist-filter-${watchlist.join(",")}`
     return filter
 }

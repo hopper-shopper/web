@@ -9,6 +9,7 @@ const StyledOverlay = styled(DialogPrimitives.Overlay, {
     backgroundColor: "$blackA9",
     position: "fixed",
     inset: 0,
+    backdropFilter: "blur(3px)",
 })
 
 const StyledContent = styled(DialogPrimitives.Content, {

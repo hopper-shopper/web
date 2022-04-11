@@ -66,32 +66,28 @@ export default function ConfigureHoppersTable(props: ConfigureHoppersTableProps)
             <Section>
                 <SectionTitle>Filter</SectionTitle>
                 <Radio.Root value={configuration.type} onValueChange={handleFilterChange}>
-                    <SectionContent>
-                        <Column>
-                            <Flex gap="sm">
-                                <Radio.Radio value={HoppersTableConfigFilters.NONE} id="none">
-                                    <Radio.Indicator />
-                                </Radio.Radio>
-                                <Label htmlFor="none">None</Label>
-                            </Flex>
+                    <Column>
+                        <Flex gap="sm">
+                            <Radio.Radio value={HoppersTableConfigFilters.NONE} id="none">
+                                <Radio.Indicator />
+                            </Radio.Radio>
+                            <Label htmlFor="none">None</Label>
+                        </Flex>
 
-                            <Flex gap="sm">
-                                <Radio.Radio
-                                    value={HoppersTableConfigFilters.FERTILITY}
-                                    id="fertility">
-                                    <Radio.Indicator />
-                                </Radio.Radio>
-                                <Label htmlFor="fertility">Fertility</Label>
-                            </Flex>
+                        <Flex gap="sm">
+                            <Radio.Radio value={HoppersTableConfigFilters.FERTILITY} id="fertility">
+                                <Radio.Indicator />
+                            </Radio.Radio>
+                            <Label htmlFor="fertility">Fertility</Label>
+                        </Flex>
 
-                            <Flex gap="sm">
-                                <Radio.Radio value={HoppersTableConfigFilters.PERMIT} id="permit">
-                                    <Radio.Indicator />
-                                </Radio.Radio>
-                                <Label htmlFor="permit">Permit</Label>
-                            </Flex>
-                        </Column>
-                    </SectionContent>
+                        <Flex gap="sm">
+                            <Radio.Radio value={HoppersTableConfigFilters.PERMIT} id="permit">
+                                <Radio.Indicator />
+                            </Radio.Radio>
+                            <Label htmlFor="permit">Permit</Label>
+                        </Flex>
+                    </Column>
                 </Radio.Root>
             </Section>
 
@@ -215,7 +211,7 @@ export type HoppersTableConfiguration =
 // Styles
 const Container = styled("div", {
     display: "flex",
-    columnGap: "5rem",
+    columnGap: "4rem",
     alignItems: "flex-start",
 })
 const Section = styled("div", {

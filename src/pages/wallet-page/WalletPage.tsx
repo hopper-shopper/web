@@ -198,7 +198,7 @@ const UserCapList = styled("div", {
 const HoppersList = styled("div", {
     display: "grid",
     gridTemplateColumns: "repeat(3, 1fr)",
-    columnGap: "1rem",
+    gap: "1rem",
     alignItems: "start",
 })
 const TransfersGrid = styled("div", {

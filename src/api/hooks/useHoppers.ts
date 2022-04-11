@@ -1,31 +1,31 @@
 import { HoppersFilter } from "api/filters/hoopers"
 import { fetchHoppers } from "api/hoppers"
+import useFetch from "hooks/useFetch"
 import { Hopper } from "models/Hopper"
-import { useAsync } from "react-use"
 
 export type UseHoppersReturn = {
     hoppers: Hopper[]
+    dataSignature: string | null
     loading: boolean
-    error: Error | undefined
+    error: Error | null
 }
 
 export default function useHoppers(filter: HoppersFilter): UseHoppersReturn {
-    const { adventure, market, permit } = filter
+    const { adventure, market, permit, owner, tokenIds } = filter
 
+    const signature = `${adventure}-${market}-${permit}-${owner}-${tokenIds?.join(",")}`
     const {
-        value: hoppers = [],
+        data: hoppers,
+        dataSignature,
         loading,
         error,
-    } = useAsync(() => {
-        return fetchHoppers({
-            adventure,
-            market,
-            permit,
-        })
-    }, [adventure, market, permit])
+    } = useFetch(() => {
+        return fetchHoppers(filter)
+    }, signature)
 
     return {
-        hoppers,
+        hoppers: hoppers ?? [],
+        dataSignature,
         loading,
         error,
     }
