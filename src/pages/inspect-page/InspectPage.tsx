@@ -18,10 +18,11 @@ import { Listing } from "models/Listing"
 import { useEffect, useRef, useState } from "react"
 import useWatchlistStore from "stores/watchlist"
 import { styled } from "theme"
+import useInspectPageState from "./useInspectPageState"
 
 export default function InspectPage() {
     const watchlist = useWatchlistStore(store => store.watchlist)
-    const [state, setState] = useUrlState({ hopperId: "" })
+    const [state, setState] = useInspectPageState()
 
     const lastLoadedForHopperId = useRef<HopperId | null>(null)
 

@@ -14,3 +14,12 @@ export function normalize(min: number, max: number, value: number, base = 10): n
 
     return normalized
 }
+
+export function parseIntFromString(fromValue: string | undefined | null, fallback: number): number {
+    if (!fromValue) {
+        return fallback
+    }
+
+    const parsed = parseInt(fromValue)
+    return Number.isNaN(parsed) ? fallback : parsed
+}

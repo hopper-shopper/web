@@ -96,6 +96,5 @@ export function getIdealAdventure(hopper: Hopper): Adventure {
 
 export function getEarningsByAdventure(adventure: Adventure, hopper: Hopper): number {
     const baseFly = getBaseFlyByAdventure(adventure, hopper)
-
     return baseFly * hopper.level
 }

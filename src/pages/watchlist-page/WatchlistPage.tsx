@@ -1,28 +1,21 @@
 import useHoppers from "api/hooks/useHoppers"
-import HopperCard from "components/hoppers/hopper-card/HopperCard"
 import Button from "components/inputs/buttons/button/Button"
 import Fieldset from "components/inputs/fieldset/Fieldset"
 import Input from "components/inputs/input/Input"
 import Label from "components/inputs/label/Label"
-import ConfigureWatchlistFilter, {
-    WatchlistCardFeature,
-    WatchlistFilter,
-    WatchlistMarketFilter,
-} from "components/watchlist/configure-watchlist-filter/ConfigureWatchlistFilter"
+import ConfigureWatchlistFilter from "components/watchlist/configure-watchlist-filter/ConfigureWatchlistFilter"
 import WatchlistCard from "components/watchlist/watchlist-card/WatchlistCard"
 import WatchlistHopperCard from "components/watchlist/watchlist-hopper-card/WatchlistHopperCard"
 import { getHoppersMarketFilter, getHoppersOnWatchlistFilter } from "filters/hoppers"
 import useFilter from "hooks/useFilter"
-import { useRef, useState } from "react"
+import { useRef } from "react"
 import useWatchlistStore from "stores/watchlist"
 import { styled } from "theme"
+import useWatchlistPageState from "./useWatchlistPageState"
 
 export default function WatchlistPage() {
     const [watchlist, toggle] = useWatchlistStore(store => [store.watchlist, store.toggle])
-    const [watchlistFilter, setWatchlistFilter] = useState<WatchlistFilter>({
-        market: WatchlistMarketFilter.ANY,
-        features: [WatchlistCardFeature.MARKET_PRICE, WatchlistCardFeature.ADVENTURE_PERMIT],
-    })
+    const [watchlistFilter, setWatchlistFilter] = useWatchlistPageState()
 
     const addHopperIdRef = useRef<HTMLInputElement | null>(null)
 

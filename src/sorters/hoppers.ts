@@ -219,7 +219,7 @@ function sortByMaxPriceGreatLake(hoppers: Hopper[]): Hopper[] {
     return [...hoppers].sort(
         (a, b) =>
             calculateMaxRatingPrice(Adventure.GREAT_LAKE, a) -
-            calculateMaxRatingPrice(Adventure.POND, b),
+            calculateMaxRatingPrice(Adventure.GREAT_LAKE, b),
     )
 }
 function sortByMaxPriceFertility(hoppers: Hopper[]): Hopper[] {

@@ -16,15 +16,16 @@ import WalletHopperCard from "components/wallet/wallet-hopper-card/WalletHopperC
 import { Hopper } from "models/Hopper"
 import { Transfer } from "models/Transfer"
 import { useRef, useState } from "react"
-import { useLocalStorage, useMount } from "react-use"
+import { useMount } from "react-use"
 import { styled } from "theme"
 import { Adventure } from "utils/adventures"
 import { hopperAdventureToAdventure } from "utils/hopper"
 import isEthereumAddress from "validator/es/lib/isEthereumAddress"
+import useWalletPageState from "./useWalletPageState"
 
 export default function WalletPage() {
     const hoppersLoadedForAddress = useRef<string | null>(null)
-    const [walletAddress, setWalletAddress] = useLocalStorage(WALLET_ADDRESS_LS, "")
+    const [state, setState] = useWalletPageState()
     const [walletHoppers, setWalletHoppers] = useState<Hopper[]>([])
     const [selectedTransfers, setSelectedTransfers] = useState<Transfer[]>([])
 
@@ -33,7 +34,7 @@ export default function WalletPage() {
         loading: inTransfersLoading,
         dataSignature: inTransfersSignature,
     } = useTransfers({
-        user: walletAddress || "",
+        user: state.wallet || "",
         direction: TransferDirection.IN,
     })
     const {
@@ -41,7 +42,7 @@ export default function WalletPage() {
         loading: outTransfersLoading,
         dataSignature: outTransfersSignature,
     } = useTransfers({
-        user: walletAddress || "",
+        user: state.wallet || "",
         direction: TransferDirection.OUT,
     })
     const { listings: hopperListings } = useHoppersListings({
@@ -51,20 +52,20 @@ export default function WalletPage() {
 
     const loadHoppers = async () => {
         if (
-            !walletAddress ||
-            !isEthereumAddress(walletAddress) ||
-            hoppersLoadedForAddress.current === walletAddress
+            !state.wallet ||
+            !isEthereumAddress(state.wallet) ||
+            hoppersLoadedForAddress.current === state.wallet
         ) {
             return
         }
 
         try {
             const hoppers = await fetchHoppers({
-                owner: walletAddress,
+                owner: state.wallet,
             })
             setSelectedTransfers([])
             setWalletHoppers(hoppers)
-            hoppersLoadedForAddress.current = walletAddress
+            hoppersLoadedForAddress.current = state.wallet
         } catch (error) {
             console.error(error)
         }
@@ -90,68 +91,72 @@ export default function WalletPage() {
                         id="wallet-address"
                         type="text"
                         placeholder="Wallet address"
-                        defaultValue={walletAddress || ""}
-                        onBlur={value => setWalletAddress(value.target.value)}
+                        defaultValue={state.wallet}
+                        onBlur={value => setState({ wallet: value.target.value })}
                     />
                 </Fieldset>
 
                 <Button>Load</Button>
             </InputContainer>
 
-            <Container>
-                {adventuresOfStakedHoppers.size > 0 && walletAddress && (
+            {!state.wallet && (
+                <EmptyText>
+                    Enter your Wallet address to view game analytics and transfers
+                </EmptyText>
+            )}
+            {state.wallet && (
+                <Container>
+                    {adventuresOfStakedHoppers.size > 0 && state.wallet && (
+                        <Section.Root>
+                            <Section.Title>FLY cap</Section.Title>
+                            <UserCapList>
+                                {Array.from(adventuresOfStakedHoppers).map(adventure => (
+                                    <FlyCap
+                                        key={adventure}
+                                        user={state.wallet}
+                                        adventure={adventure}
+                                    />
+                                ))}
+                            </UserCapList>
+                        </Section.Root>
+                    )}
+
                     <Section.Root>
-                        <Section.Title>FLY cap</Section.Title>
-                        <UserCapList>
-                            {Array.from(adventuresOfStakedHoppers).map(adventure => (
-                                <FlyCap
-                                    key={adventure}
-                                    user={walletAddress}
-                                    adventure={adventure}
+                        <Section.Title>Hoppers</Section.Title>
+                        <HoppersList>
+                            {walletHoppers.map(hopper => (
+                                <WalletHopperCard
+                                    key={hopper.tokenId}
+                                    hopper={hopper}
+                                    listings={hopperListings}
                                 />
                             ))}
-                        </UserCapList>
+                        </HoppersList>
                     </Section.Root>
-                )}
 
-                <Section.Root>
-                    <Section.Title>Hoppers</Section.Title>
-                    <HoppersList>
-                        {walletHoppers.map(hopper => (
-                            <WalletHopperCard
-                                key={hopper.tokenId}
-                                hopper={hopper}
-                                listings={hopperListings}
-                            />
-                        ))}
-                    </HoppersList>
-                </Section.Root>
+                    <Section.Root>
+                        <Section.Title>FLY Transfers</Section.Title>
 
-                <Section.Root>
-                    <Section.Title>FLY Transfers</Section.Title>
+                        <TransfersBreakdown transfers={combinedTransfers} />
 
-                    <TransfersBreakdown transfers={combinedTransfers} />
+                        <TransfersGrid>
+                            <div>
+                                <TransfersByDaySelect
+                                    key={`${state.wallet}-${inTransfersSignature}-${outTransfersSignature}`}
+                                    ready={!inTransfersLoading && !outTransfersLoading}
+                                    transfers={combinedTransfers}
+                                    onSelect={setSelectedTransfers}
+                                />
+                            </div>
 
-                    <TransfersGrid>
-                        <div>
-                            <TransfersByDaySelect
-                                key={`${walletAddress}-${inTransfersSignature}-${outTransfersSignature}`}
-                                ready={!inTransfersLoading && !outTransfersLoading}
-                                transfers={combinedTransfers}
-                                onSelect={setSelectedTransfers}
-                            />
-                        </div>
-
-                        <TransfersTable transfers={selectedTransfers} />
-                    </TransfersGrid>
-                </Section.Root>
-            </Container>
+                            <TransfersTable transfers={selectedTransfers} />
+                        </TransfersGrid>
+                    </Section.Root>
+                </Container>
+            )}
         </>
     )
 }
-
-// Constants
-const WALLET_ADDRESS_LS = "hoppershopper.wallet.address"
 
 // Components
 const InputContainer = styled("form", {
@@ -167,6 +172,13 @@ const Container = styled("div", {
     display: "flex",
     flexDirection: "column",
     rowGap: "3rem",
+})
+const EmptyText = styled("p", {
+    color: "$gray11",
+    fontSize: "1rem",
+    lineHeight: 1.25,
+    textAlign: "center",
+    padding: "2rem",
 })
 const UserCapList = styled("div", {
     display: "grid",
