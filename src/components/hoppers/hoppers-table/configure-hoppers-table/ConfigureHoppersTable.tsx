@@ -152,8 +152,9 @@ export default function ConfigureHoppersTable(props: ConfigureHoppersTableProps)
                         <SectionTitle>Refine filter</SectionTitle>
                         <SectionContent>
                             <Fieldset>
-                                <Label>Rating greater equals</Label>
+                                <Label htmlFor="rating-ge">Rating greater equals</Label>
                                 <Input
+                                    id="rating-ge"
                                     type="number"
                                     placeholder="Rating 0 - 100"
                                     defaultValue={configuration.ratingGe || ""}
@@ -170,8 +171,9 @@ export default function ConfigureHoppersTable(props: ConfigureHoppersTableProps)
                     <SectionTitle>Refine filter</SectionTitle>
                     <SectionContent>
                         <Fieldset>
-                            <Label>Fertility greater equals</Label>
+                            <Label htmlFor="fertility-ge">Fertility greater equals</Label>
                             <Input
+                                id="fertility-ge"
                                 type="number"
                                 placeholder="Fertility 1 - 10"
                                 defaultValue={configuration.fertilityGe || ""}

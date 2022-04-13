@@ -4,9 +4,11 @@ import {
     WatchlistMarketFilter,
 } from "components/watchlist/configure-watchlist-filter/ConfigureWatchlistFilter"
 import useLocationEffect from "hooks/useLocationEffect"
+import { HopperId } from "models/Hopper"
 import { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { createLookupMap } from "utils/map"
+import { parseIntFromString } from "utils/numbers"
 
 export default function useWatchlistPageState() {
     const [searchParams, setSearchParams] = useSearchParams()
@@ -28,10 +30,14 @@ export default function useWatchlistPageState() {
 const INITIAL_STATE: WatchlistFilter = {
     market: WatchlistMarketFilter.ANY,
     features: [WatchlistCardFeature.MARKET_PRICE, WatchlistCardFeature.ADVENTURE_PERMIT],
+    normalizeLevel: 1,
+    hidden: [],
 }
 
 const MARKET_KEY = "market"
 const FEATURE_KEY = "features"
+const NORMALIZE_LEVEL_KEY = "normalize-level"
+const HIDDEN_KEY = "hidden"
 
 // State update functions
 
@@ -42,10 +48,19 @@ function deriveStateFromSearchParams(searchParams: URLSearchParams): WatchlistFi
     const features = searchParams.has(FEATURE_KEY)
         ? parseFeatures(searchParams.get(FEATURE_KEY)!)
         : INITIAL_STATE.features
+    const normalizeLevel = parseIntFromString(
+        searchParams.get(NORMALIZE_LEVEL_KEY),
+        INITIAL_STATE.normalizeLevel,
+    )
+    const hidden = searchParams.has(HIDDEN_KEY)
+        ? parseHidden(searchParams.get(HIDDEN_KEY)!)
+        : INITIAL_STATE.hidden
 
     return {
         market,
         features,
+        normalizeLevel,
+        hidden,
     }
 }
 
@@ -55,6 +70,14 @@ function deriveSearchParamsFromState(state: WatchlistFilter): URLSearchParams {
 
     if (state.features.length > 0) {
         params.set(FEATURE_KEY, urlifyFeatures(state.features))
+    }
+
+    if (state.normalizeLevel > 0 && state.normalizeLevel <= 100) {
+        params.set(NORMALIZE_LEVEL_KEY, `${state.normalizeLevel}`)
+    }
+
+    if (state.hidden.length > 0) {
+        params.set(HIDDEN_KEY, urlifyHidden(state.hidden))
     }
 
     return params
@@ -94,4 +117,11 @@ function parseFeatures(features: string): WatchlistCardFeature[] {
             return featureMapping.get(feature)
         })
         .filter(Boolean) as WatchlistCardFeature[]
+}
+
+function urlifyHidden(hidden: HopperId[]): string {
+    return hidden.join(".")
+}
+function parseHidden(hidden: string): HopperId[] {
+    return hidden.split(".")
 }

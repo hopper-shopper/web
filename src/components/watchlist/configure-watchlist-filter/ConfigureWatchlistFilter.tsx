@@ -4,6 +4,9 @@ import Flex from "components/layout/flex/Flex"
 import Label from "components/inputs/label/Label"
 import * as Checkbox from "components/inputs/checkbox/Checkbox"
 import { CheckboxProps } from "@radix-ui/react-checkbox"
+import Fieldset from "components/inputs/fieldset/Fieldset"
+import Input from "components/inputs/input/Input"
+import { HopperId } from "models/Hopper"
 
 type ConfigureWatchlistFilterProps = {
     filter: WatchlistFilter
@@ -42,6 +45,14 @@ export default function ConfigureWatchlistFilter(props: ConfigureWatchlistFilter
                 }
             },
         }
+    }
+    const handleNormalizeLevelChange = (event: React.FocusEvent<HTMLInputElement>) => {
+        const normalizeLevel = event.target.valueAsNumber
+
+        onChange({
+            ...filter,
+            normalizeLevel: Number.isNaN(normalizeLevel) ? 0 : normalizeLevel,
+        })
     }
 
     return (
@@ -111,6 +122,24 @@ export default function ConfigureWatchlistFilter(props: ConfigureWatchlistFilter
                     </Flex>
                 </Column>
             </Section>
+
+            <RightSlot>
+                <Section>
+                    <Fieldset>
+                        <Label htmlFor="normalize-level">Normalize level</Label>
+                        <Input
+                            id="normalize-level"
+                            type="number"
+                            placeholder="Normalize hopper levels"
+                            min={1}
+                            max={100}
+                            css={{ width: 250 }}
+                            defaultValue={filter.normalizeLevel || ""}
+                            onBlur={handleNormalizeLevelChange}
+                        />
+                    </Fieldset>
+                </Section>
+            </RightSlot>
         </Container>
     )
 }
@@ -128,6 +157,8 @@ export enum WatchlistCardFeature {
 export type WatchlistFilter = {
     market: WatchlistMarketFilter
     features: WatchlistCardFeature[]
+    normalizeLevel: number
+    hidden: HopperId[]
 }
 
 const Container = styled("div", {
@@ -145,11 +176,10 @@ const SectionTitle = styled("h3", {
     lineHeight: 1.5,
     fontWeight: 500,
 })
-const SectionContent = styled("div", {
-    display: "flex",
-    columnGap: "2rem",
-})
 const Column = styled("div", {
     display: "grid",
     rowGap: "1rem",
+})
+const RightSlot = styled("div", {
+    marginLeft: "auto",
 })

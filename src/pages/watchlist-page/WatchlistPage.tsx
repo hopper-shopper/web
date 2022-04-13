@@ -13,8 +13,7 @@ import {
 } from "filters/hoppers"
 import useFilter from "hooks/useFilter"
 import { HopperId } from "models/Hopper"
-import { useRef } from "react"
-import { useSet } from "react-use"
+import { useMemo, useRef } from "react"
 import useWatchlistStore from "stores/watchlist"
 import { styled } from "theme"
 import useWatchlistPageState from "./useWatchlistPageState"
@@ -22,7 +21,6 @@ import useWatchlistPageState from "./useWatchlistPageState"
 export default function WatchlistPage() {
     const [watchlist, toggle] = useWatchlistStore(store => [store.watchlist, store.toggle])
     const [watchlistFilter, setWatchlistFilter] = useWatchlistPageState()
-    const [hiddenWatchlistItems, { toggle: toggleHiddenWatchlistItem }] = useSet<HopperId>()
 
     const addHopperIdRef = useRef<HTMLInputElement | null>(null)
 
@@ -34,7 +32,7 @@ export default function WatchlistPage() {
         hoppers,
     )
     const withoutHiddenHoppers = useFilter(
-        [getHoppersHiddenFilter(hiddenWatchlistItems)],
+        [getHoppersHiddenFilter(watchlistFilter.hidden)],
         filteredHoppers,
     )
 
@@ -53,6 +51,34 @@ export default function WatchlistPage() {
         toggle(`${hopperId}`)
         addHopperIdRef.current.value = ""
     }
+    const toggleHidden = (hopperId: HopperId) => {
+        setWatchlistFilter(prev => {
+            const newHidden = new Set(prev.hidden)
+
+            // Add
+            if (!newHidden.has(hopperId)) {
+                newHidden.add(hopperId)
+            } else {
+                newHidden.delete(hopperId)
+            }
+
+            return {
+                ...prev,
+                hidden: Array.from(newHidden),
+            }
+        })
+    }
+
+    const patchedHoppers = useMemo(() => {
+        if (watchlistFilter.normalizeLevel > 0 && watchlistFilter.normalizeLevel <= 100) {
+            return withoutHiddenHoppers.map(hopper => ({
+                ...hopper,
+                level: watchlistFilter.normalizeLevel,
+            }))
+        }
+
+        return withoutHiddenHoppers
+    }, [withoutHiddenHoppers, watchlistFilter.normalizeLevel])
 
     return (
         <Container>
@@ -93,8 +119,8 @@ export default function WatchlistPage() {
                         <WatchlistCard
                             key={hopper.tokenId}
                             hopper={hopper}
-                            hidden={hiddenWatchlistItems.has(hopper.tokenId)}
-                            toggleHide={() => toggleHiddenWatchlistItem(hopper.tokenId)}
+                            hidden={watchlistFilter.hidden.includes(hopper.tokenId)}
+                            toggleHide={() => toggleHidden(hopper.tokenId)}
                         />
                     ))}
                 </WatchlistList>
@@ -104,12 +130,12 @@ export default function WatchlistPage() {
                 )}
                 {watchlist.length > 0 && (
                     <>
-                        {withoutHiddenHoppers.length === 0 && (
+                        {patchedHoppers.length === 0 && (
                             <EmptyText>No Hoppers on watchlist match the given filters</EmptyText>
                         )}
-                        {withoutHiddenHoppers.length > 0 && (
+                        {patchedHoppers.length > 0 && (
                             <HoppersGrid>
-                                {withoutHiddenHoppers.map(hopper => (
+                                {patchedHoppers.map(hopper => (
                                     <WatchlistHopperCard
                                         key={hopper.tokenId}
                                         hopper={hopper}
@@ -137,9 +163,6 @@ const Container = styled("div", {
 })
 const Filter = styled("div", {
     marginBottom: "2rem",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
 })
 const Content = styled("div", {
     display: "grid",
