@@ -3,4 +3,9 @@ export type UserCap = {
     current: number
 }
 
+export type UserEarnings = {
+    base: number
+    boost: number
+}
+
 export type WalletAddress = string

@@ -12,6 +12,7 @@ import TransfersBreakdown from "components/transfers/transfers-breakdown/Transfe
 import TransfersByDaySelect from "components/transfers/transfers-by-day-select/TransfersByDaySelect"
 import TransfersTable from "components/transfers/transfers-table/TransfersTable"
 import FlyCap from "components/user/fly-cap/FlyCap"
+import UserEarnings from "components/user/user-earnings/UserEarnings"
 import WalletHopperCard from "components/wallet/wallet-hopper-card/WalletHopperCard"
 import { Hopper } from "models/Hopper"
 import { Transfer } from "models/Transfer"
@@ -107,18 +108,33 @@ export default function WalletPage() {
             {state.wallet && (
                 <Container>
                     {adventuresOfStakedHoppers.size > 0 && state.wallet && (
-                        <Section.Root>
-                            <Section.Title>FLY cap</Section.Title>
-                            <UserCapList>
-                                {Array.from(adventuresOfStakedHoppers).map(adventure => (
-                                    <FlyCap
-                                        key={adventure}
-                                        user={state.wallet}
-                                        adventure={adventure}
-                                    />
-                                ))}
-                            </UserCapList>
-                        </Section.Root>
+                        <>
+                            <Section.Root>
+                                <Section.Title>FLY cap</Section.Title>
+                                <UserCapList>
+                                    {Array.from(adventuresOfStakedHoppers).map(adventure => (
+                                        <FlyCap
+                                            key={adventure}
+                                            user={state.wallet}
+                                            adventure={adventure}
+                                        />
+                                    ))}
+                                </UserCapList>
+                            </Section.Root>
+
+                            <Section.Root>
+                                <Section.Title>Estimated earnings / Day</Section.Title>
+                                <UserEarningsGrid>
+                                    {Array.from(adventuresOfStakedHoppers).map(adventure => (
+                                        <UserEarnings
+                                            key={adventure}
+                                            user={state.wallet}
+                                            adventure={adventure}
+                                        />
+                                    ))}
+                                </UserEarningsGrid>
+                            </Section.Root>
+                        </>
                     )}
 
                     <Section.Root>
@@ -183,6 +199,11 @@ const EmptyText = styled("p", {
 const UserCapList = styled("div", {
     display: "grid",
     rowGap: "1rem",
+})
+const UserEarningsGrid = styled("div", {
+    display: "grid",
+    gridTemplateColumns: "repeat(3, 1fr)",
+    gap: "1rem",
 })
 const HoppersList = styled("div", {
     display: "grid",

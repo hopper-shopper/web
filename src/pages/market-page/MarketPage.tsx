@@ -23,8 +23,7 @@ import { styled } from "theme"
 export default function MarketPage() {
     const { hoppers } = useHoppers(HOPPERS_FILTER)
 
-    const [configState, setConfig] = useHoppersTableConfiguration(DEFAULT_TABLE_CONFIGURATION)
-    const config = configState as HoppersTableConfiguration
+    const [config, setConfig] = useHoppersTableConfiguration(DEFAULT_TABLE_CONFIGURATION)
 
     const hopperFilters: UseFilterPipeline<Hopper> = (() => {
         if (config.type === HoppersTableConfigFilters.PERMIT) {

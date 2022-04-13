@@ -5,3 +5,8 @@ export type UserCapFilter = {
     adventure: Adventure
     user: WalletAddress
 }
+
+export type UserEarningsFilter = {
+    adventure: Adventure
+    user: WalletAddress
+}

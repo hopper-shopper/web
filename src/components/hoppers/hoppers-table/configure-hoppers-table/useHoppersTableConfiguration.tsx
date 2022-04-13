@@ -1,30 +1,19 @@
-import useLocationEffect from "hooks/useLocationEffect"
-import { useCallback, useState } from "react"
+import { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
-import { useMount } from "react-use"
 import { Adventure, urlifyAdventure } from "utils/adventures"
+import { createLookupMap } from "utils/map"
 import { clamp, parseIntFromString } from "utils/numbers"
 import { HoppersTableConfigFilters, HoppersTableConfiguration } from "./ConfigureHoppersTable"
 
 export default function useHoppersTableConfiguration(initial: HoppersTableConfiguration) {
     const [searchParams, setSearchParams] = useSearchParams()
-    const [config, setConfig] = useState(initial)
+    const [config, setConfig] = useState(deriveStateFromSearchParams(searchParams, initial))
 
-    useMount(() => {
-        setConfig(deriveStateFromSearchParams(searchParams, initial))
-    })
+    useEffect(() => {
+        setSearchParams(deriveSearchParamsFromState(config))
+    }, [config])
 
-    useLocationEffect("search", search => {
-        const params = new URLSearchParams(search)
-        setConfig(prev => deriveStateFromSearchParams(params, prev))
-    })
-
-    const setState = useCallback((state: HoppersTableConfiguration) => {
-        setSearchParams(deriveSearchParamsFromState(state))
-        setConfig(state)
-    }, [])
-
-    return [config, setState] as const
+    return [config, setConfig] as const
 }
 
 // Constants
@@ -43,7 +32,7 @@ function deriveStateFromSearchParams(
         return initial
     }
 
-    const type = parseType(searchParams.get(TYPE_KEY)!) ?? HoppersTableConfigFilters.NONE
+    const type = searchParams.has(TYPE_KEY) ? parseType(searchParams.get(TYPE_KEY)!) : initial.type
     const permit = searchParams.get(PERMIT_KEY)
     const ratingGe = clamp(0, 100, parseIntFromString(searchParams.get(RATING_GE_KEY), 0))
     const fertilityGe = clamp(0, 10, parseIntFromString(searchParams.get(FERTILITY_KEY), 0))
@@ -55,7 +44,7 @@ function deriveStateFromSearchParams(
     } else if (type === HoppersTableConfigFilters.PERMIT) {
         return {
             type: HoppersTableConfigFilters.PERMIT,
-            permit: permit ? parsePermit(permit) ?? Adventure.POND : Adventure.POND,
+            permit: permit ? parsePermit(permit) : Adventure.POND,
             ratingGe,
         }
     } else if (type === HoppersTableConfigFilters.FERTILITY) {
@@ -90,44 +79,29 @@ function deriveSearchParamsFromState(state: HoppersTableConfiguration): URLSearc
 
 // Helper functions
 
+const typeFilterMapping = createLookupMap([
+    [HoppersTableConfigFilters.NONE, "none"],
+    [HoppersTableConfigFilters.PERMIT, "permit"],
+    [HoppersTableConfigFilters.FERTILITY, "fertility"],
+])
 function urlifyType(type: HoppersTableConfigFilters): string {
-    switch (type) {
-        case HoppersTableConfigFilters.NONE:
-            return "none"
-        case HoppersTableConfigFilters.PERMIT:
-            return "permit"
-        case HoppersTableConfigFilters.FERTILITY:
-            return "fertility"
-    }
+    return typeFilterMapping.get(type) ?? "none"
 }
-function parseType(type: string): HoppersTableConfigFilters | null {
-    switch (type) {
-        case "none":
-            return HoppersTableConfigFilters.NONE
-        case "permit":
-            return HoppersTableConfigFilters.PERMIT
-        case "fertility":
-            return HoppersTableConfigFilters.FERTILITY
-        default:
-            return null
-    }
+function parseType(type: string): HoppersTableConfigFilters {
+    return typeFilterMapping.get(type) ?? HoppersTableConfigFilters.NONE
 }
 
-function parsePermit(adventure: string): Adventure | null {
-    switch (adventure) {
-        case "pond":
-            return Adventure.POND
-        case "stream":
-            return Adventure.STREAM
-        case "swamp":
-            return Adventure.SWAMP
-        case "river":
-            return Adventure.RIVER
-        case "forest":
-            return Adventure.FOREST
-        case "great-lake":
-            return Adventure.GREAT_LAKE
-        default:
-            return null
-    }
+const permitMapping = createLookupMap([
+    [Adventure.POND, "pond"],
+    [Adventure.STREAM, "stream"],
+    [Adventure.SWAMP, "swamp"],
+    [Adventure.RIVER, "river"],
+    [Adventure.FOREST, "forest"],
+    [Adventure.GREAT_LAKE, "great-lake"],
+])
+function urlifyPermit(permit: Adventure): string {
+    return permitMapping.get(permit) ?? "pond"
+}
+function parsePermit(adventure: string): Adventure {
+    return permitMapping.get(adventure) ?? Adventure.POND
 }

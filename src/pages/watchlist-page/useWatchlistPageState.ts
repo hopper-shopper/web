@@ -5,7 +5,7 @@ import {
 } from "components/watchlist/configure-watchlist-filter/ConfigureWatchlistFilter"
 import { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
-import { createBothSidedMap } from "utils/map"
+import { createLookupMap } from "utils/map"
 
 export default function useWatchlistPageState() {
     const [searchParams, setSearchParams] = useSearchParams()
@@ -56,7 +56,7 @@ function deriveSearchParamsFromState(state: WatchlistFilter): URLSearchParams {
 
 // Helper functions
 
-const marketFilterMapping = createBothSidedMap([
+const marketFilterMapping = createLookupMap([
     [WatchlistMarketFilter.ANY, "any"],
     [WatchlistMarketFilter.ON_MARKET, "listed"],
     [WatchlistMarketFilter.OFF_MARKET, "not-listed"],
@@ -68,7 +68,7 @@ function parseMarketFilter(marketFilter: string): WatchlistMarketFilter {
     return marketFilterMapping.get(marketFilter) ?? WatchlistMarketFilter.ANY
 }
 
-const featureMapping = createBothSidedMap([
+const featureMapping = createLookupMap([
     [WatchlistCardFeature.MARKET_PRICE, "market-price"],
     [WatchlistCardFeature.ADVENTURE_PERMIT, "adventure-permit"],
     [WatchlistCardFeature.FLY_EARNINGS, "fly-earnings"],
