@@ -71,3 +71,13 @@ export function getHoppersOnWatchlistFilter(watchlist: HopperId[]): FilterFn<Hop
     filter.signature = `watchlist-filter-${watchlist.join(",")}`
     return filter
 }
+
+export function getHoppersHiddenFilter(hidden: Set<HopperId>): FilterFn<Hopper> {
+    const filter: FilterFn<Hopper> = hoppers => {
+        return hoppers.filter(hopper => {
+            return !hidden.has(hopper.tokenId)
+        })
+    }
+    filter.signature = `watchlist-hidden-filter-${Array.from(hidden).join(",")}`
+    return filter
+}

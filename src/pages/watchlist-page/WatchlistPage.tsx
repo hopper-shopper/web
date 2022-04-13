@@ -6,9 +6,15 @@ import Label from "components/inputs/label/Label"
 import ConfigureWatchlistFilter from "components/watchlist/configure-watchlist-filter/ConfigureWatchlistFilter"
 import WatchlistCard from "components/watchlist/watchlist-card/WatchlistCard"
 import WatchlistHopperCard from "components/watchlist/watchlist-hopper-card/WatchlistHopperCard"
-import { getHoppersMarketFilter, getHoppersOnWatchlistFilter } from "filters/hoppers"
+import {
+    getHoppersHiddenFilter,
+    getHoppersMarketFilter,
+    getHoppersOnWatchlistFilter,
+} from "filters/hoppers"
 import useFilter from "hooks/useFilter"
+import { HopperId } from "models/Hopper"
 import { useRef } from "react"
+import { useSet } from "react-use"
 import useWatchlistStore from "stores/watchlist"
 import { styled } from "theme"
 import useWatchlistPageState from "./useWatchlistPageState"
@@ -16,6 +22,7 @@ import useWatchlistPageState from "./useWatchlistPageState"
 export default function WatchlistPage() {
     const [watchlist, toggle] = useWatchlistStore(store => [store.watchlist, store.toggle])
     const [watchlistFilter, setWatchlistFilter] = useWatchlistPageState()
+    const [hiddenWatchlistItems, { toggle: toggleHiddenWatchlistItem }] = useSet<HopperId>()
 
     const addHopperIdRef = useRef<HTMLInputElement | null>(null)
 
@@ -25,6 +32,10 @@ export default function WatchlistPage() {
     const filteredHoppers = useFilter(
         [getHoppersOnWatchlistFilter(watchlist), getHoppersMarketFilter(watchlistFilter.market)],
         hoppers,
+    )
+    const withoutHiddenHoppers = useFilter(
+        [getHoppersHiddenFilter(hiddenWatchlistItems)],
+        filteredHoppers,
     )
 
     const handleAddHopperIdSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -79,7 +90,12 @@ export default function WatchlistPage() {
                     </InputContainer>
 
                     {filteredHoppers.map(hopper => (
-                        <WatchlistCard key={hopper.tokenId} hopper={hopper} />
+                        <WatchlistCard
+                            key={hopper.tokenId}
+                            hopper={hopper}
+                            hidden={hiddenWatchlistItems.has(hopper.tokenId)}
+                            toggleHide={() => toggleHiddenWatchlistItem(hopper.tokenId)}
+                        />
                     ))}
                 </WatchlistList>
 
@@ -88,12 +104,12 @@ export default function WatchlistPage() {
                 )}
                 {watchlist.length > 0 && (
                     <>
-                        {filteredHoppers.length === 0 && (
+                        {withoutHiddenHoppers.length === 0 && (
                             <EmptyText>No Hoppers on watchlist match the given filters</EmptyText>
                         )}
-                        {filteredHoppers.length > 0 && (
+                        {withoutHiddenHoppers.length > 0 && (
                             <HoppersGrid>
-                                {filteredHoppers.map(hopper => (
+                                {withoutHiddenHoppers.map(hopper => (
                                     <WatchlistHopperCard
                                         key={hopper.tokenId}
                                         hopper={hopper}
