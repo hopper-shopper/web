@@ -3,6 +3,7 @@ import {
     WatchlistFilter,
     WatchlistMarketFilter,
 } from "components/watchlist/configure-watchlist-filter/ConfigureWatchlistFilter"
+import useLocationEffect from "hooks/useLocationEffect"
 import { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { createLookupMap } from "utils/map"
@@ -11,8 +12,13 @@ export default function useWatchlistPageState() {
     const [searchParams, setSearchParams] = useSearchParams()
     const [state, setState] = useState(deriveStateFromSearchParams(searchParams))
 
+    useLocationEffect("search", search => {
+        const params = new URLSearchParams(search)
+        setState(deriveStateFromSearchParams(params))
+    })
+
     useEffect(() => {
-        setSearchParams(deriveSearchParamsFromState(state))
+        setSearchParams(deriveSearchParamsFromState(state), { replace: true })
     }, [state])
 
     return [state, setState] as const

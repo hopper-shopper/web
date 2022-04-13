@@ -33,7 +33,7 @@ export default function UserEarnings(props: UserEarningsProps) {
                 </EarningsValue>
                 <EarningsValue>
                     <span> = Total</span>
-                    <span>{formatCurrency(earnings.base + earnings.boost, Currency.FLY)}</span>
+                    <Total>{formatCurrency(earnings.base + earnings.boost, Currency.FLY)}</Total>
                 </EarningsValue>
             </EarningsContent>
         </EarningsCard>
@@ -63,4 +63,8 @@ const EarningsValue = styled("p", {
     alignItems: "baseline",
     color: "$gray12",
     fontSize: "1rem",
+})
+const Total = styled("span", {
+    fontWeight: 500,
+    color: "$blue11",
 })

@@ -1,22 +1,21 @@
 import useLocationEffect from "hooks/useLocationEffect"
-import { useCallback, useState } from "react"
+import { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 
 export default function useInspectPageState() {
     const [searchParams, setSearchParams] = useSearchParams()
-    const [state, internalSetState] = useState<InspectPageState>(
+    const [state, setState] = useState<InspectPageState>(
         deriveStateFromSearchParams(searchParams, INITIAL_STATE),
     )
 
     useLocationEffect("search", search => {
         const params = new URLSearchParams(search)
-        internalSetState(prev => deriveStateFromSearchParams(params, prev))
+        setState(prev => deriveStateFromSearchParams(params, prev))
     })
 
-    const setState = useCallback((state: InspectPageState) => {
-        setSearchParams(deriveSearchParamsFromState(state))
-        internalSetState(state)
-    }, [])
+    useEffect(() => {
+        setSearchParams(deriveSearchParamsFromState(state), { replace: true })
+    }, [state])
 
     return [state, setState] as const
 }

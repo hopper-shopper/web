@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import { useLatest } from "react-use"
+import { useLatest, usePromise } from "react-use"
 
-type Fetcher<T> = () => Promise<T> | T
+type Fetcher<T> = () => Promise<T>
 
 export type UseFetchReturn<T> = {
     data: T | null
@@ -17,11 +17,12 @@ export default function useFetch<T>(fetcher: Fetcher<T>, signature: string): Use
     const [data, setData] = useState<T | null>(null)
 
     const latestFetcher = useLatest(fetcher)
+    const resolve = usePromise()
 
     useEffect(() => {
         ;(async () => {
             try {
-                const data = await latestFetcher.current()
+                const data = await resolve(latestFetcher.current())
                 setData(data)
                 setDataSignature(signature)
             } catch (error) {

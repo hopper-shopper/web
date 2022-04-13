@@ -1,3 +1,4 @@
+import useLocationEffect from "hooks/useLocationEffect"
 import { WalletAddress } from "models/User"
 import { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
@@ -6,8 +7,13 @@ export default function useWalletPageState() {
     const [searchParams, setSearchParams] = useSearchParams()
     const [state, setState] = useState(deriveStateFromSearchParams(searchParams))
 
+    useLocationEffect("search", search => {
+        const params = new URLSearchParams(search)
+        setState(deriveStateFromSearchParams(params))
+    })
+
     useEffect(() => {
-        setSearchParams(deriveSearchParamsFromState(state))
+        setSearchParams(deriveSearchParamsFromState(state), { replace: true })
     }, [state])
 
     return [state, setState] as const

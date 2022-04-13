@@ -16,8 +16,8 @@ import UserEarnings from "components/user/user-earnings/UserEarnings"
 import WalletHopperCard from "components/wallet/wallet-hopper-card/WalletHopperCard"
 import { Hopper } from "models/Hopper"
 import { Transfer } from "models/Transfer"
-import { useRef, useState } from "react"
-import { useMount } from "react-use"
+import { useEffect, useRef, useState } from "react"
+import { useMount, useUpdateEffect } from "react-use"
 import { styled } from "theme"
 import { Adventure } from "utils/adventures"
 import { hopperAdventureToAdventure } from "utils/hopper"
@@ -25,6 +25,7 @@ import isEthereumAddress from "validator/es/lib/isEthereumAddress"
 import useWalletPageState from "./useWalletPageState"
 
 export default function WalletPage() {
+    const inputRef = useRef<HTMLInputElement | null>(null)
     const hoppersLoadedForAddress = useRef<string | null>(null)
     const [state, setState] = useWalletPageState()
     const [walletHoppers, setWalletHoppers] = useState<Hopper[]>([])
@@ -71,7 +72,12 @@ export default function WalletPage() {
             console.error(error)
         }
     }
-    useMount(loadHoppers)
+    useEffect(() => {
+        loadHoppers()
+        if (inputRef.current) {
+            inputRef.current.value = state.wallet
+        }
+    }, [state.wallet])
 
     const combinedTransfers = [...inTransfers, ...outTransfers]
 
@@ -90,6 +96,7 @@ export default function WalletPage() {
                     <Label htmlFor="wallet-address">Your Wallet address</Label>
                     <Input
                         id="wallet-address"
+                        ref={inputRef}
                         type="text"
                         placeholder="Wallet address"
                         defaultValue={state.wallet}
