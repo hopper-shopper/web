@@ -2,11 +2,10 @@ import useLocationEffect from "hooks/useLocationEffect"
 import { HopperId } from "models/Hopper"
 import { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
-import { isValidHopperId } from "utils/hopper"
 
-export default function useInspectPageState() {
+export default function useRoiCalculatorPageState() {
     const [searchParams, setSearchParams] = useSearchParams()
-    const [state, setState] = useState<InspectPageState>(deriveStateFromSearchParams(searchParams))
+    const [state, setState] = useState(deriveStateFromSearchParams(searchParams))
 
     useLocationEffect("search", search => {
         const params = new URLSearchParams(search)
@@ -21,32 +20,35 @@ export default function useInspectPageState() {
 }
 
 // Types
-export type InspectPageState = {
+export type RoiCalculatorPageState = {
     hopperId: HopperId
 }
 
 // Constants
 const HOPPER_ID_KEY = "hopper"
 
-const INITIAL_STATE: InspectPageState = {
+const INITIAL_STATE: RoiCalculatorPageState = {
     hopperId: "",
 }
 
 // State update functions
 
-function deriveStateFromSearchParams(searchParams: URLSearchParams): InspectPageState {
-    const hopperId = searchParams.get(HOPPER_ID_KEY)
+function deriveStateFromSearchParams(searchParams: URLSearchParams): RoiCalculatorPageState {
+    const hopperId = searchParams.get(HOPPER_ID_KEY) ?? INITIAL_STATE.hopperId
 
     return {
-        hopperId: hopperId ?? INITIAL_STATE.hopperId,
+        hopperId,
     }
 }
 
-function deriveSearchParamsFromState(state: InspectPageState): URLSearchParams {
+function deriveSearchParamsFromState(state: RoiCalculatorPageState): URLSearchParams {
     const params = new URLSearchParams()
 
-    if (state.hopperId && isValidHopperId(state.hopperId)) {
-        params.set(HOPPER_ID_KEY, state.hopperId)
+    if (state.hopperId) {
+        const hopperIdNumber = parseInt(state.hopperId)
+        if (!Number.isNaN(hopperIdNumber) && hopperIdNumber >= 0 && hopperIdNumber <= 9999) {
+            params.set(HOPPER_ID_KEY, `${hopperIdNumber}`)
+        }
     }
 
     return params

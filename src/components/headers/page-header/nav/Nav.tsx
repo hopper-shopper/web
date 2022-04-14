@@ -9,7 +9,7 @@ export default function Nav() {
             <ActivatableLink to={ROUTES.MARKET}>Market</ActivatableLink>
             <ActivatableLink to={ROUTES.WALLET}>Wallet</ActivatableLink>
             <ActivatableLink to={ROUTES.WATCHLIST}>Watchlist</ActivatableLink>
-            <ActivatableLink to={ROUTES.ROI}>ROI Calculator</ActivatableLink>
+            <ActivatableLink to={ROUTES.INSPECT}>Inspect</ActivatableLink>
         </StyledNav>
     )
 }

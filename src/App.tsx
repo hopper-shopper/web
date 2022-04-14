@@ -3,7 +3,6 @@ import PageHeader from "components/headers/page-header/PageHeader"
 import useApplyDarkMode from "hooks/useApplyDarkMode"
 import InspectPage from "pages/inspect-page/InspectPage"
 import MarketPage from "pages/market-page/MarketPage"
-import RoiCalculatorPage from "pages/roi-calculator-page/RoiCalculatorPage"
 import WalletPage from "pages/wallet-page/WalletPage"
 import WatchlistPage from "pages/watchlist-page/WatchlistPage"
 import { Outlet, Route, Routes } from "react-router-dom"
@@ -41,7 +40,6 @@ function App() {
                 <Route path={ROUTES.INSPECT} element={<InspectPage />} />
                 <Route path={ROUTES.WALLET} element={<WalletPage />} />
                 <Route path={ROUTES.WATCHLIST} element={<WatchlistPage />} />
-                <Route path={ROUTES.ROI} element={<RoiCalculatorPage />} />
 
                 <Route index element={<Redirect to={ROUTES.MARKET} />} />
             </Route>

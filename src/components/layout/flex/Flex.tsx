@@ -42,11 +42,20 @@ const Flex = styled("div", {
                 gap: "1rem",
             },
         },
+        direction: {
+            row: {
+                flexDirection: "row",
+            },
+            column: {
+                flexDirection: "column",
+            },
+        },
     },
     defaultVariants: {
         x: "start",
         y: "center",
         gap: "none",
+        direction: "row",
     },
 })
 

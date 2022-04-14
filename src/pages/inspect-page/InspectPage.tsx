@@ -1,119 +1,70 @@
-import useUrlState from "@ahooksjs/use-url-state"
-import { fetchHoppers } from "api/hoppers"
-import { fetchHoppersListings } from "api/market"
-import BaseStatsList from "components/hoppers/hopper-card/hopper-card-features/base-stats-list/BaseStatsList"
-import FlyEarnings from "components/hoppers/hopper-card/hopper-card-features/fly-earnings/FlyEarnings"
-import PermitDetails from "components/hoppers/hopper-card/hopper-card-features/permit-details/PermitDetails"
-import HopperCardContext from "components/hoppers/hopper-card/HopperCardContext"
+import useHoppers from "api/hooks/useHoppers"
+import useHoppersListings from "api/hooks/useHoppersListings"
+import HopperPreview from "components/hoppers/hopper-preview/HopperPreview"
+import HopperRoi from "components/hoppers/hopper-roi/HopperRoi"
 import Button from "components/inputs/buttons/button/Button"
 import Fieldset from "components/inputs/fieldset/Fieldset"
+import InputForm from "components/inputs/input-form/InputForm"
 import Input from "components/inputs/input/Input"
 import Label from "components/inputs/label/Label"
-import Flex from "components/layout/flex/Flex"
 import * as Section from "components/layout/section/Section"
 import ListingsTable from "components/listings/listings-table/ListingsTable"
-import WatchlistButton from "components/watchlist/watchlist-button/WatchlistButton"
-import { Hopper, HopperId } from "models/Hopper"
-import { Listing } from "models/Listing"
-import { useEffect, useRef, useState } from "react"
-import useWatchlistStore from "stores/watchlist"
+import { Hopper } from "models/Hopper"
 import { styled } from "theme"
+import { isValidHopperId } from "utils/hopper"
 import useInspectPageState from "./useInspectPageState"
 
 export default function InspectPage() {
-    const watchlist = useWatchlistStore(store => store.watchlist)
     const [state, setState] = useInspectPageState()
 
-    const lastLoadedForHopperId = useRef<HopperId | null>(null)
+    const { hoppers } = useHoppers({
+        tokenIds: state.hopperId ? [state.hopperId] : [],
+    })
+    const { listings } = useHoppersListings({
+        tokenIds: state.hopperId ? [state.hopperId] : [],
+    })
+    const hopper = state.hopperId ? (hoppers[0] as Hopper | null) : null
 
-    const [listings, setListings] = useState<Listing[]>([])
-    const [hopper, setHopper] = useState<Hopper | null>(null)
+    const handleHopperIdSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        const formData = new FormData(event.currentTarget)
+        const hopperId = formData.get("hopper")
 
-    useEffect(() => {
-        ;(async () => {
-            if (!state.hopperId || lastLoadedForHopperId.current === state.hopperId) {
-                return
-            }
+        if (!hopperId) {
+            return
+        }
 
-            const tokenId = parseInt(state.hopperId)
-            if (Number.isNaN(tokenId) || tokenId < 0 || tokenId > 9999) {
-                return
-            }
-            const tokenIdStr = `${tokenId}`
+        if (!isValidHopperId(hopperId.toString())) {
+            return
+        }
 
-            try {
-                const fetchHopper = fetchHoppers({ tokenIds: [tokenIdStr] }).then(hoppers => {
-                    setHopper(hoppers[0])
-                })
-                const fetchListings = fetchHoppersListings({ tokenIds: [tokenIdStr] }).then(
-                    listings => {
-                        setListings(listings)
-                    },
-                )
-
-                await Promise.all([fetchHopper, fetchListings])
-            } catch (error) {
-                console.error(error)
-            }
-        })()
-    }, [state.hopperId])
+        setState({ hopperId: hopperId.toString() })
+    }
 
     return (
         <>
-            <InputContainer
-                onSubmit={event => {
-                    event.preventDefault()
-                }}>
+            <InputForm css={{ maxWidth: 375 }} onSubmit={handleHopperIdSubmit}>
                 <Fieldset css={{ flex: 1 }}>
                     <Label htmlFor="hopper-id">Hopper-ID</Label>
                     <Input
                         id="hopper-id"
+                        name="hopper"
                         type="number"
                         min={0}
                         max={9999}
                         placeholder="Hopper-ID"
                         defaultValue={state.hopperId || ""}
-                        onBlur={value => {
-                            setState({
-                                hopperId: value.target.value,
-                            })
-                        }}
                     />
                 </Fieldset>
 
                 <Button type="submit">Load</Button>
-            </InputContainer>
+            </InputForm>
 
-            {state.hopperId && (
+            {hopper && (
                 <Container>
                     <Section.Root>
                         <Section.Title>Hopper</Section.Title>
-                        {hopper && (
-                            <HopperCardContext.Provider value={{ hopper }}>
-                                <HopperPreview>
-                                    <HopperBaseInfo>
-                                        <HopperImage src={hopper.image} />
-                                        <Flex gap="md">
-                                            <WatchlistButton hopperId={hopper.tokenId} />
-                                            <WatchlistText>
-                                                {watchlist.includes(hopper.tokenId)
-                                                    ? "Remove from"
-                                                    : "Add to"}{" "}
-                                                watchlist
-                                            </WatchlistText>
-                                        </Flex>
-                                    </HopperBaseInfo>
-
-                                    <HopperAnalysis>
-                                        <Column>
-                                            <BaseStatsList title />
-                                            <PermitDetails />
-                                        </Column>
-                                        <FlyEarnings />
-                                    </HopperAnalysis>
-                                </HopperPreview>
-                            </HopperCardContext.Provider>
-                        )}
+                        <HopperPreview hopper={hopper} />
                     </Section.Root>
 
                     <Section.Root>
@@ -123,53 +74,21 @@ export default function InspectPage() {
                         )}
                         {listings.length > 0 && <ListingsTable listings={listings} />}
                     </Section.Root>
+
+                    <Section.Root>
+                        <Section.Title>ROI</Section.Title>
+                        <HopperRoi hopper={hopper} />
+                    </Section.Root>
                 </Container>
             )}
         </>
     )
 }
 
-const InputContainer = styled("form", {
-    maxWidth: 375,
-    margin: "0 auto",
-    display: "flex",
-    alignItems: "flex-end",
-    columnGap: "1rem",
-})
-const HopperPreview = styled("div", {
-    display: "grid",
-    gridTemplateColumns: "max-content 1fr",
-    columnGap: "2rem",
-})
-const HopperImage = styled("img", {
-    width: 200,
-    borderRadius: "$md",
-})
-const WatchlistText = styled("span", {
-    fontSize: "0.75rem",
-    color: "$gray12",
-})
-const HopperBaseInfo = styled("div", {
-    display: "flex",
-    flexDirection: "column",
-    rowGap: "1rem",
-})
-const HopperAnalysis = styled("div", {
-    display: "grid",
-    gridTemplateColumns: "repeat(2, 1fr)",
-    columnGap: "2rem",
-    alignItems: "start",
-})
-const Column = styled("div", {
-    display: "flex",
-    flexDirection: "column",
-    rowGap: "2rem",
-})
 const EmptyText = styled("p", {
     color: "$gray11",
     fontSize: "1rem",
     lineHeight: 1.25,
-    textAlign: "center",
 })
 const Container = styled("div", {
     maxWidth: 1024,

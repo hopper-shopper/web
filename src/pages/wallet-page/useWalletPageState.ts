@@ -25,7 +25,6 @@ export type WalletPageState = {
 }
 
 // Constants
-const WALLET_LS = "hoppershopper.wallet.address"
 const WALLET_KEY = "wallet"
 
 const INITIAL_STATE: WalletPageState = {
@@ -35,7 +34,7 @@ const INITIAL_STATE: WalletPageState = {
 // State update functions
 
 function deriveStateFromSearchParams(searchParams: URLSearchParams): WalletPageState {
-    const walletAddress = searchParams.get(WALLET_KEY) ?? localStorage.getItem(WALLET_LS)
+    const walletAddress = searchParams.get(WALLET_KEY)
 
     return {
         wallet: walletAddress ?? INITIAL_STATE.wallet,
@@ -47,7 +46,6 @@ function deriveSearchParamsFromState(state: WalletPageState): URLSearchParams {
 
     if (state.wallet) {
         params.set(WALLET_KEY, state.wallet)
-        localStorage.setItem(WALLET_LS, state.wallet)
     }
 
     return params
