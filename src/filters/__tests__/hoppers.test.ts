@@ -87,16 +87,16 @@ describe("getHoppersRatingFilter", () => {
         ]
 
         const filter0 = getHoppersRatingFilter(adventure, NumberComparison.GE, 0)
-        const filter1 = getHoppersRatingFilter(adventure, NumberComparison.GE, 0.1)
-        const filter2 = getHoppersRatingFilter(adventure, NumberComparison.GE, 0.2)
-        const filter3 = getHoppersRatingFilter(adventure, NumberComparison.GE, 0.3)
-        const filter4 = getHoppersRatingFilter(adventure, NumberComparison.GE, 0.4)
-        const filter5 = getHoppersRatingFilter(adventure, NumberComparison.GE, 0.5)
-        const filter6 = getHoppersRatingFilter(adventure, NumberComparison.GE, 0.6)
-        const filter7 = getHoppersRatingFilter(adventure, NumberComparison.GE, 0.7)
-        const filter8 = getHoppersRatingFilter(adventure, NumberComparison.GE, 0.8)
-        const filter9 = getHoppersRatingFilter(adventure, NumberComparison.GE, 0.9)
-        const filter10 = getHoppersRatingFilter(adventure, NumberComparison.GE, 1)
+        const filter1 = getHoppersRatingFilter(adventure, NumberComparison.GE, 10)
+        const filter2 = getHoppersRatingFilter(adventure, NumberComparison.GE, 20)
+        const filter3 = getHoppersRatingFilter(adventure, NumberComparison.GE, 30)
+        const filter4 = getHoppersRatingFilter(adventure, NumberComparison.GE, 40)
+        const filter5 = getHoppersRatingFilter(adventure, NumberComparison.GE, 50)
+        const filter6 = getHoppersRatingFilter(adventure, NumberComparison.GE, 60)
+        const filter7 = getHoppersRatingFilter(adventure, NumberComparison.GE, 70)
+        const filter8 = getHoppersRatingFilter(adventure, NumberComparison.GE, 80)
+        const filter9 = getHoppersRatingFilter(adventure, NumberComparison.GE, 90)
+        const filter10 = getHoppersRatingFilter(adventure, NumberComparison.GE, 100)
 
         expect(filter0(hoppers).map(h => h.tokenId)).toMatchObject([
             "1",

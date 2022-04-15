@@ -1,9 +1,9 @@
 import { HoverCardContentProps } from "@radix-ui/react-hover-card"
 import * as HoverCard from "components/hover-card/HoverCard"
+import InspectPageLink from "components/inspect/inspect-page-link/InspectPageLink"
+import RightSlot from "components/layout/flex/RightSlot"
 import { Hopper } from "models/Hopper"
-import { Link } from "react-router-dom"
 import { styled } from "theme"
-import { getInspectPageUrl } from "utils/url"
 import BaseStatsList from "../hopper-card/hopper-card-features/base-stats-list/BaseStatsList"
 import FlyEarnings from "../hopper-card/hopper-card-features/fly-earnings/FlyEarnings"
 import PermitDetails from "../hopper-card/hopper-card-features/permit-details/PermitDetails"
@@ -29,9 +29,7 @@ export default function HopperDetailsHoverCard(props: HopperDetailsHoverCardProp
                         </HopperStats>
 
                         <RightSlot>
-                            <StyledLink to={getInspectPageUrl({ hopper: hopper.tokenId })}>
-                                Inspect
-                            </StyledLink>
+                            <InspectPageLink hopperId={hopper.tokenId} />
                         </RightSlot>
                     </HopperInfo>
 
@@ -52,14 +50,6 @@ const HopperInfo = styled("div", {
     display: "flex",
     alignItems: "center",
     columnGap: "1rem",
-})
-const RightSlot = styled("div", {
-    marginLeft: "auto",
-})
-const StyledLink = styled(Link, {
-    color: "$blue11",
-    fontSize: "0.75rem",
-    textDecoration: "none",
 })
 const HopperStats = styled("div", {
     display: "flex",

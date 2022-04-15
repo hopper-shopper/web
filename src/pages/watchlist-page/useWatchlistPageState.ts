@@ -30,7 +30,7 @@ export default function useWatchlistPageState() {
 const INITIAL_STATE: WatchlistFilter = {
     market: WatchlistMarketFilter.ANY,
     features: [WatchlistCardFeature.MARKET_PRICE, WatchlistCardFeature.ADVENTURE_PERMIT],
-    normalizeLevel: 1,
+    normalizeLevel: 0,
     hidden: [],
 }
 

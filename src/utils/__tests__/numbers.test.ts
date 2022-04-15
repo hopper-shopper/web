@@ -1,4 +1,4 @@
-import { clamp, normalize } from "utils/numbers"
+import { clamp, normalize, parseIntFromString, round } from "utils/numbers"
 import { describe, test, expect } from "vitest"
 
 describe("clamp", () => {
@@ -28,5 +28,32 @@ describe("normalize", () => {
     test("should normalize value", () => {
         expect(normalize(0, 10, 500)).toBe(5)
         expect(normalize(0, 100, 500)).toBe(50)
+    })
+})
+
+describe("parseIntFromString", () => {
+    test("should return fallback if value is unset", () => {
+        expect(parseIntFromString("", 5)).toBe(5)
+        expect(parseIntFromString(null, 5)).toBe(5)
+        expect(parseIntFromString(undefined, 5)).toBe(5)
+    })
+
+    test("should parse decimals correctly", () => {
+        expect(parseIntFromString("12.34", 5)).toBe(12)
+        expect(parseIntFromString("12,34", 5)).toBe(12)
+    })
+
+    test("should parse negative numbers correctly", () => {
+        expect(parseIntFromString("-12", 5)).toBe(-12)
+        expect(parseIntFromString("-12.34", 5)).toBe(-12)
+        expect(parseIntFromString("-12,34", 5)).toBe(-12)
+    })
+})
+
+describe("round", () => {
+    test("should round value correctly", () => {
+        expect(round(12.34, 1)).toBe(12.3)
+        expect(round(12.345, 2)).toBe(12.35)
+        expect(round(12.3456, 3)).toBe(12.346)
     })
 })

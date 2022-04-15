@@ -23,3 +23,12 @@ export function parseIntFromString(fromValue: string | undefined | null, fallbac
     const parsed = parseInt(fromValue)
     return Number.isNaN(parsed) ? fallback : parsed
 }
+
+export function round(value: number, decimals: number): number {
+    const factor = 10 ** decimals
+    return Math.round(value * factor) / factor
+}
+
+export function avg(values: number[]): number {
+    return values.reduce((acc, cur) => acc + cur, 0) / values.length
+}

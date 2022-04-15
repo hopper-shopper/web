@@ -1,12 +1,12 @@
-import { Listing } from "models/Listing"
 import * as Table from "components/table/Table"
-import { formatDateTime } from "formatters/date"
+import WalletPageLink from "components/wallet/WalletPageLink/WalletPageLink"
 import { Currency, formatCurrency } from "formatters/currency"
+import { formatDateTime } from "formatters/date"
 import useSort from "hooks/useSort"
+import { Listing } from "models/Listing"
 import { SortListingBy, sortListings } from "sorters/listings"
 import { SortDirection } from "sorters/_common"
 import { styled } from "theme"
-import { formatWalletAddress } from "formatters/wallet"
 
 type ListingsTableProps = {
     listings: Listing[]
@@ -46,8 +46,12 @@ export default function ListingsTable(props: ListingsTableProps) {
                             </SoldIndicator>
                         </Table.Cell>
                         <Table.Cell align="left">{formatDateTime(listing.timestamp)}</Table.Cell>
-                        <Table.Cell align="left">{formatWalletAddress(listing.seller)}</Table.Cell>
-                        <Table.Cell align="left">{formatWalletAddress(listing.buyer)}</Table.Cell>
+                        <Table.Cell align="left">
+                            <WalletPageLink wallet={listing.seller} />
+                        </Table.Cell>
+                        <Table.Cell align="left">
+                            <WalletPageLink wallet={listing.buyer} />
+                        </Table.Cell>
                         <Table.Cell align="right">
                             {formatCurrency(listing.price, Currency.AVAX)}
                         </Table.Cell>

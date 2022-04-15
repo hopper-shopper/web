@@ -27,6 +27,13 @@ describe("calculateCostsAtLevel", () => {
 })
 
 describe("calculateLevelUpCosts", () => {
+    test("should calculate level up costs correctly", () => {
+        expect(calculateLevelUpCosts(1, 2)).toBe(1)
+        expect(calculateLevelUpCosts(5, 6)).toBe(3)
+        expect(calculateLevelUpCosts(10, 11)).toBe(5.5)
+        expect(calculateLevelUpCosts(25, 26)).toBe(15)
+    })
+
     test("should return 0 if desired level is below currentLevel", () => {
         expect(calculateLevelUpCosts(0, 0)).toBe(0)
         expect(calculateLevelUpCosts(10, 5)).toBe(0)

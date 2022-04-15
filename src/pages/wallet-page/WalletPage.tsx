@@ -14,6 +14,7 @@ import * as Section from "components/layout/section/Section"
 import TransfersBreakdown from "components/transfers/transfers-breakdown/TransfersBreakdown"
 import TransfersByDaySelect from "components/transfers/transfers-by-day-select/TransfersByDaySelect"
 import TransfersTable from "components/transfers/transfers-table/TransfersTable"
+import EmptyText from "components/typography/empty-text/EmptyText"
 import FlyCap from "components/user/fly-cap/FlyCap"
 import UserEarnings from "components/user/user-earnings/UserEarnings"
 import WalletHopperCard from "components/wallet/wallet-hopper-card/WalletHopperCard"
@@ -94,7 +95,7 @@ export default function WalletPage() {
             </InputForm>
 
             {!state.wallet && (
-                <EmptyText>
+                <EmptyText align="center" padding="md">
                     Enter your Wallet address to view game analytics and transfers
                 </EmptyText>
             )}
@@ -132,15 +133,20 @@ export default function WalletPage() {
 
                     <Section.Root>
                         <Section.Title>Hoppers</Section.Title>
-                        <Grid columns="3" gap="md" css={{ alignItems: "start" }}>
-                            {hoppers.map(hopper => (
-                                <WalletHopperCard
-                                    key={hopper.tokenId}
-                                    hopper={hopper}
-                                    listings={hopperListings}
-                                />
-                            ))}
-                        </Grid>
+                        {hoppers.length === 0 && (
+                            <EmptyText>This wallet does not have any hoppers</EmptyText>
+                        )}
+                        {hoppers.length > 0 && (
+                            <Grid columns="3" gap="md" css={{ alignItems: "start" }}>
+                                {hoppers.map(hopper => (
+                                    <WalletHopperCard
+                                        key={hopper.tokenId}
+                                        hopper={hopper}
+                                        listings={hopperListings}
+                                    />
+                                ))}
+                            </Grid>
+                        )}
                     </Section.Root>
 
                     <Section.Root>
@@ -174,11 +180,4 @@ const Container = styled("div", {
     display: "flex",
     flexDirection: "column",
     rowGap: "3rem",
-})
-const EmptyText = styled("p", {
-    color: "$gray11",
-    fontSize: "1rem",
-    lineHeight: 1.25,
-    textAlign: "center",
-    padding: "2rem",
 })

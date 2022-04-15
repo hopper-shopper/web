@@ -1,4 +1,4 @@
-import { IconCheck, IconChevronDown, IconChevronUp } from "@tabler/icons"
+import { IconCheck, IconChevronDown, IconChevronUp, IconDirection } from "@tabler/icons"
 import * as Select from "components/inputs/select/Select"
 import { getMonth, isToday, isYesterday } from "date-fns"
 import { formatDateTime, formatMonth } from "formatters/date"
@@ -63,7 +63,7 @@ export default function TransfersByDaySelect(props: TransfersByDaySelectProps) {
             <Select.Trigger>
                 <Select.Value />
                 <Select.Icon>
-                    <IconChevronDown />
+                    <IconDirection />
                 </Select.Icon>
             </Select.Trigger>
 

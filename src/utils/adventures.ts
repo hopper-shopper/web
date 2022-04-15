@@ -9,6 +9,15 @@ export enum Adventure {
     GREAT_LAKE = "GREAT_LAKE",
 }
 
+export const ALL_ADVENTURES: Adventure[] = [
+    Adventure.POND,
+    Adventure.STREAM,
+    Adventure.SWAMP,
+    Adventure.RIVER,
+    Adventure.FOREST,
+    Adventure.GREAT_LAKE,
+]
+
 export function urlifyAdventure(adventure: Adventure): string {
     switch (adventure) {
         case Adventure.POND:
@@ -79,19 +88,11 @@ export function getIdealAdventure(hopper: Hopper): Adventure {
         hopper.baseFly.forest,
         hopper.baseFly.greatLake,
     ]
-    const adventures = [
-        Adventure.POND,
-        Adventure.STREAM,
-        Adventure.SWAMP,
-        Adventure.RIVER,
-        Adventure.FOREST,
-        Adventure.GREAT_LAKE,
-    ]
 
     const maxBaseFly = Math.max(...baseFlies)
     const maxBaseFlyIndex = baseFlies.lastIndexOf(maxBaseFly)
 
-    return adventures[maxBaseFlyIndex]
+    return ALL_ADVENTURES[maxBaseFlyIndex]
 }
 
 export function getEarningsByAdventure(adventure: Adventure, hopper: Hopper): number {

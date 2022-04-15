@@ -7,6 +7,7 @@ import HopperCardContext from "../hopper-card/HopperCardContext"
 import BaseStatsList from "../hopper-card/hopper-card-features/base-stats-list/BaseStatsList"
 import PermitDetails from "../hopper-card/hopper-card-features/permit-details/PermitDetails"
 import FlyEarnings from "../hopper-card/hopper-card-features/fly-earnings/FlyEarnings"
+import CurrentLevel from "../hopper-card/hopper-card-features/current-level/CurrentLevel"
 
 type HopperPreviewProps = {
     hopper: Hopper
@@ -33,6 +34,7 @@ export default function HopperPreview(props: HopperPreviewProps) {
 
                 <HopperAnalysis>
                     <Column>
+                        <CurrentLevel />
                         <BaseStatsList title />
                         <PermitDetails />
                     </Column>
@@ -70,5 +72,5 @@ const HopperAnalysis = styled("div", {
 const Column = styled("div", {
     display: "flex",
     flexDirection: "column",
-    rowGap: "2rem",
+    rowGap: "1rem",
 })

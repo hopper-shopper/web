@@ -7,13 +7,11 @@ import Label from "components/inputs/label/Label"
 import * as Section from "components/layout/section/Section"
 import { Hopper } from "models/Hopper"
 import React from "react"
-import usePricesStore from "stores/prices"
 import { styled } from "theme"
 import useRoiCalculatorPageState from "./useRoiCalculatorPageState"
 
 export default function RoiCalculatorPage() {
     const [state, setState] = useRoiCalculatorPageState()
-    const price = usePricesStore(store => store.price)
 
     const { hoppers } = useHoppers({
         tokenIds: state.hopperId ? [state.hopperId] : [],
