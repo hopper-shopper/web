@@ -2,6 +2,7 @@ import Fieldset from "components/inputs/fieldset/Fieldset"
 import Input from "components/inputs/input/Input"
 import Label from "components/inputs/label/Label"
 import Flex from "components/layout/flex/Flex"
+import RightSlot from "components/layout/flex/RightSlot"
 import { formatAdventure } from "formatters/adventure"
 import { Hopper } from "models/Hopper"
 import { useState } from "react"
@@ -18,10 +19,11 @@ type HopperRoiProps = {
 export default function HopperRoi(props: HopperRoiProps) {
     const { hopper } = props
 
-    const flyPerAvax = usePricesStore(store => store.price.AVAX.FLY)
+    const avaxPrices = usePricesStore(store => store.price.AVAX)
 
     const [boughtFor, setBoughtFor] = useState(round(hopper.listing.price, 2))
     const [startAtLevel, setStartAtLevel] = useState(hopper.level)
+    const [flyPerAvax, setFlyPerAvax] = useState(round(avaxPrices.FLY, 2))
 
     const handleBoughtForBlur = (event: React.FocusEvent<HTMLInputElement>) => {
         const value = event.target.valueAsNumber
@@ -30,6 +32,10 @@ export default function HopperRoi(props: HopperRoiProps) {
     const handleStartAtLevelBlur = (event: React.FocusEvent<HTMLInputElement>) => {
         const value = event.target.valueAsNumber
         setStartAtLevel(Number.isNaN(value) ? hopper.level : value)
+    }
+    const handleFlyPerAvaxBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+        const value = event.target.valueAsNumber
+        setFlyPerAvax(Number.isNaN(value) ? avaxPrices.FLY : value)
     }
 
     const boughtForFly = boughtFor * flyPerAvax
@@ -71,6 +77,20 @@ export default function HopperRoi(props: HopperRoiProps) {
                         onBlur={handleStartAtLevelBlur}
                     />
                 </Fieldset>
+
+                <RightSlot>
+                    <Fieldset css={{ maxWidth: 200 }}>
+                        <Label htmlFor="fly-per-avax">FLY / AVAX</Label>
+                        <Input
+                            id="fly-per-avax"
+                            type="number"
+                            min={0}
+                            placeholder="FLY / AVAX"
+                            defaultValue={flyPerAvax || ""}
+                            onBlur={handleFlyPerAvaxBlur}
+                        />
+                    </Fieldset>
+                </RightSlot>
             </Flex>
 
             <Flex direction="column" y="stretch" gap="md">
