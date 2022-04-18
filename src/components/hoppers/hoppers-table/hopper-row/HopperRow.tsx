@@ -18,18 +18,18 @@ import { HOPPER_STATS_SCALE } from "utils/hopper"
 import { calculateLevelUpCosts } from "utils/level"
 import { getHopperMarketUrl } from "utils/url"
 import {
+    HoppersTableAnyFilter,
     HoppersTableConfigFilters,
-    HoppersTableConfiguration,
-} from "../configure-hoppers-table/ConfigureHoppersTable"
+} from "../hoppers-table-filter/HoppersTableFilter"
 
 type HopperRowProps = {
     hopper: Hopper
     index: number
-    config: HoppersTableConfiguration
+    filter: HoppersTableAnyFilter
 }
 
 export default function HopperRow(props: HopperRowProps) {
-    const { hopper, index, config } = props
+    const { hopper, index, filter } = props
 
     return (
         <>
@@ -69,28 +69,28 @@ export default function HopperRow(props: HopperRowProps) {
                     {hopper.fertility}
                 </Value>
             </Cell>
-            {config.type === HoppersTableConfigFilters.PERMIT && config.permit && (
+            {filter.type === HoppersTableConfigFilters.PERMIT && filter.permit && (
                 <StyledRatingCell align="center" striped={index % 2 === 1}>
-                    {formatRating(getRatingByAdventure(config.permit, hopper))}
+                    {formatRating(getRatingByAdventure(filter.permit, hopper))}
                 </StyledRatingCell>
             )}
             <Cell align="right">{formatCurrency(hopper.listing.price, Currency.AVAX)}</Cell>
             <Cell align="right">{formatCurrency(hopper.levelCosts, Currency.AVAX)}</Cell>
-            {config.type === HoppersTableConfigFilters.PERMIT && config.permit && (
+            {filter.type === HoppersTableConfigFilters.PERMIT && filter.permit && (
                 <>
                     <Cell align="right">
                         {formatCurrency(
-                            calculateMaxRatingPrice(config.permit, hopper),
+                            calculateMaxRatingPrice(filter.permit, hopper),
                             Currency.AVAX,
                         )}
                     </Cell>
                     <Cell align="right">
-                        {formatCurrency(getBaseFlyByAdventure(config.permit, hopper), Currency.FLY)}
+                        {formatCurrency(getBaseFlyByAdventure(filter.permit, hopper), Currency.FLY)}
                     </Cell>
                 </>
             )}
 
-            {config.type === HoppersTableConfigFilters.FERTILITY && (
+            {filter.type === HoppersTableConfigFilters.FERTILITY && (
                 <>
                     <Cell align="right">
                         {formatCurrency(calculateMaxFertilityRatingPrice(hopper), Currency.AVAX)}

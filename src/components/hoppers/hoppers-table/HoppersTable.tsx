@@ -1,23 +1,21 @@
-import { IconStar } from "@tabler/icons"
-import IconButton from "components/inputs/buttons/icon-button/IconButton"
 import * as Table from "components/table/Table"
 import { Hopper } from "models/Hopper"
 import { TableVirtuoso } from "react-virtuoso"
 import { SortHopperBy } from "sorters/hoppers"
 import { Adventure } from "utils/adventures"
-import {
-    HoppersTableConfigFilters,
-    HoppersTableConfiguration,
-} from "./configure-hoppers-table/ConfigureHoppersTable"
 import HopperRow from "./hopper-row/HopperRow"
+import {
+    HoppersTableAnyFilter,
+    HoppersTableConfigFilters,
+} from "./hoppers-table-filter/HoppersTableFilter"
 
 type HoppersTableProps = {
-    config: HoppersTableConfiguration
+    filter: HoppersTableAnyFilter
     hoppers: Hopper[]
 }
 
 export default function HoppersTable(props: HoppersTableProps) {
-    const { config, hoppers } = props
+    const { filter, hoppers } = props
 
     return (
         <>
@@ -70,8 +68,8 @@ export default function HoppersTable(props: HoppersTableProps) {
                                 sortBy={SortHopperBy.FERTILITY}>
                                 Fertility
                             </Table.SortableHeaderCell>
-                            {config.type === HoppersTableConfigFilters.PERMIT && config.permit && (
-                                <Table.SortableHeaderCell sortBy={RatingSortPreset[config.permit]}>
+                            {filter.type === HoppersTableConfigFilters.PERMIT && filter.permit && (
+                                <Table.SortableHeaderCell sortBy={RatingSortPreset[filter.permit]}>
                                     Rating
                                 </Table.SortableHeaderCell>
                             )}
@@ -83,23 +81,23 @@ export default function HoppersTable(props: HoppersTableProps) {
                                 sortBy={SortHopperBy.LEVEL_COSTS}>
                                 Level costs
                             </Table.SortableHeaderCell>
-                            {config.type === HoppersTableConfigFilters.PERMIT && config.permit && (
+                            {filter.type === HoppersTableConfigFilters.PERMIT && filter.permit && (
                                 <Table.SortableHeaderCell
                                     align="right"
-                                    sortBy={MaxPriceSortPreset[config.permit]}>
+                                    sortBy={MaxPriceSortPreset[filter.permit]}>
                                     Max. Price
                                 </Table.SortableHeaderCell>
                             )}
 
-                            {config.type === HoppersTableConfigFilters.PERMIT && config.permit && (
+                            {filter.type === HoppersTableConfigFilters.PERMIT && filter.permit && (
                                 <Table.SortableHeaderCell
                                     align="right"
-                                    sortBy={BaseFlySortPreset[config.permit]}>
+                                    sortBy={BaseFlySortPreset[filter.permit]}>
                                     Base Fly / Level
                                 </Table.SortableHeaderCell>
                             )}
 
-                            {config.type === HoppersTableConfigFilters.FERTILITY && (
+                            {filter.type === HoppersTableConfigFilters.FERTILITY && (
                                 <>
                                     <Table.SortableHeaderCell
                                         align="right"
@@ -117,7 +115,7 @@ export default function HoppersTable(props: HoppersTableProps) {
                     )
                 }}
                 itemContent={(index, hopper) => (
-                    <HopperRow key={hopper.tokenId} index={index} hopper={hopper} config={config} />
+                    <HopperRow key={hopper.tokenId} index={index} hopper={hopper} filter={filter} />
                 )}
             />
         </>

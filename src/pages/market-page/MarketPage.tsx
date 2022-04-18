@@ -1,11 +1,11 @@
 import { AdventureFilter, HoppersFilter, MarketFilter, PermitFilter } from "api/filters/hoopers"
 import useHoppers from "api/hooks/useHoppers"
-import ConfigureHoppersTable, {
-    HoppersTableConfigFilters,
-    HoppersTableConfiguration,
-} from "components/hoppers/hoppers-table/configure-hoppers-table/ConfigureHoppersTable"
-import useHoppersTableConfiguration from "components/hoppers/hoppers-table/configure-hoppers-table/useHoppersTableConfiguration"
 import FloorPrice from "components/hoppers/hoppers-table/floor-price/FloorPrice"
+import HoppersTableFilter, {
+    HoppersTableAnyFilter,
+    HoppersTableConfigFilters,
+} from "components/hoppers/hoppers-table/hoppers-table-filter/HoppersTableFilter"
+import useHoppersTableFilter from "components/hoppers/hoppers-table/hoppers-table-filter/useHoppersTableFilter"
 import HoppersTable from "components/hoppers/hoppers-table/HoppersTable"
 import {
     getHoppersFertilityFilter,
@@ -23,16 +23,16 @@ import { styled } from "theme"
 export default function MarketPage() {
     const { hoppers } = useHoppers(HOPPERS_FILTER)
 
-    const [config, setConfig] = useHoppersTableConfiguration(DEFAULT_TABLE_CONFIGURATION)
+    const [filter, setFilter] = useHoppersTableFilter(DEFAULT_TABLE_CONFIGURATION)
 
     const hopperFilters: UseFilterPipeline<Hopper> = (() => {
-        if (config.type === HoppersTableConfigFilters.PERMIT) {
+        if (filter.type === HoppersTableConfigFilters.PERMIT) {
             return [
-                getHoppersPermitFilter(config.permit),
-                getHoppersRatingFilter(config.permit, NumberComparison.GE, config.ratingGe),
+                getHoppersPermitFilter(filter.permit),
+                getHoppersRatingFilter(filter.permit, NumberComparison.GE, filter.ratingGe),
             ]
-        } else if (config.type === HoppersTableConfigFilters.FERTILITY) {
-            return [getHoppersFertilityFilter(NumberComparison.GE, config.fertilityGe)]
+        } else if (filter.type === HoppersTableConfigFilters.FERTILITY) {
+            return [getHoppersFertilityFilter(NumberComparison.GE, filter.fertilityGe)]
         }
 
         return []
@@ -56,13 +56,13 @@ export default function MarketPage() {
     return (
         <>
             <Filter>
-                <ConfigureHoppersTable configuration={config} onChange={setConfig} />
+                <HoppersTableFilter filter={filter} onChange={setFilter} />
                 <FloorPrice hoppers={filteredHoppers} />
             </Filter>
 
             <SortContext.Provider
                 value={{ active: sortBy, direction: sortDirection, update: setSortBy }}>
-                <HoppersTable config={config} hoppers={sortedHoppers} />
+                <HoppersTable filter={filter} hoppers={sortedHoppers} />
             </SortContext.Provider>
         </>
     )
@@ -76,7 +76,7 @@ const HOPPERS_FILTER: Required<HoppersFilter> = {
     tokenIds: [],
     owner: "",
 }
-const DEFAULT_TABLE_CONFIGURATION: HoppersTableConfiguration = {
+const DEFAULT_TABLE_CONFIGURATION: HoppersTableAnyFilter = {
     type: HoppersTableConfigFilters.NONE,
 }
 

@@ -6,13 +6,13 @@ import Flex from "components/layout/flex/Flex"
 import { styled } from "theme"
 import { Adventure } from "utils/adventures"
 
-type ConfigureHoppersTableProps = {
-    configuration: HoppersTableConfiguration
-    onChange: (configuration: HoppersTableConfiguration) => void
+type HoppersTableFilterProps = {
+    filter: HoppersTableAnyFilter
+    onChange: (configuration: HoppersTableAnyFilter) => void
 }
 
-export default function ConfigureHoppersTable(props: ConfigureHoppersTableProps) {
-    const { configuration, onChange } = props
+export default function HoppersTableFilter(props: HoppersTableFilterProps) {
+    const { filter: configuration, onChange } = props
 
     const handleAdventureChange = (adventure: Adventure) => {
         if (configuration.type !== HoppersTableConfigFilters.PERMIT) {
@@ -47,17 +47,17 @@ export default function ConfigureHoppersTable(props: ConfigureHoppersTableProps)
             onChange({
                 type: HoppersTableConfigFilters.FERTILITY,
                 fertilityGe: 0,
-            } as HoppersTableConfigurationFertility)
+            } as HoppersTableFilterFertility)
         } else if (filterValue === HoppersTableConfigFilters.PERMIT) {
             onChange({
                 type: HoppersTableConfigFilters.PERMIT,
                 permit: Adventure.POND,
                 ratingGe: 0,
-            } as HoppersTableConfigurationPermit)
+            } as HoppersTableFilterPermit)
         } else if (filterValue === HoppersTableConfigFilters.NONE) {
             onChange({
                 type: HoppersTableConfigFilters.NONE,
-            } as HoppersTableConfigurationNone)
+            } as HoppersTableFilterNone)
         }
     }
 
@@ -156,6 +156,8 @@ export default function ConfigureHoppersTable(props: ConfigureHoppersTableProps)
                                 <Input
                                     id="rating-ge"
                                     type="number"
+                                    min={0}
+                                    max={100}
                                     placeholder="Rating 0 - 100"
                                     defaultValue={configuration.ratingGe || ""}
                                     onBlur={handleRatingGeChange}
@@ -175,6 +177,8 @@ export default function ConfigureHoppersTable(props: ConfigureHoppersTableProps)
                             <Input
                                 id="fertility-ge"
                                 type="number"
+                                min={0}
+                                max={10}
                                 placeholder="Fertility 1 - 10"
                                 defaultValue={configuration.fertilityGe || ""}
                                 onBlur={handleFertilityGeChange}
@@ -193,22 +197,22 @@ export enum HoppersTableConfigFilters {
     PERMIT = "PERMIT",
     FERTILITY = "FERTILITY",
 }
-export type HoppersTableConfigurationNone = {
+export type HoppersTableFilterNone = {
     type: HoppersTableConfigFilters.NONE
 }
-export type HoppersTableConfigurationPermit = {
+export type HoppersTableFilterPermit = {
     type: HoppersTableConfigFilters.PERMIT
     permit: Adventure
     ratingGe: number
 }
-export type HoppersTableConfigurationFertility = {
+export type HoppersTableFilterFertility = {
     type: HoppersTableConfigFilters.FERTILITY
     fertilityGe: number
 }
-export type HoppersTableConfiguration =
-    | HoppersTableConfigurationNone
-    | HoppersTableConfigurationPermit
-    | HoppersTableConfigurationFertility
+export type HoppersTableAnyFilter =
+    | HoppersTableFilterNone
+    | HoppersTableFilterPermit
+    | HoppersTableFilterFertility
 
 // Styles
 const Container = styled("div", {

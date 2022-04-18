@@ -4,9 +4,9 @@ import { useSearchParams } from "react-router-dom"
 import { Adventure, urlifyAdventure } from "utils/adventures"
 import { createLookupMap } from "utils/map"
 import { clamp, parseIntFromString } from "utils/numbers"
-import { HoppersTableConfigFilters, HoppersTableConfiguration } from "./ConfigureHoppersTable"
+import { HoppersTableConfigFilters, HoppersTableAnyFilter } from "./HoppersTableFilter"
 
-export default function useHoppersTableConfiguration(initial: HoppersTableConfiguration) {
+export default function useHoppersTableFilter(initial: HoppersTableAnyFilter) {
     const [searchParams, setSearchParams] = useSearchParams()
     const [config, setConfig] = useState(deriveStateFromSearchParams(searchParams, initial))
 
@@ -16,7 +16,7 @@ export default function useHoppersTableConfiguration(initial: HoppersTableConfig
     })
 
     useEffect(() => {
-        setSearchParams(deriveSearchParamsFromState(config))
+        setSearchParams(deriveSearchParamsFromState(config), { replace: true })
     }, [config])
 
     return [config, setConfig] as const
@@ -32,8 +32,8 @@ const FERTILITY_KEY = "fertility"
 
 function deriveStateFromSearchParams(
     searchParams: URLSearchParams,
-    initial: HoppersTableConfiguration,
-): HoppersTableConfiguration {
+    initial: HoppersTableAnyFilter,
+): HoppersTableAnyFilter {
     if (!searchParams.has(TYPE_KEY)) {
         return initial
     }
@@ -63,7 +63,7 @@ function deriveStateFromSearchParams(
     return initial
 }
 
-function deriveSearchParamsFromState(state: HoppersTableConfiguration): URLSearchParams {
+function deriveSearchParamsFromState(state: HoppersTableAnyFilter): URLSearchParams {
     const params = new URLSearchParams()
 
     params.set(TYPE_KEY, urlifyType(state.type))
