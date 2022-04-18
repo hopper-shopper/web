@@ -50,37 +50,3 @@ export function isValidHopperId(hopperId: HopperId | number): boolean {
 
     return hopperId >= 0 && hopperId <= 9999
 }
-
-export function getBaseShareForAdventure(adventure: Adventure, hopper: Hopper): number {
-    const rating = getRatingByAdventure(adventure, hopper)
-
-    if (rating === 0) {
-        return 0
-    }
-
-    let statsBaseShare = 0
-
-    switch (adventure) {
-        case Adventure.POND:
-            statsBaseShare = hopper.strength
-            break
-        case Adventure.STREAM:
-            statsBaseShare = hopper.vitality
-            break
-        case Adventure.SWAMP:
-            statsBaseShare = hopper.agility
-            break
-        case Adventure.RIVER:
-            statsBaseShare = hopper.strength * hopper.intelligence
-            break
-        case Adventure.FOREST:
-            statsBaseShare = hopper.vitality * hopper.agility * hopper.intelligence
-            break
-        case Adventure.GREAT_LAKE:
-            statsBaseShare =
-                hopper.strength * hopper.vitality * hopper.agility * hopper.intelligence
-            break
-    }
-
-    return statsBaseShare * hopper.level
-}

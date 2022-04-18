@@ -16,6 +16,7 @@ import {
 } from "utils/fertility"
 import { HOPPER_STATS_SCALE } from "utils/hopper"
 import { calculateLevelUpCosts } from "utils/level"
+import { getHopperMarketUrl } from "utils/url"
 import {
     HoppersTableConfigFilters,
     HoppersTableConfiguration,
@@ -34,7 +35,7 @@ export default function HopperRow(props: HopperRowProps) {
         <>
             <Cell>
                 <HopperDetailsHoverCard hopper={hopper} side="left">
-                    <a href={`https://hoppersgame.io/market#h${hopper.tokenId}`} target="_blank">
+                    <a href={getHopperMarketUrl({ hopper: hopper.tokenId })} target="_blank">
                         <Center>
                             <Image src={hopper.image} />
                         </Center>
@@ -76,15 +77,17 @@ export default function HopperRow(props: HopperRowProps) {
             <Cell align="right">{formatCurrency(hopper.listing.price, Currency.AVAX)}</Cell>
             <Cell align="right">{formatCurrency(hopper.levelCosts, Currency.AVAX)}</Cell>
             {config.type === HoppersTableConfigFilters.PERMIT && config.permit && (
-                <Cell align="right">
-                    {formatCurrency(calculateMaxRatingPrice(config.permit, hopper), Currency.AVAX)}
-                </Cell>
-            )}
-
-            {config.type === HoppersTableConfigFilters.PERMIT && config.permit && (
-                <Cell align="right">
-                    {formatCurrency(getBaseFlyByAdventure(config.permit, hopper), Currency.FLY)}
-                </Cell>
+                <>
+                    <Cell align="right">
+                        {formatCurrency(
+                            calculateMaxRatingPrice(config.permit, hopper),
+                            Currency.AVAX,
+                        )}
+                    </Cell>
+                    <Cell align="right">
+                        {formatCurrency(getBaseFlyByAdventure(config.permit, hopper), Currency.FLY)}
+                    </Cell>
+                </>
             )}
 
             {config.type === HoppersTableConfigFilters.FERTILITY && (

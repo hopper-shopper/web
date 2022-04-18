@@ -43,7 +43,7 @@ export function urlifyAdventure(adventure: Adventure): string {
  */
 export function calculateMaxRatingPrice(adventure: Adventure, hopper: Hopper): number {
     const rating = getRatingByAdventure(adventure, hopper)
-    return (hopper.listing.price - hopper.levelCosts) / rating
+    return hopper.listing.price / rating
 }
 
 export function getRatingByAdventure(adventure: Adventure, hopper: Hopper): number {

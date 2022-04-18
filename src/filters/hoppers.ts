@@ -11,8 +11,6 @@ export function getHoppersRatingFilter(
 ): FilterFn<Hopper> {
     const filter: FilterFn<Hopper> = hoppers => {
         return hoppers.filter(hopper => {
-            value = normalize(0, 100, value)
-
             const rating = getRatingByAdventure(adventure, hopper)
             return compareNumber(comparison, rating * 100, value)
         })
@@ -38,7 +36,7 @@ export function getHoppersFertilityFilter(
 ): FilterFn<Hopper> {
     const filter: FilterFn<Hopper> = hoppers => {
         return hoppers.filter(hopper => {
-            return compareNumber(comparison, hopper.fertility, normalize(1, 10, value))
+            return compareNumber(comparison, hopper.fertility, value)
         })
     }
     filter.signature = `fertility-filter-${comparison}-${value}`

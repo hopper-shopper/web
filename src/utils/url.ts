@@ -17,3 +17,10 @@ export function getWalletPageUrl(params: WalletPageUrlParams): string {
     const searchParams = new URLSearchParams(params)
     return `${WALLET}?${searchParams.toString()}`
 }
+
+type HopperMarketUrlParams = {
+    hopper: HopperId
+}
+export function getHopperMarketUrl(params: HopperMarketUrlParams): string {
+    return `https://hoppersgame.io/market#h${params.hopper}`
+}

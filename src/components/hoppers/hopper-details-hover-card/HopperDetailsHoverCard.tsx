@@ -1,6 +1,7 @@
 import { HoverCardContentProps } from "@radix-ui/react-hover-card"
 import * as HoverCard from "components/hover-card/HoverCard"
 import InspectPageLink from "components/inspect/inspect-page-link/InspectPageLink"
+import Flex from "components/layout/flex/Flex"
 import RightSlot from "components/layout/flex/RightSlot"
 import { Hopper } from "models/Hopper"
 import { styled } from "theme"
@@ -20,25 +21,25 @@ export default function HopperDetailsHoverCard(props: HopperDetailsHoverCardProp
         <HoverCard.Root>
             <HoverCard.Trigger asChild>{children}</HoverCard.Trigger>
             <HoverCard.Content {...restHoverCardProps} css={{ width: 350 }}>
-                <Details>
-                    <HopperInfo>
+                <Flex gap="md" direction="column" y="stretch">
+                    <Flex gap="md" y="center">
                         <HopperImage src={hopper.image} />
-                        <HopperStats>
+                        <Flex direction="column" y="start">
                             <HopperId>Hopper-ID: {hopper.tokenId}</HopperId>
                             <HopperLevel>Level: {hopper.level}</HopperLevel>
-                        </HopperStats>
+                        </Flex>
 
                         <RightSlot>
                             <InspectPageLink hopperId={hopper.tokenId} />
                         </RightSlot>
-                    </HopperInfo>
+                    </Flex>
 
                     <HopperCardContext.Provider value={{ hopper }}>
                         <BaseStatsList />
                         <PermitDetails />
                         <FlyEarnings />
                     </HopperCardContext.Provider>
-                </Details>
+                </Flex>
 
                 <HoverCard.Arrow />
             </HoverCard.Content>
@@ -46,15 +47,6 @@ export default function HopperDetailsHoverCard(props: HopperDetailsHoverCardProp
     )
 }
 
-const HopperInfo = styled("div", {
-    display: "flex",
-    alignItems: "center",
-    columnGap: "1rem",
-})
-const HopperStats = styled("div", {
-    display: "flex",
-    flexDirection: "column",
-})
 const HopperId = styled("h3", {
     color: "$gray12",
     fontSize: "1rem",
@@ -69,8 +61,4 @@ const HopperLevel = styled("span", {
 const HopperImage = styled("img", {
     size: 50,
     borderRadius: "$sm",
-})
-const Details = styled("div", {
-    display: "grid",
-    rowGap: "1rem",
 })

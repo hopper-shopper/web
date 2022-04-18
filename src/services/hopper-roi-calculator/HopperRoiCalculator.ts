@@ -15,8 +15,8 @@ export default class HopperRoiCalculator {
      * Level-Up timestamp -> Level after Level-Up
      */
     private levelUpHistory: Map<UnixTimestampMs, number>
-    private currentLevel: number
 
+    private currentLevel: number
     private currentLevelFlyGeneration: number
 
     /**
@@ -36,7 +36,6 @@ export default class HopperRoiCalculator {
 
     forAdventure(adventure: Adventure) {
         this.adventure = adventure
-
         return this
     }
 
@@ -77,7 +76,7 @@ export default class HopperRoiCalculator {
         const cap = this.getFlyCap()
         let hoursUsed = 0
 
-        while (cap > this.currentLevelFlyGeneration) {
+        while (cap >= this.currentLevelFlyGeneration) {
             this.advanceByHour()
             hoursUsed += 1
         }
@@ -111,6 +110,10 @@ export default class HopperRoiCalculator {
                 const days = hoursUsed / 24
 
                 dayPointer += days
+
+                if (dayPointer > 1000) {
+                    throw new Error("roi limit may never be reached")
+                }
             }
 
             return dayPointer
