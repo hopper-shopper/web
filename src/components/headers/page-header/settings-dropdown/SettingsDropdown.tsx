@@ -3,10 +3,11 @@ import * as Dropdown from "components/dropdown/Dropdown"
 import IconButton from "components/inputs/buttons/icon-button/IconButton"
 import RightSlot from "components/layout/flex/RightSlot"
 import { Currency } from "formatters/currency"
-import useSettingsStore from "stores/settings"
+import { useAtom } from "jotai"
+import { currencyAtom } from "stores/settings"
 
 export default function SettingsDropdown() {
-    const [currency, setCurrency] = useSettingsStore(store => [store.currency, store.setCurrency])
+    const [currency, setCurrency] = useAtom(currencyAtom)
 
     return (
         <Dropdown.Root>

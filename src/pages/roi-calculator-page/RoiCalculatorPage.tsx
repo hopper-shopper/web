@@ -7,7 +7,7 @@ import Label from "components/inputs/label/Label"
 import * as Section from "components/layout/section/Section"
 import { Hopper } from "models/Hopper"
 import React from "react"
-import { styled } from "theme"
+import { Screens, styled } from "theme"
 import useRoiCalculatorPageState from "./useRoiCalculatorPageState"
 
 export default function RoiCalculatorPage() {
@@ -72,14 +72,14 @@ export default function RoiCalculatorPage() {
 
 // Components
 const InputContainer = styled("form", {
-    maxWidth: 640,
+    maxWidth: Screens.sm,
     margin: "0 auto",
     display: "flex",
     alignItems: "flex-end",
     columnGap: "1rem",
 })
 const Container = styled("div", {
-    maxWidth: 1024,
+    maxWidth: Screens.lg,
     margin: "5rem auto",
     display: "flex",
     flexDirection: "column",

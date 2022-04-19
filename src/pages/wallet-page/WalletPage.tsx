@@ -20,7 +20,7 @@ import UserEarnings from "components/user/user-earnings/UserEarnings"
 import WalletHopperCard from "components/wallet/wallet-hopper-card/WalletHopperCard"
 import { Transfer } from "models/Transfer"
 import { useState } from "react"
-import { styled } from "theme"
+import { Screens, styled } from "theme"
 import { Adventure } from "utils/adventures"
 import { hopperAdventureToAdventure } from "utils/hopper"
 import { isValidWalletAddress } from "utils/user"
@@ -79,7 +79,7 @@ export default function WalletPage() {
 
     return (
         <>
-            <InputForm css={{ maxWidth: 640 }} onSubmit={handleWalletSubmit}>
+            <InputForm css={{ maxWidth: Screens.sm }} onSubmit={handleWalletSubmit}>
                 <Fieldset css={{ flex: 1 }}>
                     <Label htmlFor="wallet-address">Your Wallet address</Label>
                     <Input
@@ -175,7 +175,7 @@ export default function WalletPage() {
 
 // Components
 const Container = styled("div", {
-    maxWidth: 1024,
+    maxWidth: Screens.lg,
     margin: "5rem auto",
     display: "flex",
     flexDirection: "column",

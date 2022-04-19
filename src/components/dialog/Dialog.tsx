@@ -2,7 +2,7 @@ import * as DialogPrimitives from "@radix-ui/react-dialog"
 import { ComponentProps } from "@stitches/react"
 import { IconX } from "@tabler/icons"
 import IconButton from "components/inputs/buttons/icon-button/IconButton"
-import { styled } from "theme"
+import { Screens, styled } from "theme"
 
 const StyledOverlay = styled(DialogPrimitives.Overlay, {
     zIndex: 99,
@@ -22,7 +22,7 @@ const StyledContent = styled(DialogPrimitives.Content, {
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: "100vw",
-    maxWidth: 640,
+    maxWidth: Screens.sm,
     maxHeight: "80vh",
     padding: "2rem",
     "&:focus": {

@@ -1,6 +1,7 @@
 import { fetchPrices } from "api/prices"
 import PageHeader from "components/headers/page-header/PageHeader"
 import useApplyDarkMode from "hooks/useApplyDarkMode"
+import { useSetAtom } from "jotai"
 import InspectPage from "pages/inspect-page/InspectPage"
 import MarketPage from "pages/market-page/MarketPage"
 import WalletPage from "pages/wallet-page/WalletPage"
@@ -9,23 +10,19 @@ import { Outlet, Route, Routes } from "react-router-dom"
 import { useInterval, useMount } from "react-use"
 import Redirect from "routing/Redirect"
 import * as ROUTES from "routing/routes"
-import usePricesStore from "stores/prices"
+import { pricesAtom } from "stores/prices"
 import { globalCss, styled } from "./theme"
 
 function App() {
     globalStyles()
     useApplyDarkMode()
 
-    const [setAvaxPrice, setFlyPrice] = usePricesStore(store => [
-        store.setAvaxPrice,
-        store.setFlyPrice,
-    ])
+    const setPrices = useSetAtom(pricesAtom)
 
     const loadAndSavePrices = async () => {
         try {
             const prices = await fetchPrices()
-            setAvaxPrice(prices.AVAX)
-            setFlyPrice(prices.FLY)
+            setPrices(prices)
         } catch (error) {
             console.error(error)
         }

@@ -2458,6 +2458,43 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jotai@npm:^1.6.4":
+  version: 1.6.4
+  resolution: "jotai@npm:1.6.4"
+  peerDependencies:
+    "@babel/core": "*"
+    "@babel/template": "*"
+    "@urql/core": "*"
+    immer: "*"
+    optics-ts: "*"
+    react: ">=16.8"
+    react-query: "*"
+    valtio: "*"
+    wonka: "*"
+    xstate: "*"
+  peerDependenciesMeta:
+    "@babel/core":
+      optional: true
+    "@babel/template":
+      optional: true
+    "@urql/core":
+      optional: true
+    immer:
+      optional: true
+    optics-ts:
+      optional: true
+    react-query:
+      optional: true
+    valtio:
+      optional: true
+    wonka:
+      optional: true
+    xstate:
+      optional: true
+  checksum: d1c7476130b2cc7ae9e128a86253fc53e83587579e6b29f39e5bec219b4b61d7de92df213f6329cd4fbf2e49bf8af664bf796baf6a3cedd8d13b3b90bcbe5334
+  languageName: node
+  linkType: hard
+
 "js-cookie@npm:^2.2.1":
   version: 2.2.1
   resolution: "js-cookie@npm:2.2.1"
@@ -3519,6 +3556,7 @@ __metadata:
     "@vitejs/plugin-react": ^1.0.7
     d3-scale: ^4.0.2
     date-fns: ^2.28.0
+    jotai: ^1.6.4
     prettier: ^2.6.0
     react: ^17.0.2
     react-dom: ^17.0.2
@@ -3530,7 +3568,6 @@ __metadata:
     vite: ^2.8.0
     vite-tsconfig-paths: ^3.4.1
     vitest: ^0.8.4
-    zustand: ^3.7.2
   languageName: unknown
   linkType: soft
 
@@ -3725,17 +3762,5 @@ __metadata:
   version: 4.0.0
   resolution: "yallist@npm:4.0.0"
   checksum: 343617202af32df2a15a3be36a5a8c0c8545208f3d3dfbc6bb7c3e3b7e8c6f8e7485432e4f3b88da3031a6e20afa7c711eded32ddfb122896ac5d914e75848d5
-  languageName: node
-  linkType: hard
-
-"zustand@npm:^3.7.2":
-  version: 3.7.2
-  resolution: "zustand@npm:3.7.2"
-  peerDependencies:
-    react: ">=16.8"
-  peerDependenciesMeta:
-    react:
-      optional: true
-  checksum: 18f025b1b666a311121d3855303ff58e6a21fd107920ca474307e86984c13338d6c4cfa5cdf13382a9e0f76821f2554a12d4d200a98a66b58637e729f149797b
   languageName: node
   linkType: hard

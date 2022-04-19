@@ -1,6 +1,7 @@
 import { Currency, formatCurrency } from "formatters/currency"
-import usePricesStore from "stores/prices"
-import useSettingsStore from "stores/settings"
+import { useAtomValue } from "jotai"
+import { flyPriceAtom } from "stores/prices"
+import { currencyAtom } from "stores/settings"
 import { styled } from "theme"
 
 type BreakdownCardProps = {
@@ -11,17 +12,17 @@ type BreakdownCardProps = {
 export default function BreakdownCard(props: BreakdownCardProps) {
     const { title, value } = props
 
-    const currency = useSettingsStore(store => store.currency)
-    const price = usePricesStore(store => store.price)
+    const currency = useAtomValue(currencyAtom)
+    const price = useAtomValue(flyPriceAtom)
 
     const priceByCurrency = ((): number => {
         switch (currency) {
             case Currency.USD:
-                return price.FLY.USD
+                return price.USD
             case Currency.EUR:
-                return price.FLY.EUR
+                return price.EUR
             default:
-                return price.FLY.USD
+                return price.USD
         }
     })()
 

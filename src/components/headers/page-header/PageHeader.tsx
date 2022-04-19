@@ -1,38 +1,17 @@
 import { IconExternalLink } from "@tabler/icons"
 import useCurrentGas from "api/hooks/useCurrentGas"
-import { Currency, formatCurrency } from "formatters/currency"
 import { formatGwei } from "formatters/gas"
-import usePricesStore from "stores/prices"
-import useSettingsStore from "stores/settings"
+import { useAtomValue } from "jotai"
+import { avaxPriceByCurrencyAtom, flyPriceByCurrencyAtom } from "stores/prices"
 import { styled } from "theme"
 import Nav from "./nav/Nav"
 import SettingsDropdown from "./settings-dropdown/SettingsDropdown"
 
 export default function PageHeader() {
-    const currency = useSettingsStore(store => store.currency)
-    const price = usePricesStore(store => store.price)
     const { gas } = useCurrentGas()
 
-    const avaxLocalePrice = ((): string => {
-        switch (currency) {
-            case Currency.EUR:
-                return formatCurrency(price.AVAX.EUR, Currency.EUR)
-            case Currency.USD:
-                return formatCurrency(price.AVAX.USD, Currency.USD)
-            default:
-                return formatCurrency(price.AVAX.USD, Currency.USD)
-        }
-    })()
-    const flyLocalePrice = ((): string => {
-        switch (currency) {
-            case Currency.EUR:
-                return formatCurrency(price.FLY.EUR, Currency.EUR)
-            case Currency.USD:
-                return formatCurrency(price.FLY.USD, Currency.USD)
-            default:
-                return formatCurrency(price.FLY.USD, Currency.USD)
-        }
-    })()
+    const avaxPrice = useAtomValue(avaxPriceByCurrencyAtom)
+    const flyPrice = useAtomValue(flyPriceByCurrencyAtom)
 
     return (
         <Header>
@@ -53,11 +32,11 @@ export default function PageHeader() {
                     </Info>
                     <Info>
                         <InfoLabel>AVAX</InfoLabel>
-                        <InfoValue>{avaxLocalePrice}</InfoValue>
+                        <InfoValue>{avaxPrice}</InfoValue>
                     </Info>
                     <Info>
                         <InfoLabel>FLY</InfoLabel>
-                        <InfoValue>{flyLocalePrice}</InfoValue>
+                        <InfoValue>{flyPrice}</InfoValue>
                     </Info>
                 </InfoContainer>
 

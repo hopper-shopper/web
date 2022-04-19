@@ -12,14 +12,16 @@ import {
     getHoppersOnWatchlistFilter,
 } from "filters/hoppers"
 import useFilter from "hooks/useFilter"
+import { useAtomValue, useSetAtom } from "jotai"
 import { HopperId } from "models/Hopper"
 import { useMemo, useRef } from "react"
-import useWatchlistStore from "stores/watchlist"
-import { styled } from "theme"
+import { watchlistAtom, toggleWatchlistAtom } from "stores/watchlist"
+import { Screens, styled } from "theme"
 import useWatchlistPageState from "./useWatchlistPageState"
 
 export default function WatchlistPage() {
-    const [watchlist, toggle] = useWatchlistStore(store => [store.watchlist, store.toggle])
+    const watchlist = useAtomValue(watchlistAtom)
+    const toggle = useSetAtom(toggleWatchlistAtom)
     const [watchlistFilter, setWatchlistFilter] = useWatchlistPageState()
 
     const addHopperIdRef = useRef<HTMLInputElement | null>(null)
@@ -158,7 +160,7 @@ const EmptyText = styled("p", {
     textAlign: "center",
 })
 const Container = styled("div", {
-    maxWidth: 1280,
+    maxWidth: Screens.xl,
     margin: "0 auto",
 })
 const Filter = styled("div", {

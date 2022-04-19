@@ -10,7 +10,7 @@ import Label from "components/inputs/label/Label"
 import * as Section from "components/layout/section/Section"
 import ListingsTable from "components/listings/listings-table/ListingsTable"
 import { Hopper } from "models/Hopper"
-import { styled } from "theme"
+import { Screens, styled } from "theme"
 import { isValidHopperId } from "utils/hopper"
 import useInspectPageState from "./useInspectPageState"
 
@@ -91,7 +91,7 @@ const EmptyText = styled("p", {
     lineHeight: 1.25,
 })
 const Container = styled("div", {
-    maxWidth: 1024,
+    maxWidth: Screens.lg,
     margin: "5rem auto",
     display: "flex",
     flexDirection: "column",

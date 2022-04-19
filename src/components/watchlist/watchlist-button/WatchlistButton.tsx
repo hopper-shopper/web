@@ -1,7 +1,8 @@
 import { IconStar } from "@tabler/icons"
 import { HopperId } from "models/Hopper"
 import { styled } from "theme"
-import useWatchlistStore from "stores/watchlist"
+import { watchlistAtom, toggleWatchlistAtom } from "stores/watchlist"
+import { useAtomValue, useSetAtom } from "jotai"
 
 type WatchlistButtonProps = {
     hopperId: HopperId
@@ -10,7 +11,8 @@ type WatchlistButtonProps = {
 export default function WatchlistButton(props: WatchlistButtonProps) {
     const { hopperId } = props
 
-    const [watchlist, toggle] = useWatchlistStore(store => [store.watchlist, store.toggle])
+    const watchlist = useAtomValue(watchlistAtom)
+    const toggle = useSetAtom(toggleWatchlistAtom)
 
     return (
         <Button inWatchlist={watchlist.includes(hopperId)} onClick={() => toggle(hopperId)}>

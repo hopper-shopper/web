@@ -1,20 +1,19 @@
 import Fieldset from "components/inputs/fieldset/Fieldset"
 import Input from "components/inputs/input/Input"
 import Label from "components/inputs/label/Label"
+import * as LabeledInput from "components/inputs/labeled-input/LabeledInput"
 import Flex from "components/layout/flex/Flex"
-import { formatAdventure } from "formatters/adventure"
 import RightSlot from "components/layout/flex/RightSlot"
+import { formatAdventure } from "formatters/adventure"
+import useObservableState from "hooks/useObservableState"
+import { useAtomValue } from "jotai"
 import { Hopper } from "models/Hopper"
 import { useState } from "react"
 import HopperRoiCalculator from "services/hopper-roi-calculator/HopperRoiCalculator"
-import usePricesStore from "stores/prices"
+import { avaxPriceAtom, avaxPriceByCurrencyAtom, flyPriceByCurrencyAtom } from "stores/prices"
 import { styled } from "theme"
 import { Adventure, ALL_ADVENTURES } from "utils/adventures"
 import { round } from "utils/numbers"
-import useSettingsStore from "stores/settings"
-import { Currency } from "formatters/currency"
-import * as LabeledInput from "components/inputs/labeled-input/LabeledInput"
-import useObservableState from "hooks/useObservableState"
 
 type HopperRoiProps = {
     hopper: Hopper
@@ -23,15 +22,13 @@ type HopperRoiProps = {
 export default function HopperRoi(props: HopperRoiProps) {
     const { hopper } = props
 
-    const avaxPrices = usePricesStore(store => store.price.AVAX)
-    const flyPrices = usePricesStore(store => store.price.FLY)
-    const currency = useSettingsStore(store => store.currency)
+    const avaxPrices = useAtomValue(avaxPriceAtom)
+    const avaxPrice = useAtomValue(avaxPriceByCurrencyAtom)
+    const initialFlyPrice = useAtomValue(flyPriceByCurrencyAtom)
 
     const [boughtFor, setBoughtFor] = useObservableState(round(hopper.listing.price, 2))
     const [startAtLevel, setStartAtLevel] = useState(hopper.level)
-    const [flyPrice, setFlyPrice] = useObservableState(
-        round(currency === Currency.USD ? flyPrices.USD : flyPrices.EUR, 2),
-    )
+    const [flyPrice, setFlyPrice] = useObservableState(round(initialFlyPrice, 2))
 
     const handleBoughtForBlur = (event: React.FocusEvent<HTMLInputElement>) => {
         const value = event.target.valueAsNumber
@@ -45,15 +42,6 @@ export default function HopperRoi(props: HopperRoiProps) {
         const value = event.target.valueAsNumber
         setFlyPrice(Number.isNaN(value) ? avaxPrices.FLY : value)
     }
-
-    const avaxPrice = ((): number => {
-        if (currency === Currency.USD) {
-            return avaxPrices.USD
-        } else if (currency === Currency.EUR) {
-            return avaxPrices.EUR
-        }
-        return 0
-    })()
 
     const getRoiInDaysForAdventure = (adventure: Adventure): string => {
         const flyPerAvax = avaxPrice / flyPrice

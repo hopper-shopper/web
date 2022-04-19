@@ -1,40 +1,16 @@
+import { atom } from "jotai"
+import { atomWithStorage } from "jotai/utils"
 import { HopperId } from "models/Hopper"
-import createStore from "zustand"
-import { persist } from "zustand/middleware"
-
-type WatchlistStore = {
-    watchlist: HopperId[]
-    toggle: (hopperId: HopperId) => void
-}
 
 const WATCHLIST_LS = "hoppershopper.watchlist.tokenIds"
-const DEFAULT_STORE: WatchlistStore = {
-    watchlist: [],
-    toggle: () => {},
-}
 
-export default createStore<WatchlistStore>(
-    persist(
-        set => ({
-            ...DEFAULT_STORE,
-            toggle: tokenId => {
-                set(({ watchlist }) => {
-                    // Remove
-                    if (watchlist.includes(tokenId)) {
-                        return {
-                            watchlist: watchlist.filter(hopperId => hopperId !== tokenId),
-                        }
-                    }
+export const watchlistAtom = atomWithStorage<HopperId[]>(WATCHLIST_LS, [])
+export const toggleWatchlistAtom = atom(null, (_, set, hopperId: HopperId) => {
+    set(watchlistAtom, prev => {
+        if (prev.includes(hopperId)) {
+            return prev.filter(tokenId => tokenId !== hopperId)
+        }
 
-                    // Add
-                    return {
-                        watchlist: [...watchlist, tokenId],
-                    }
-                })
-            },
-        }),
-        {
-            name: WATCHLIST_LS,
-        },
-    ),
-)
+        return [...prev, hopperId]
+    })
+})
