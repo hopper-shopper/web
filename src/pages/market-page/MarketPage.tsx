@@ -1,6 +1,10 @@
 import { AdventureFilter, HoppersFilter, MarketFilter, PermitFilter } from "api/filters/hoopers"
 import useHoppers from "api/hooks/useHoppers"
 import FloorPrice from "components/hoppers/hoppers-table/floor-price/FloorPrice"
+import HoppersTableConfiguration, {
+    ALL_HOPPER_TABLE_COLUMNS,
+    HoppersTableConfig,
+} from "components/hoppers/hoppers-table/hoppers-table-configuration/HoppersTableConfiguration"
 import HoppersTableFilter, {
     HoppersTableAnyFilter,
     HoppersTableConfigFilters,
@@ -16,6 +20,7 @@ import { NumberComparison } from "filters/_common"
 import useFilter, { UseFilterPipeline } from "hooks/useFilter"
 import useSort, { SortContext } from "hooks/useSort"
 import { Hopper } from "models/Hopper"
+import { useState } from "react"
 import { SortHopperBy, sortHoppers } from "sorters/hoppers"
 import { SortDirection } from "sorters/_common"
 import { styled } from "theme"
@@ -23,7 +28,8 @@ import { styled } from "theme"
 export default function MarketPage() {
     const { hoppers } = useHoppers(HOPPERS_FILTER)
 
-    const [filter, setFilter] = useHoppersTableFilter(DEFAULT_TABLE_CONFIGURATION)
+    const [filter, setFilter] = useHoppersTableFilter(DEFAULT_TABLE_FILTER)
+    const [config, setConfig] = useState(DEFAULT_TABLE_CONFIG)
 
     const hopperFilters: UseFilterPipeline<Hopper> = (() => {
         if (filter.type === HoppersTableConfigFilters.PERMIT) {
@@ -60,9 +66,13 @@ export default function MarketPage() {
                 <FloorPrice hoppers={filteredHoppers} />
             </Filter>
 
+            <Config>
+                <HoppersTableConfiguration config={config} onChange={setConfig} />
+            </Config>
+
             <SortContext.Provider
                 value={{ active: sortBy, direction: sortDirection, update: setSortBy }}>
-                <HoppersTable filter={filter} hoppers={sortedHoppers} />
+                <HoppersTable filter={filter} config={config} hoppers={sortedHoppers} />
             </SortContext.Provider>
         </>
     )
@@ -76,8 +86,12 @@ const HOPPERS_FILTER: Required<HoppersFilter> = {
     tokenIds: [],
     owner: "",
 }
-const DEFAULT_TABLE_CONFIGURATION: HoppersTableAnyFilter = {
+const DEFAULT_TABLE_FILTER: HoppersTableAnyFilter = {
     type: HoppersTableConfigFilters.NONE,
+}
+
+const DEFAULT_TABLE_CONFIG: HoppersTableConfig = {
+    columns: ALL_HOPPER_TABLE_COLUMNS,
 }
 
 // Components
@@ -86,4 +100,9 @@ const Filter = styled("div", {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "flex-start",
+})
+const Config = styled("div", {
+    display: "flex",
+    justifyContent: "flex-end",
+    marginBottom: "1rem",
 })

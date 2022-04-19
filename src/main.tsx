@@ -3,6 +3,16 @@ import ReactDOM from "react-dom"
 import "./index.css"
 import App from "./App"
 import { BrowserRouter } from "react-router-dom"
+import * as Sentry from "@sentry/react"
+import { BrowserTracing } from "@sentry/tracing"
+
+Sentry.init({
+    dsn: import.meta.env.VITE_SENTRY_DSN,
+    integrations: [new BrowserTracing()],
+    tracesSampleRate: 0.5,
+    enabled: import.meta.env.PROD,
+    environment: "production",
+})
 
 ReactDOM.render(
     <BrowserRouter>
