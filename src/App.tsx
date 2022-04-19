@@ -36,7 +36,6 @@ export default App
 
 const Container = styled("div", {
     padding: "2rem",
-    overflowX: "hidden",
 })
 
 const globalStyles = globalCss({

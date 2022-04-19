@@ -31,6 +31,10 @@ function WrappedRoot(props: RootProps) {
         } else {
             document.body.style.overflow = "auto"
         }
+
+        return () => {
+            document.body.style.overflow = "auto"
+        }
     }, [open])
 
     return <RootContext.Provider value={{ open, onDismiss }}>{children}</RootContext.Provider>

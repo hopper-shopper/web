@@ -4,14 +4,14 @@ import DesktopHeaderContent from "./desktop-header-content/DesktopHeaderContent"
 import MobileHeaderContent from "./mobile-header-content/MobileHeaderContent"
 
 export default function PageHeader() {
-    const isLg = useMedia(`(min-width: ${Screens.lg})`)
+    const isXl = useMedia(`(min-width: ${Screens.xl}px)`)
 
     return (
         <Header>
             <Title>Hopper Shopper</Title>
 
-            {!isLg && <MobileHeaderContent />}
-            {isLg && <DesktopHeaderContent />}
+            {!isXl && <MobileHeaderContent />}
+            {isXl && <DesktopHeaderContent />}
         </Header>
     )
 }
