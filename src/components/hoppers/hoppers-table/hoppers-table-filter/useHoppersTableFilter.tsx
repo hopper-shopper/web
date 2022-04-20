@@ -1,18 +1,17 @@
-import useLocationEffect from "hooks/useLocationEffect"
 import { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
+import { useMount } from "react-use"
 import { Adventure, urlifyAdventure } from "utils/adventures"
 import { createLookupMap } from "utils/map"
 import { clamp, parseIntFromString } from "utils/numbers"
-import { HoppersTableConfigFilters, HoppersTableAnyFilter } from "./HoppersTableFilter"
+import { HoppersTableAnyFilter, HoppersTableConfigFilters } from "./HoppersTableFilter"
 
 export default function useHoppersTableFilter(initial: HoppersTableAnyFilter) {
     const [searchParams, setSearchParams] = useSearchParams()
     const [config, setConfig] = useState(deriveStateFromSearchParams(searchParams, initial))
 
-    useLocationEffect("search", search => {
-        const params = new URLSearchParams(search)
-        setConfig(prev => deriveStateFromSearchParams(params, prev))
+    useMount(() => {
+        setConfig(prev => deriveStateFromSearchParams(searchParams, prev))
     })
 
     useEffect(() => {

@@ -4,7 +4,6 @@ import {
     WatchlistFilter,
     WatchlistMarketFilter,
 } from "components/watchlist/configure-watchlist-filter/ConfigureWatchlistFilter"
-import useLocationEffect from "hooks/useLocationEffect"
 import { HopperId } from "models/Hopper"
 import { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
@@ -15,11 +14,6 @@ import { parseIntFromString } from "utils/numbers"
 export default function useWatchlistPageState() {
     const [searchParams, setSearchParams] = useSearchParams()
     const [state, setState] = useState(deriveStateFromSearchParams(searchParams))
-
-    // useLocationEffect("search", search => {
-    //     const params = new URLSearchParams(search)
-    //     setState(deriveStateFromSearchParams(params))
-    // })
 
     useMount(() => {
         setState(deriveStateFromSearchParams(searchParams))

@@ -1,16 +1,15 @@
-import useLocationEffect from "hooks/useLocationEffect"
 import { HopperId } from "models/Hopper"
 import { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
+import { useMount } from "react-use"
 import { isValidHopperId } from "utils/hopper"
 
 export default function useInspectPageState() {
     const [searchParams, setSearchParams] = useSearchParams()
     const [state, setState] = useState<InspectPageState>(deriveStateFromSearchParams(searchParams))
 
-    useLocationEffect("search", search => {
-        const params = new URLSearchParams(search)
-        setState(deriveStateFromSearchParams(params))
+    useMount(() => {
+        setState(deriveStateFromSearchParams(searchParams))
     })
 
     useEffect(() => {
