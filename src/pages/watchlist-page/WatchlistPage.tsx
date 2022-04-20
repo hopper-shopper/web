@@ -10,6 +10,7 @@ import {
     getHoppersHiddenFilter,
     getHoppersMarketFilter,
     getHoppersOnWatchlistFilter,
+    getHoppersTierPermitFilter,
 } from "filters/hoppers"
 import useFilter from "hooks/useFilter"
 import { useAtomValue, useSetAtom } from "jotai"
@@ -30,7 +31,11 @@ export default function WatchlistPage() {
         tokenIds: watchlist,
     })
     const filteredHoppers = useFilter(
-        [getHoppersOnWatchlistFilter(watchlist), getHoppersMarketFilter(watchlistFilter.market)],
+        [
+            getHoppersOnWatchlistFilter(watchlist),
+            getHoppersMarketFilter(watchlistFilter.market),
+            getHoppersTierPermitFilter(watchlistFilter.permit),
+        ],
         hoppers,
     )
     const withoutHiddenHoppers = useFilter(

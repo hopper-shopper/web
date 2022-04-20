@@ -1,4 +1,7 @@
-import { WatchlistMarketFilter } from "components/watchlist/configure-watchlist-filter/ConfigureWatchlistFilter"
+import {
+    AdventureTierPermit,
+    WatchlistMarketFilter,
+} from "components/watchlist/configure-watchlist-filter/ConfigureWatchlistFilter"
 import { Hopper, HopperId } from "models/Hopper"
 import { Adventure, getRatingByAdventure } from "utils/adventures"
 import { normalize } from "utils/numbers"
@@ -77,5 +80,31 @@ export function getHoppersHiddenFilter(hidden: HopperId[]): FilterFn<Hopper> {
         })
     }
     filter.signature = `watchlist-hidden-filter-${Array.from(hidden).join(",")}`
+    return filter
+}
+
+export function getHoppersTierPermitFilter(permits: AdventureTierPermit[]): FilterFn<Hopper> {
+    const filter: FilterFn<Hopper> = hoppers => {
+        return hoppers.filter(hopper => {
+            const getAdventure = (permit: AdventureTierPermit): Adventure => {
+                switch (permit) {
+                    case AdventureTierPermit.T1:
+                        return Adventure.POND
+                    case AdventureTierPermit.T2:
+                        return Adventure.RIVER
+                    case AdventureTierPermit.T3:
+                        return Adventure.FOREST
+                    case AdventureTierPermit.T4:
+                        return Adventure.GREAT_LAKE
+                }
+            }
+
+            return permits.some(permit => {
+                const rating = getRatingByAdventure(getAdventure(permit), hopper)
+                return rating > 0
+            })
+        })
+    }
+    filter.signature = `adventure-tier-filter-${permits.join(",")}`
     return filter
 }

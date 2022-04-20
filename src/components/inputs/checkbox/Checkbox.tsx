@@ -1,4 +1,5 @@
 import * as CheckboxPrimitives from "@radix-ui/react-checkbox"
+import { ComponentProps } from "@stitches/react"
 import { IconCheck } from "@tabler/icons"
 import { styled } from "theme"
 
@@ -34,3 +35,14 @@ const StyledIcon = styled(IconCheck, {
 export const Root = StyledCheckbox
 export const Indicator = StyledIndicator
 export const Icon = StyledIcon
+
+function Checkbox(props: ComponentProps<typeof StyledCheckbox>) {
+    return (
+        <StyledCheckbox {...props}>
+            <StyledIndicator>
+                <StyledIcon />
+            </StyledIndicator>
+        </StyledCheckbox>
+    )
+}
+export default Checkbox

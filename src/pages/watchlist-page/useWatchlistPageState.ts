@@ -1,4 +1,5 @@
 import {
+    AdventureTierPermit,
     WatchlistCardFeature,
     WatchlistFilter,
     WatchlistMarketFilter,
@@ -7,6 +8,7 @@ import useLocationEffect from "hooks/useLocationEffect"
 import { HopperId } from "models/Hopper"
 import { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
+import { useMount } from "react-use"
 import { createLookupMap } from "utils/map"
 import { parseIntFromString } from "utils/numbers"
 
@@ -14,9 +16,13 @@ export default function useWatchlistPageState() {
     const [searchParams, setSearchParams] = useSearchParams()
     const [state, setState] = useState(deriveStateFromSearchParams(searchParams))
 
-    useLocationEffect("search", search => {
-        const params = new URLSearchParams(search)
-        setState(deriveStateFromSearchParams(params))
+    // useLocationEffect("search", search => {
+    //     const params = new URLSearchParams(search)
+    //     setState(deriveStateFromSearchParams(params))
+    // })
+
+    useMount(() => {
+        setState(deriveStateFromSearchParams(searchParams))
     })
 
     useEffect(() => {
@@ -32,12 +38,19 @@ const INITIAL_STATE: WatchlistFilter = {
     features: [WatchlistCardFeature.MARKET_PRICE, WatchlistCardFeature.ADVENTURE_PERMIT],
     normalizeLevel: 0,
     hidden: [],
+    permit: [
+        AdventureTierPermit.T1,
+        AdventureTierPermit.T2,
+        AdventureTierPermit.T3,
+        AdventureTierPermit.T4,
+    ],
 }
 
 const MARKET_KEY = "market"
-const FEATURE_KEY = "features"
+const FEATURES_KEY = "features"
 const NORMALIZE_LEVEL_KEY = "normalize-level"
 const HIDDEN_KEY = "hidden"
+const PERMITS_KEY = "permits"
 
 // State update functions
 
@@ -45,8 +58,8 @@ function deriveStateFromSearchParams(searchParams: URLSearchParams): WatchlistFi
     const market = searchParams.has(MARKET_KEY)
         ? parseMarketFilter(searchParams.get(MARKET_KEY)!)
         : INITIAL_STATE.market
-    const features = searchParams.has(FEATURE_KEY)
-        ? parseFeatures(searchParams.get(FEATURE_KEY)!)
+    const features = searchParams.has(FEATURES_KEY)
+        ? parseFeatures(searchParams.get(FEATURES_KEY)!)
         : INITIAL_STATE.features
     const normalizeLevel = parseIntFromString(
         searchParams.get(NORMALIZE_LEVEL_KEY),
@@ -55,12 +68,16 @@ function deriveStateFromSearchParams(searchParams: URLSearchParams): WatchlistFi
     const hidden = searchParams.has(HIDDEN_KEY)
         ? parseHidden(searchParams.get(HIDDEN_KEY)!)
         : INITIAL_STATE.hidden
+    const permit = searchParams.has(PERMITS_KEY)
+        ? parsePermits(searchParams.get(PERMITS_KEY)!)
+        : INITIAL_STATE.permit
 
     return {
         market,
         features,
         normalizeLevel,
         hidden,
+        permit,
     }
 }
 
@@ -69,7 +86,7 @@ function deriveSearchParamsFromState(state: WatchlistFilter): URLSearchParams {
     params.set(MARKET_KEY, urlifyMarketFilter(state.market))
 
     if (state.features.length > 0) {
-        params.set(FEATURE_KEY, urlifyFeatures(state.features))
+        params.set(FEATURES_KEY, urlifyFeatures(state.features))
     }
 
     if (state.normalizeLevel > 0 && state.normalizeLevel <= 100) {
@@ -78,6 +95,10 @@ function deriveSearchParamsFromState(state: WatchlistFilter): URLSearchParams {
 
     if (state.hidden.length > 0) {
         params.set(HIDDEN_KEY, urlifyHidden(state.hidden))
+    }
+
+    if (state.permit.length > 0) {
+        params.set(PERMITS_KEY, urlifyPermits(state.permit))
     }
 
     return params
@@ -124,4 +145,27 @@ function urlifyHidden(hidden: HopperId[]): string {
 }
 function parseHidden(hidden: string): HopperId[] {
     return hidden.split(".")
+}
+
+const permitMapping = createLookupMap([
+    [AdventureTierPermit.T1, "t1"],
+    [AdventureTierPermit.T2, "t2"],
+    [AdventureTierPermit.T3, "t3"],
+    [AdventureTierPermit.T4, "t4"],
+])
+function urlifyPermits(permits: AdventureTierPermit[]): string {
+    return permits
+        .map(permit => {
+            return permitMapping.get(permit)
+        })
+        .filter(Boolean)
+        .join(".")
+}
+function parsePermits(permits: string): AdventureTierPermit[] {
+    return permits
+        .split(".")
+        .map(permit => {
+            return permitMapping.get(permit)
+        })
+        .filter(Boolean) as AdventureTierPermit[]
 }
