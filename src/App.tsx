@@ -35,7 +35,10 @@ function App() {
 export default App
 
 const Container = styled("div", {
-    padding: "2rem",
+    padding: "1rem",
+    "@lg": {
+        padding: "2rem",
+    },
 })
 
 const globalStyles = globalCss({

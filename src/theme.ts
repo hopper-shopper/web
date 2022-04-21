@@ -14,11 +14,11 @@ import {
 import { createStitches, CSS, PropertyValue } from "@stitches/react"
 
 export const Screens = {
-    sm: 640 as const,
-    md: 768 as const,
-    lg: 1024 as const,
-    xl: 1280 as const,
-}
+    sm: 640,
+    md: 768,
+    lg: 1024,
+    xl: 1280,
+} as const
 
 export const {
     createTheme,

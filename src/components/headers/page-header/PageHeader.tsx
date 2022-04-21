@@ -1,17 +1,20 @@
-import { useMedia } from "react-use"
-import { Screens, styled } from "theme"
+import Screen from "components/layout/screen/Screen"
+import { styled } from "theme"
 import DesktopHeaderContent from "./desktop-header-content/DesktopHeaderContent"
 import MobileHeaderContent from "./mobile-header-content/MobileHeaderContent"
 
 export default function PageHeader() {
-    const isXl = useMedia(`(min-width: ${Screens.xl}px)`)
-
     return (
         <Header>
             <Title>Hopper Shopper</Title>
 
-            {!isXl && <MobileHeaderContent />}
-            {isXl && <DesktopHeaderContent />}
+            <Screen bp="xl" constraint="max">
+                <MobileHeaderContent />
+            </Screen>
+
+            <Screen bp="xl" constraint="min">
+                <DesktopHeaderContent />
+            </Screen>
         </Header>
     )
 }
