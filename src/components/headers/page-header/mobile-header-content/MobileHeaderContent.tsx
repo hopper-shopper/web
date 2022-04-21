@@ -16,6 +16,7 @@ import { styled } from "theme"
 
 export default function MobileHeaderContent() {
     const [open, setOpen] = useState(false)
+    const closeDrawer = () => setOpen(false)
 
     const gasGwei = useAtomValue(gasGweiAtom)
     const currency = useAtomValue(currencyAtom)
@@ -25,13 +26,13 @@ export default function MobileHeaderContent() {
     return (
         <>
             <RightSlot>
-                <IconButton onClick={() => setOpen(true)}>
-                    <IconMenu />
-                </IconButton>
-            </RightSlot>
+                <Drawer.Root open={open} onOpenChange={setOpen}>
+                    <Drawer.Trigger>
+                        <IconButton>
+                            <IconMenu />
+                        </IconButton>
+                    </Drawer.Trigger>
 
-            {open && (
-                <Drawer.Root open={open} onDismiss={() => setOpen(false)}>
                     <Drawer.Content>
                         <Drawer.Title>Menu</Drawer.Title>
 
@@ -54,17 +55,25 @@ export default function MobileHeaderContent() {
                             </InfoBar>
 
                             <Flex direction="column" y="stretch">
-                                <ActivatableLink to={ROUTES.MARKET}>Market</ActivatableLink>
-                                <ActivatableLink to={ROUTES.WALLET}>Wallet</ActivatableLink>
-                                <ActivatableLink to={ROUTES.WATCHLIST}>Watchlist</ActivatableLink>
-                                <ActivatableLink to={ROUTES.INSPECT}>Inspect</ActivatableLink>
+                                <ActivatableLink to={ROUTES.MARKET} onClick={closeDrawer}>
+                                    Market
+                                </ActivatableLink>
+                                <ActivatableLink to={ROUTES.WALLET} onClick={closeDrawer}>
+                                    Wallet
+                                </ActivatableLink>
+                                <ActivatableLink to={ROUTES.WATCHLIST} onClick={closeDrawer}>
+                                    Watchlist
+                                </ActivatableLink>
+                                <ActivatableLink to={ROUTES.INSPECT} onClick={closeDrawer}>
+                                    Inspect
+                                </ActivatableLink>
                             </Flex>
                         </Flex>
 
                         <Drawer.Close />
                     </Drawer.Content>
                 </Drawer.Root>
-            )}
+            </RightSlot>
         </>
     )
 }

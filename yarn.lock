@@ -803,7 +803,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@radix-ui/react-slot@npm:0.1.2":
+"@radix-ui/react-slot@npm:0.1.2, @radix-ui/react-slot@npm:^0.1.2":
   version: 0.1.2
   resolution: "@radix-ui/react-slot@npm:0.1.2"
   dependencies:
@@ -3545,6 +3545,7 @@ __metadata:
     "@radix-ui/react-progress": ^0.1.4
     "@radix-ui/react-radio-group": ^0.1.5
     "@radix-ui/react-select": ^0.1.1
+    "@radix-ui/react-slot": ^0.1.2
     "@radix-ui/react-toggle-group": ^0.1.5
     "@sentry/react": ^6.19.6
     "@sentry/tracing": ^6.19.6

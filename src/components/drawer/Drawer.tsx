@@ -4,26 +4,35 @@ import * as Portal from "@radix-ui/react-portal"
 import IconButton from "components/inputs/buttons/icon-button/IconButton"
 import { IconX } from "@tabler/icons"
 import { createContext, useContext, useEffect } from "react"
+import { Slot, SlotProps } from "@radix-ui/react-slot"
+import useControllableState from "hooks/useControllableState"
 
 export type RootProps = {
-    open: boolean
-    onDismiss: () => void
+    defaultOpen?: boolean
+    open?: boolean
+    onOpenChange?: (open: boolean) => void
     children?: React.ReactNode
 }
-type RootContextProps = {
+type DialogContextProps = {
     open: boolean
-    onDismiss: () => void
+    onOpenChange: (open: boolean) => void
 }
-const RootContext = createContext<RootContextProps>({
+const DialogContext = createContext<DialogContextProps>({
     open: false,
-    onDismiss: () => {},
+    onOpenChange: () => {},
 })
-function useRootContext() {
-    return useContext(RootContext)
+function useDialogContext() {
+    return useContext(DialogContext)
 }
 
 function WrappedRoot(props: RootProps) {
-    const { open, onDismiss, children } = props
+    const { defaultOpen, open: controlledOpen, onOpenChange, children } = props
+
+    const [open = false, setOpen] = useControllableState({
+        value: controlledOpen,
+        defaultValue: defaultOpen,
+        onChange: onOpenChange,
+    })
 
     useEffect(() => {
         if (open) {
@@ -37,22 +46,34 @@ function WrappedRoot(props: RootProps) {
         }
     }, [open])
 
-    return <RootContext.Provider value={{ open, onDismiss }}>{children}</RootContext.Provider>
+    return (
+        <DialogContext.Provider value={{ open, onOpenChange: setOpen }}>
+            {children}
+        </DialogContext.Provider>
+    )
 }
 
 const StyledRoot = styled("div", {
     position: "fixed",
-    top: 0,
-    left: 0,
-    width: "100vw",
-    height: "100vh",
+    inset: 0,
 })
+
+function WrappedTrigger(props: SlotProps) {
+    const { open, onOpenChange } = useDialogContext()
+
+    const handleClick = () => {
+        onOpenChange(open ? false : true)
+    }
+
+    return <Slot {...props} onClick={handleClick} />
+}
 
 const StyledOverlay = styled("div", {
     zIndex: 99,
     backgroundColor: "$blackA9",
     position: "fixed",
     inset: 0,
+    backdropFilter: "blur(3px)",
 })
 
 const StyledContent = styled("div", {
@@ -61,6 +82,7 @@ const StyledContent = styled("div", {
     top: 0,
     right: 0,
     bottom: 0,
+    backdropFilter: "blur(0px)",
     backgroundColor: "$gray2",
     borderLeft: "1px solid $gray6",
     padding: "2rem",
@@ -72,12 +94,20 @@ const StyledContent = styled("div", {
 })
 
 function WrappedContent(props: ComponentProps<typeof StyledContent>) {
-    const { onDismiss } = useRootContext()
+    const { open, onOpenChange } = useDialogContext()
+
+    const handleDismiss = () => {
+        onOpenChange(false)
+    }
+
+    if (!open) {
+        return null
+    }
 
     return (
         <Portal.Root>
             <StyledRoot>
-                <StyledOverlay onClick={onDismiss} />
+                <StyledOverlay onClick={handleDismiss} />
                 <StyledContent {...props} />
             </StyledRoot>
         </Portal.Root>
@@ -99,16 +129,21 @@ const StyledCloseIconButton = styled(IconButton, {
 })
 
 function CloseButton(props: ComponentProps<typeof StyledCloseIconButton>) {
-    const { onDismiss } = useRootContext()
+    const { onOpenChange } = useDialogContext()
+
+    const handleDismiss = () => {
+        onOpenChange(false)
+    }
 
     return (
-        <StyledCloseIconButton {...props} onClick={onDismiss} size="md">
+        <StyledCloseIconButton {...props} onClick={handleDismiss} size="md">
             <IconX />
         </StyledCloseIconButton>
     )
 }
 
 export const Root = WrappedRoot
+export const Trigger = WrappedTrigger
 export const Content = WrappedContent
 export const Title = StyledTitle
 export const Close = CloseButton
