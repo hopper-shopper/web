@@ -56,6 +56,7 @@ const Value = styled("p", {
     display: "flex",
     alignItems: "baseline",
     color: "$gray12",
+    whiteSpace: "nowrap",
 })
 const FiatValue = styled("span", {
     fontSize: "0.75rem",

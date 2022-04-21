@@ -36,7 +36,7 @@ export default App
 
 const Container = styled("div", {
     padding: "1rem",
-    "@lg": {
+    "@md": {
         padding: "2rem",
     },
 })

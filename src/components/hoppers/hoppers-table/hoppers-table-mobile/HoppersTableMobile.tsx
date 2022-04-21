@@ -21,17 +21,19 @@ export default function HoppersTableMobile(props: HoppersTableProps) {
                 />
             </Screen>
 
-            <Screen bp="xl" constraint="max">
-                <VirtuosoGrid
-                    useWindowScroll
-                    totalCount={hoppers.length}
-                    components={{
-                        List: ListContainer,
-                    }}
-                    itemContent={index => (
-                        <HopperTableCard hopper={hoppers[index]} filter={filter} />
-                    )}
-                />
+            <Screen bp="md" constraint="min">
+                <Screen bp="xl" constraint="max">
+                    <VirtuosoGrid
+                        useWindowScroll
+                        totalCount={hoppers.length}
+                        components={{
+                            List: ListContainer,
+                        }}
+                        itemContent={index => (
+                            <HopperTableCard hopper={hoppers[index]} filter={filter} />
+                        )}
+                    />
+                </Screen>
             </Screen>
         </>
     )

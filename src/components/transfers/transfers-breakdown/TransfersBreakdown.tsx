@@ -30,6 +30,11 @@ export default function TransfersBreakdown(props: TransfersBreakdownProps) {
 
 const StyledList = styled("div", {
     display: "grid",
-    gridTemplateColumns: "repeat(3, 1fr)",
-    columnGap: "1rem",
+    gap: "1rem",
+    "@md": {
+        gridTemplateColumns: "repeat(2, 1fr)",
+    },
+    "@lg": {
+        gridTemplateColumns: "repeat(3, 1fr)",
+    },
 })

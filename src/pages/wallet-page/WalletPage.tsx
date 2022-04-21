@@ -118,7 +118,7 @@ export default function WalletPage() {
 
                             <Section.Root>
                                 <Section.Title>Estimated earnings / Day</Section.Title>
-                                <Grid columns="3" gap="md">
+                                <EarningsGrid>
                                     {Array.from(adventuresOfStakedHoppers).map(adventure => (
                                         <UserEarnings
                                             key={adventure}
@@ -126,7 +126,7 @@ export default function WalletPage() {
                                             adventure={adventure}
                                         />
                                     ))}
-                                </Grid>
+                                </EarningsGrid>
                             </Section.Root>
                         </>
                     )}
@@ -137,7 +137,7 @@ export default function WalletPage() {
                             <EmptyText>This wallet does not have any hoppers</EmptyText>
                         )}
                         {hoppers.length > 0 && (
-                            <Grid columns="3" gap="md" css={{ alignItems: "start" }}>
+                            <HoppersGrid>
                                 {hoppers.map(hopper => (
                                     <WalletHopperCard
                                         key={hopper.tokenId}
@@ -145,7 +145,7 @@ export default function WalletPage() {
                                         listings={hopperListings}
                                     />
                                 ))}
-                            </Grid>
+                            </HoppersGrid>
                         )}
                     </Section.Root>
 
@@ -180,4 +180,21 @@ const Container = styled("div", {
     display: "flex",
     flexDirection: "column",
     rowGap: "3rem",
+})
+const EarningsGrid = styled("div", {
+    display: "grid",
+    gap: "1rem",
+    "@md": {
+        gridTemplateColumns: "repeat(3, 1fr)",
+    },
+})
+const HoppersGrid = styled("div", {
+    display: "grid",
+    gap: "1rem",
+    "@md": {
+        gridTemplateColumns: "repeat(2, 1fr)",
+    },
+    "@lg": {
+        gridTemplateColumns: "repeat(3, 1fr)",
+    },
 })

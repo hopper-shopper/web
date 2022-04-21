@@ -1,3 +1,4 @@
+import Screen from "components/layout/screen/Screen"
 import * as Table from "components/table/Table"
 import { Currency, formatCurrency } from "formatters/currency"
 import { formatDateTime } from "formatters/date"
@@ -33,8 +34,13 @@ export default function TransfersTable(props: TransfersTableProps) {
         <Table.Root>
             <thead>
                 <Table.Row>
-                    <Table.HeaderCell align="left">Date</Table.HeaderCell>
-                    <Table.HeaderCell align="left">Type</Table.HeaderCell>
+                    <Screen bp="md" constraint="max">
+                        <Table.HeaderCell align="left">Date / Type</Table.HeaderCell>
+                    </Screen>
+                    <Screen bp="md" constraint="min">
+                        <Table.HeaderCell align="left">Date</Table.HeaderCell>
+                        <Table.HeaderCell align="left">Type</Table.HeaderCell>
+                    </Screen>
                     <Table.HeaderCell align="right">Amount</Table.HeaderCell>
                 </Table.Row>
             </thead>
@@ -42,8 +48,20 @@ export default function TransfersTable(props: TransfersTableProps) {
             <tbody>
                 {sortedTransfers.map((transfer, index) => (
                     <Table.Row key={transfer.timestamp} striped={index % 2 === 1}>
-                        <Table.Cell align="left">{formatDateTime(transfer.timestamp)}</Table.Cell>
-                        <Table.Cell align="left">{formatTransferType(transfer.type)}</Table.Cell>
+                        <Screen bp="md" constraint="max">
+                            <Table.Cell align="left">
+                                <p>{formatDateTime(transfer.timestamp)}</p>
+                                <p>{formatTransferType(transfer.type)}</p>
+                            </Table.Cell>
+                        </Screen>
+                        <Screen bp="md" constraint="min">
+                            <Table.Cell align="left">
+                                {formatDateTime(transfer.timestamp)}
+                            </Table.Cell>
+                            <Table.Cell align="left">
+                                {formatTransferType(transfer.type)}
+                            </Table.Cell>
+                        </Screen>
                         <Table.Cell align="right">
                             <Amount amountChange={getTransferAmountChange(transfer)}>
                                 {formatTransferAmount(transfer)}
@@ -53,8 +71,13 @@ export default function TransfersTable(props: TransfersTableProps) {
                 ))}
 
                 <Table.Row>
-                    <Table.SummaryCell />
-                    <Table.SummaryCell />
+                    <Screen bp="md" constraint="max">
+                        <Table.SummaryCell />
+                    </Screen>
+                    <Screen bp="md" constraint="min">
+                        <Table.SummaryCell />
+                        <Table.SummaryCell />
+                    </Screen>
                     <Table.SummaryCell align="right">
                         FLY profit:{" "}
                         {formatCurrency(calculateTransfersProfit(sortedTransfers), Currency.FLY)}

@@ -43,9 +43,12 @@ export default function FlyCap(props: FlyCapProps) {
 
 const StyledCap = styled("div", {
     display: "grid",
-    gridTemplateColumns: "300px 1fr",
-    columnGap: "2rem",
-    alignItems: "center",
+    rowGap: "0.5rem",
+    "@md": {
+        gridTemplateColumns: "300px 1fr",
+        alignItems: "center",
+        columnGap: "2rem",
+    },
 })
 const AdventureTitle = styled("h3", {
     color: "$gray12",

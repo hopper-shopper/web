@@ -7,7 +7,7 @@ const StyledRoot = styled(ProgressPrimitives.Root, {
     background: "$gray3",
     borderRadius: "$md",
     border: "1px solid $gray6",
-    height: "2rem",
+    height: "1.5rem",
 })
 
 const StyledIndicator = styled(ProgressPrimitives.Indicator, {
