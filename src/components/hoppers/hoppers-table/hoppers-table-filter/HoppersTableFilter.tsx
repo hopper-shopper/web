@@ -67,26 +67,18 @@ export default function HoppersTableFilter(props: HoppersTableFilterProps) {
                 <SectionTitle>Filter</SectionTitle>
                 <Radio.Root value={configuration.type} onValueChange={handleFilterChange}>
                     <Column>
-                        <Flex gap="sm">
-                            <Radio.Radio value={HoppersTableConfigFilters.NONE} id="none">
-                                <Radio.Indicator />
-                            </Radio.Radio>
-                            <Label htmlFor="none">None</Label>
-                        </Flex>
-
-                        <Flex gap="sm">
-                            <Radio.Radio value={HoppersTableConfigFilters.FERTILITY} id="fertility">
-                                <Radio.Indicator />
-                            </Radio.Radio>
-                            <Label htmlFor="fertility">Fertility</Label>
-                        </Flex>
-
-                        <Flex gap="sm">
-                            <Radio.Radio value={HoppersTableConfigFilters.PERMIT} id="permit">
-                                <Radio.Indicator />
-                            </Radio.Radio>
-                            <Label htmlFor="permit">Permit</Label>
-                        </Flex>
+                        {ALL_CONFIG_FILTERS.map(configFilter => (
+                            <Flex key={configFilter} gap="sm">
+                                <Radio.Radio
+                                    value={configFilter}
+                                    id={`config-filter-${configFilter}`}>
+                                    <Radio.Indicator />
+                                </Radio.Radio>
+                                <Label htmlFor={`config-filter-${configFilter}`}>
+                                    {formatConfigFilter(configFilter)}
+                                </Label>
+                            </Flex>
+                        ))}
                     </Column>
                 </Radio.Root>
             </Section>
@@ -216,9 +208,13 @@ export type HoppersTableAnyFilter =
 
 // Styles
 const Container = styled("div", {
-    display: "flex",
-    columnGap: "4rem",
-    alignItems: "flex-start",
+    display: "grid",
+    rowGap: "2rem",
+    "@md": {
+        display: "flex",
+        columnGap: "4rem",
+        alignItems: "flex-start",
+    },
 })
 const Section = styled("div", {
     display: "grid",
@@ -238,3 +234,22 @@ const Column = styled("div", {
     display: "grid",
     rowGap: "1rem",
 })
+
+// Constants
+const ALL_CONFIG_FILTERS: HoppersTableConfigFilters[] = [
+    HoppersTableConfigFilters.NONE,
+    HoppersTableConfigFilters.FERTILITY,
+    HoppersTableConfigFilters.PERMIT,
+]
+
+// Formatters
+function formatConfigFilter(configFilter: HoppersTableConfigFilters): string {
+    switch (configFilter) {
+        case HoppersTableConfigFilters.NONE:
+            return "None"
+        case HoppersTableConfigFilters.FERTILITY:
+            return "Fertility"
+        case HoppersTableConfigFilters.PERMIT:
+            return "Permit"
+    }
+}

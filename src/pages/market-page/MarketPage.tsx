@@ -83,7 +83,11 @@ const DEFAULT_TABLE_FILTER: HoppersTableAnyFilter = {
 // Components
 const Filter = styled("div", {
     marginBottom: "2rem",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
+    display: "grid",
+    rowGap: "3rem",
+    "@lg": {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "flex-start",
+    },
 })
