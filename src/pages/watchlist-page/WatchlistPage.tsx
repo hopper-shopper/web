@@ -89,20 +89,16 @@ export default function WatchlistPage() {
 
     return (
         <Container>
-            {watchlist.length > 0 && (
-                <Content css={{ marginBottom: "2rem" }}>
-                    <div />
-
+            <Content>
+                {watchlist.length > 0 && (
                     <Filter>
                         <ConfigureWatchlistFilter
                             filter={watchlistFilter}
                             onChange={setWatchlistFilter}
                         />
                     </Filter>
-                </Content>
-            )}
+                )}
 
-            <Content>
                 <WatchlistList>
                     <InputContainer
                         onSubmit={handleAddHopperIdSubmit}
@@ -169,23 +165,46 @@ const Container = styled("div", {
     margin: "0 auto",
 })
 const Filter = styled("div", {
-    marginBottom: "2rem",
+    gridArea: "filter",
 })
 const Content = styled("div", {
     display: "grid",
-    gridTemplateColumns: "300px 1fr",
-    columnGap: "2rem",
+    gap: "2rem",
     alignItems: "start",
+    gridTemplate: `
+        "filter"
+        "list"
+        "hoppers"
+    `,
+    "@lg": {
+        rowGap: "3rem",
+        columnGap: "2rem",
+        gridTemplate: `
+            "filter filter"
+            "list hoppers" / 250px 1fr
+        `,
+    },
+    "@xl": {
+        gridTemplate: `
+            ". filter"
+            "list hoppers" / 300px 1fr
+        `,
+    },
 })
 const HoppersGrid = styled("div", {
     display: "grid",
-    gridTemplateColumns: "repeat(3, 1fr)",
+    gridTemplateColumns: "repeat(2, 1fr)",
     gap: "1rem",
     alignItems: "start",
+    gridArea: "hoppers",
+    "@xl": {
+        gridTemplateColumns: "repeat(3, 1fr)",
+    },
 })
 const WatchlistList = styled("div", {
     display: "grid",
     rowGap: "0.5rem",
+    gridArea: "list",
 })
 const InputContainer = styled("form", {
     display: "flex",

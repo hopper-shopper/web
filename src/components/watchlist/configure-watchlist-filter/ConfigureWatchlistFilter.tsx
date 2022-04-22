@@ -124,7 +124,7 @@ export default function ConfigureWatchlistFilter(props: ConfigureWatchlistFilter
                             placeholder="Normalize hopper levels"
                             min={1}
                             max={100}
-                            css={{ width: 250 }}
+                            css={{ "@md": { width: 200 }, "@lg": { width: 250 } }}
                             defaultValue={filter.normalizeLevel || ""}
                             onBlur={handleNormalizeLevelChange}
                         />
@@ -162,9 +162,19 @@ export type WatchlistFilter = {
 
 // Components
 const Container = styled("div", {
-    display: "flex",
-    columnGap: "4rem",
-    alignItems: "flex-start",
+    display: "grid",
+    rowGap: "2rem",
+    "@md": {
+        display: "flex",
+        columnGap: "2rem",
+        alignItems: "flex-start",
+    },
+    "@lg": {
+        columnGap: "3rem",
+    },
+    "@xl": {
+        columnGap: "4rem",
+    },
 })
 const Section = styled("div", {
     display: "grid",
@@ -181,7 +191,9 @@ const Column = styled("div", {
     rowGap: "1rem",
 })
 const RightSlot = styled("div", {
-    marginLeft: "auto",
+    "@md": {
+        marginLeft: "auto",
+    },
 })
 
 // Constants
