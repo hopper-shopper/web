@@ -1,7 +1,7 @@
+import HopperContext from "contests/HopperContext"
 import { Hopper } from "models/Hopper"
 import { PropsWithChildren } from "react"
 import { styled } from "theme"
-import HopperCardContext from "./HopperCardContext"
 
 type HopperCardProps = {
     hopper: Hopper
@@ -12,7 +12,7 @@ export default function HopperCard(props: PropsWithChildren<HopperCardProps>) {
     const { hopper, rightSlot, children } = props
 
     return (
-        <HopperCardContext.Provider value={{ hopper }}>
+        <HopperContext.Provider value={{ hopper }}>
             <StyledCard>
                 <CardHeader>
                     <HopperImage src={hopper.image} />
@@ -28,7 +28,7 @@ export default function HopperCard(props: PropsWithChildren<HopperCardProps>) {
 
                 <Details>{children}</Details>
             </StyledCard>
-        </HopperCardContext.Provider>
+        </HopperContext.Provider>
     )
 }
 

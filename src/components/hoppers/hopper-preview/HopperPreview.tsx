@@ -1,14 +1,14 @@
 import Flex from "components/layout/flex/Flex"
 import WatchlistButton from "components/watchlist/watchlist-button/WatchlistButton"
-import { Hopper } from "models/Hopper"
-import { styled } from "theme"
-import { watchlistAtom } from "stores/watchlist"
-import HopperCardContext from "../hopper-card/HopperCardContext"
-import BaseStatsList from "../hopper-card/hopper-card-features/base-stats-list/BaseStatsList"
-import PermitDetails from "../hopper-card/hopper-card-features/permit-details/PermitDetails"
-import FlyEarnings from "../hopper-card/hopper-card-features/fly-earnings/FlyEarnings"
-import CurrentLevel from "../hopper-card/hopper-card-features/current-level/CurrentLevel"
+import { ProvideHopper } from "contests/HopperContext"
 import { useAtomValue } from "jotai"
+import { Hopper } from "models/Hopper"
+import { watchlistAtom } from "stores/watchlist"
+import { styled } from "theme"
+import BaseStatsList from "../hopper-card/hopper-card-features/base-stats-list/BaseStatsList"
+import CurrentLevel from "../hopper-card/hopper-card-features/current-level/CurrentLevel"
+import FlyEarnings from "../hopper-card/hopper-card-features/fly-earnings/FlyEarnings"
+import PermitDetails from "../hopper-card/hopper-card-features/permit-details/PermitDetails"
 
 type HopperPreviewProps = {
     hopper: Hopper
@@ -20,7 +20,7 @@ export default function HopperPreview(props: HopperPreviewProps) {
     const watchlist = useAtomValue(watchlistAtom)
 
     return (
-        <HopperCardContext.Provider value={{ hopper }}>
+        <ProvideHopper hopper={hopper}>
             <StyledHopperPreview>
                 <HopperBaseInfo>
                     <HopperImage src={hopper.image} />
@@ -42,7 +42,7 @@ export default function HopperPreview(props: HopperPreviewProps) {
                     <FlyEarnings />
                 </HopperAnalysis>
             </StyledHopperPreview>
-        </HopperCardContext.Provider>
+        </ProvideHopper>
     )
 }
 

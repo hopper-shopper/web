@@ -3,12 +3,12 @@ import * as HoverCard from "components/hover-card/HoverCard"
 import InspectPageLink from "components/inspect/inspect-page-link/InspectPageLink"
 import Flex from "components/layout/flex/Flex"
 import RightSlot from "components/layout/flex/RightSlot"
+import { ProvideHopper } from "contests/HopperContext"
 import { Hopper } from "models/Hopper"
 import { styled } from "theme"
 import BaseStatsList from "../hopper-card/hopper-card-features/base-stats-list/BaseStatsList"
 import FlyEarnings from "../hopper-card/hopper-card-features/fly-earnings/FlyEarnings"
 import PermitDetails from "../hopper-card/hopper-card-features/permit-details/PermitDetails"
-import HopperCardContext from "../hopper-card/HopperCardContext"
 
 type HopperDetailsHoverCardProps = HoverCardContentProps & {
     hopper: Hopper
@@ -34,11 +34,11 @@ export default function HopperDetailsHoverCard(props: HopperDetailsHoverCardProp
                         </RightSlot>
                     </Flex>
 
-                    <HopperCardContext.Provider value={{ hopper }}>
+                    <ProvideHopper hopper={hopper}>
                         <BaseStatsList />
                         <PermitDetails />
                         <FlyEarnings />
-                    </HopperCardContext.Provider>
+                    </ProvideHopper>
                 </Flex>
 
                 <HoverCard.Arrow />

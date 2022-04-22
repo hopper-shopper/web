@@ -1,10 +1,10 @@
+import { useHopperContext } from "contests/HopperContext"
 import { Currency, formatCurrency } from "formatters/currency"
 import { styled } from "theme"
-import { useHopperCardContext } from "../../HopperCardContext"
 import * as Feature from "../HopperCardFeature"
 
 export default function MarketPrice() {
-    const { hopper } = useHopperCardContext()
+    const { hopper } = useHopperContext()
 
     return (
         <Feature.Root>

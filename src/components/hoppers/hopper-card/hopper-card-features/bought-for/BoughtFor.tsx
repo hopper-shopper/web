@@ -1,9 +1,9 @@
+import { useHopperContext } from "contests/HopperContext"
 import { Currency, formatCurrency } from "formatters/currency"
 import { Listing } from "models/Listing"
 import { SortListingBy, sortListings } from "sorters/listings"
 import { SortDirection } from "sorters/_common"
 import { styled } from "theme"
-import { useHopperCardContext } from "../../HopperCardContext"
 import * as Features from "../HopperCardFeature"
 
 type BoughtForProps = {
@@ -11,7 +11,7 @@ type BoughtForProps = {
 }
 
 export default function BoughtFor(props: BoughtForProps) {
-    const { hopper } = useHopperCardContext()
+    const { hopper } = useHopperContext()
     const { listings } = props
 
     const boughtForPrice = ((): number => {

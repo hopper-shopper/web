@@ -1,9 +1,9 @@
+import { useHopperContext } from "contests/HopperContext"
 import { styled } from "theme"
-import { useHopperCardContext } from "../../HopperCardContext"
 import * as Feature from "../HopperCardFeature"
 
 export default function CurrentLevel() {
-    const { hopper } = useHopperCardContext()
+    const { hopper } = useHopperContext()
 
     return (
         <Feature.Root>

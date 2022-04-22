@@ -1,12 +1,12 @@
+import { useHopperContext } from "contests/HopperContext"
 import { formatAdventure } from "formatters/adventure"
 import { Currency, formatCurrency } from "formatters/currency"
 import { styled } from "theme"
 import { Adventure, getEarningsByAdventure, getIdealAdventure } from "utils/adventures"
-import { useHopperCardContext } from "../../HopperCardContext"
 import * as Feature from "../HopperCardFeature"
 
 export default function FlyEarnings() {
-    const { hopper } = useHopperCardContext()
+    const { hopper } = useHopperContext()
 
     const idealAdventure = getIdealAdventure(hopper)
 

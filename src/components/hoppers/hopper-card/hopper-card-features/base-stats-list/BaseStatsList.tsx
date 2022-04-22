@@ -1,6 +1,6 @@
+import { useHopperContext } from "contests/HopperContext"
 import { styled } from "theme"
 import { HOPPER_STATS_SCALE } from "utils/hopper"
-import { useHopperCardContext } from "../../HopperCardContext"
 import * as Feature from "../HopperCardFeature"
 
 type BaseStatsListProps = {
@@ -12,7 +12,7 @@ type BaseStatsListProps = {
 
 export default function BaseStatsList(props: BaseStatsListProps) {
     const { title = false } = props
-    const { hopper } = useHopperCardContext()
+    const { hopper } = useHopperContext()
 
     return (
         <Feature.Root>

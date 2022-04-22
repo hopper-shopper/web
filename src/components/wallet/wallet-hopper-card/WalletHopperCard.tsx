@@ -4,9 +4,9 @@ import FlyEarnings from "components/hoppers/hopper-card/hopper-card-features/fly
 import PermitDetails from "components/hoppers/hopper-card/hopper-card-features/permit-details/PermitDetails"
 import CurrentAdventure from "components/hoppers/hopper-card/hopper-card-slots/current-adventure/CurrentAdventure"
 import HopperCard from "components/hoppers/hopper-card/HopperCard"
-import { useHopperCardContext } from "components/hoppers/hopper-card/HopperCardContext"
 import InspectPageLink from "components/inspect/inspect-page-link/InspectPageLink"
 import Flex from "components/layout/flex/Flex"
+import { useHopperContext } from "contests/HopperContext"
 import { Hopper } from "models/Hopper"
 import { Listing } from "models/Listing"
 
@@ -29,7 +29,7 @@ export default function WalletHopperCard(props: WalletHopperCardProps) {
 }
 
 function RightSlot() {
-    const { hopper } = useHopperCardContext()
+    const { hopper } = useHopperContext()
 
     return (
         <Flex direction="column" gap="none" y="end">

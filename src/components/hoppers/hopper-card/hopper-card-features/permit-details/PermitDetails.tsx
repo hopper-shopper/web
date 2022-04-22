@@ -1,10 +1,10 @@
+import { useHopperContext } from "contests/HopperContext"
 import { formatRating } from "formatters/rating"
 import { styled } from "theme"
-import { useHopperCardContext } from "../../HopperCardContext"
 import * as Feature from "../HopperCardFeature"
 
 export default function PermitDetails() {
-    const { hopper } = useHopperCardContext()
+    const { hopper } = useHopperContext()
 
     return (
         <Feature.Root>
