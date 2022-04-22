@@ -101,24 +101,28 @@ export default class HopperRoiCalculator {
         return this.stash >= flyRequired
     }
 
-    calculateRoiInDays(hopperCostInFly: number): number | null {
-        try {
-            let dayPointer = 0
+    calculateRoiInDays(hopperCostInFly: number): number {
+        let dayPointer = 0
 
-            while (!this.breakEvenReached(hopperCostInFly)) {
+        while (!this.breakEvenReached(hopperCostInFly)) {
+            try {
                 const hoursUsed = this.advance()
                 const days = hoursUsed / 24
-
                 dayPointer += days
-
-                if (dayPointer > 1000) {
-                    throw new Error("roi limit may never be reached")
-                }
+            } catch (error) {
+                throw HopperRoiCalculatorError.CANNOT_ENTER
             }
 
-            return dayPointer
-        } catch (error) {
-            return null
+            if (dayPointer > 1000) {
+                throw HopperRoiCalculatorError.NO_ROI
+            }
         }
+
+        return dayPointer
     }
+}
+
+export enum HopperRoiCalculatorError {
+    NO_ROI = "NO_ROI",
+    CANNOT_ENTER = "CANNOT_ENTER",
 }

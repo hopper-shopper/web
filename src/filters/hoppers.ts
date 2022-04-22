@@ -88,8 +88,6 @@ export function getHoppersTierPermitFilter(permits: AdventureTierPermit[]): Filt
         return hoppers.filter(hopper => {
             const getAdventure = (permit: AdventureTierPermit): Adventure => {
                 switch (permit) {
-                    case AdventureTierPermit.T1:
-                        return Adventure.POND
                     case AdventureTierPermit.T2:
                         return Adventure.RIVER
                     case AdventureTierPermit.T3:
