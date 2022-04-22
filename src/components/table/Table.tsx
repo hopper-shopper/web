@@ -54,15 +54,21 @@ const StyledTableHeaderCell = styled("th", {
     color: "$gray11",
     fontWeight: 500,
     backgroundColor: "$gray3",
-    padding: "0.5rem 1rem",
     cursor: "default",
     whiteSpace: "nowrap",
+    padding: "0.25rem 0.5rem",
+    "@md": {
+        padding: "0.5rem 1rem",
+    },
 })
 
 const StyledTableCell = styled("td", {
     color: "$gray12",
-    padding: "0.5rem 1rem",
     whiteSpace: "nowrap",
+    padding: "0.25rem 0.5rem",
+    "@md": {
+        padding: "0.5rem 1rem",
+    },
 })
 
 const StyledSummaryCell = styled(StyledTableCell, {

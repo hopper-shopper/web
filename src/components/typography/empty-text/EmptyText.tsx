@@ -13,7 +13,10 @@ const EmptyText = styled("p", {
                 padding: "1rem",
             },
             md: {
-                padding: "2rem",
+                padding: "2rem 1rem",
+                "@md": {
+                    padding: "2rem",
+                },
             },
         },
         align: {

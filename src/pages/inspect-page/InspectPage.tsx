@@ -9,6 +9,7 @@ import Input from "components/inputs/input/Input"
 import Label from "components/inputs/label/Label"
 import * as Section from "components/layout/section/Section"
 import ListingsTable from "components/listings/listings-table/ListingsTable"
+import EmptyText from "components/typography/empty-text/EmptyText"
 import { Hopper } from "models/Hopper"
 import { Screens, styled } from "theme"
 import { isValidHopperId } from "utils/hopper"
@@ -60,6 +61,12 @@ export default function InspectPage() {
                 <Button type="submit">Load</Button>
             </InputForm>
 
+            {!state.hopperId && (
+                <EmptyText align="center" padding="md">
+                    Enter a Hopper-ID to inspect stats, history and ROI
+                </EmptyText>
+            )}
+
             {hopper && (
                 <Container>
                     <Section.Root>
@@ -85,11 +92,6 @@ export default function InspectPage() {
     )
 }
 
-const EmptyText = styled("p", {
-    color: "$gray11",
-    fontSize: "1rem",
-    lineHeight: 1.25,
-})
 const Container = styled("div", {
     maxWidth: Screens.lg,
     margin: "5rem auto",

@@ -59,10 +59,10 @@ export default function HopperRoi(props: HopperRoiProps) {
 
     return (
         <Container>
-            <Flex gap="md">
-                <Fieldset>
+            <Inputs>
+                <Fieldset css={{ gridArea: "price" }}>
                     <Label htmlFor="bought-for">Hopper price</Label>
-                    <LabeledInput.Root css={{ maxWidth: 200 }}>
+                    <LabeledInput.Root>
                         <LabeledInput.Input
                             id="bought-for"
                             type="number"
@@ -74,7 +74,7 @@ export default function HopperRoi(props: HopperRoiProps) {
                     </LabeledInput.Root>
                 </Fieldset>
 
-                <Fieldset css={{ maxWidth: 200 }}>
+                <Fieldset css={{ gridArea: "level" }}>
                     <Label htmlFor="start-at-level">Start at level</Label>
                     <Input
                         id="start-at-level"
@@ -87,23 +87,21 @@ export default function HopperRoi(props: HopperRoiProps) {
                     />
                 </Fieldset>
 
-                <RightSlot>
-                    <Fieldset css={{ maxWidth: 200 }}>
-                        <Label htmlFor="fly-per-avax">FLY price</Label>
-                        <LabeledInput.Root css={{ maxWidth: 200 }}>
-                            <LabeledInput.Input
-                                id="fly-per-avax"
-                                type="number"
-                                min={0}
-                                placeholder="FLY price"
-                                defaultValue={flyPrice || ""}
-                                onBlur={handleFlyPerAvaxBlur}
-                            />
-                            <LabeledInput.Hint>FLY</LabeledInput.Hint>
-                        </LabeledInput.Root>
-                    </Fieldset>
-                </RightSlot>
-            </Flex>
+                <Fieldset css={{ gridArea: "flyPrice" }}>
+                    <Label htmlFor="fly-per-avax">FLY price</Label>
+                    <LabeledInput.Root>
+                        <LabeledInput.Input
+                            id="fly-per-avax"
+                            type="number"
+                            min={0}
+                            placeholder="FLY price"
+                            defaultValue={flyPrice || ""}
+                            onBlur={handleFlyPerAvaxBlur}
+                        />
+                        <LabeledInput.Hint>FLY</LabeledInput.Hint>
+                    </LabeledInput.Root>
+                </Fieldset>
+            </Inputs>
 
             <Flex direction="column" y="stretch" gap="md">
                 {ALL_ADVENTURES.map(adventure => (
@@ -130,4 +128,17 @@ const AdventureTitle = styled("h3", {
 const RoiInDays = styled("span", {
     color: "$gray12",
     fontSize: "1rem",
+})
+const Inputs = styled("div", {
+    display: "grid",
+    gap: "1rem",
+    gridTemplate: `
+        "price price"
+        "level flyPrice" / 1fr 1fr
+    `,
+    "@md": {
+        gridTemplate: `
+            "price level . flyPrice" / 200px 100px 1fr 150px
+        `,
+    },
 })

@@ -1,3 +1,4 @@
+import Screen from "components/layout/screen/Screen"
 import * as Table from "components/table/Table"
 import WalletPageLink from "components/wallet/WalletPageLink/WalletPageLink"
 import { Currency, formatCurrency } from "formatters/currency"
@@ -28,10 +29,12 @@ export default function ListingsTable(props: ListingsTableProps) {
         <Table.Root>
             <thead>
                 <Table.Row>
-                    <Table.HeaderCell css={{ width: 100 }} />
+                    <Table.HeaderCell css={{ width: 50, "@md": { width: 100 } }} />
                     <Table.HeaderCell align="left">Date</Table.HeaderCell>
-                    <Table.HeaderCell align="left">Seller</Table.HeaderCell>
-                    <Table.HeaderCell align="left">Buyer</Table.HeaderCell>
+                    <Screen bp="md">
+                        <Table.HeaderCell align="left">Seller</Table.HeaderCell>
+                        <Table.HeaderCell align="left">Buyer</Table.HeaderCell>
+                    </Screen>
                     <Table.HeaderCell align="right">Price</Table.HeaderCell>
                 </Table.Row>
             </thead>
@@ -46,12 +49,14 @@ export default function ListingsTable(props: ListingsTableProps) {
                             </SoldIndicator>
                         </Table.Cell>
                         <Table.Cell align="left">{formatDateTime(listing.timestamp)}</Table.Cell>
-                        <Table.Cell align="left">
-                            <WalletPageLink wallet={listing.seller} />
-                        </Table.Cell>
-                        <Table.Cell align="left">
-                            <WalletPageLink wallet={listing.buyer} />
-                        </Table.Cell>
+                        <Screen bp="md">
+                            <Table.Cell align="left">
+                                <WalletPageLink wallet={listing.seller} />
+                            </Table.Cell>
+                            <Table.Cell align="left">
+                                <WalletPageLink wallet={listing.buyer} />
+                            </Table.Cell>
+                        </Screen>
                         <Table.Cell align="right">
                             {formatCurrency(listing.price, Currency.AVAX)}
                         </Table.Cell>
@@ -63,10 +68,16 @@ export default function ListingsTable(props: ListingsTableProps) {
 }
 
 const SoldIndicator = styled("div", {
-    padding: "0.125rem 0.25rem",
-    borderRadius: "$sm",
-    fontSize: "0.75rem",
-    textAlign: "center",
+    size: 20,
+    borderRadius: "50%",
+    fontSize: 0,
+    "@md": {
+        size: "auto",
+        padding: "0.125rem 0.25rem",
+        borderRadius: "$sm",
+        textAlign: "center",
+        fontSize: "0.75rem",
+    },
     variants: {
         state: {
             sold: {

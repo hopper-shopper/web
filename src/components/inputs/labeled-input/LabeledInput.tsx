@@ -8,7 +8,7 @@ const StyledInput = styled("input", {
     flex: 1,
     outline: "none",
     height: "2.5rem",
-    minWidth: 0,
+    width: 0,
     "&::placeholder": {
         color: "$gray7",
     },

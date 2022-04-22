@@ -54,6 +54,14 @@ export const {
             width: size,
             height: size,
         }),
+        px: (padding: PropertyValue<"paddingLeft">) => ({
+            paddingLeft: padding,
+            paddingRight: padding,
+        }),
+        py: (padding: PropertyValue<"paddingTop">) => ({
+            paddingTop: padding,
+            paddingBottom: padding,
+        }),
     },
 })
 

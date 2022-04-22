@@ -48,12 +48,14 @@ export default function HopperPreview(props: HopperPreviewProps) {
 
 const StyledHopperPreview = styled("div", {
     display: "grid",
-    gridTemplateColumns: "max-content 1fr",
-    columnGap: "2rem",
+    gap: "2rem",
+    "@md": {
+        gridTemplateColumns: "max-content 1fr",
+    },
 })
 const HopperImage = styled("img", {
-    width: 200,
     borderRadius: "$md",
+    width: 200,
 })
 const WatchlistText = styled("span", {
     fontSize: "0.75rem",
@@ -66,9 +68,11 @@ const HopperBaseInfo = styled("div", {
 })
 const HopperAnalysis = styled("div", {
     display: "grid",
-    gridTemplateColumns: "repeat(2, 1fr)",
-    columnGap: "2rem",
-    alignItems: "start",
+    gap: "2rem",
+    "@md": {
+        gridTemplateColumns: "repeat(2, 1fr)",
+        alignItems: "start",
+    },
 })
 const Column = styled("div", {
     display: "flex",
