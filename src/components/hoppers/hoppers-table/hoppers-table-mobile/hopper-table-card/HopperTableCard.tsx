@@ -2,9 +2,14 @@ import {
     HoppersTableAnyFilter,
     HoppersTableConfigFilters,
 } from "components/hoppers/hoppers-table/hoppers-table-filter/HoppersTableFilter"
+import InspectPageLink from "components/inspect/inspect-page-link/InspectPageLink"
+import Flex from "components/layout/flex/Flex"
+import WatchlistButton from "components/watchlist/watchlist-button/WatchlistButton"
 import { Currency, formatCurrency } from "formatters/currency"
 import { formatRating } from "formatters/rating"
+import { useAtomValue } from "jotai"
 import { Hopper } from "models/Hopper"
+import { watchlistAtom } from "stores/watchlist"
 import { styled } from "theme"
 import {
     calculateMaxRatingPrice,
@@ -17,6 +22,7 @@ import {
 } from "utils/fertility"
 import { HOPPER_STATS_SCALE } from "utils/hopper"
 import { calculateLevelUpCosts } from "utils/level"
+import { getHopperMarketUrl } from "utils/url"
 
 type HopperTableCardProps = {
     hopper: Hopper
@@ -26,10 +32,14 @@ type HopperTableCardProps = {
 export default function HopperTableCard(props: HopperTableCardProps) {
     const { hopper, filter } = props
 
+    const watchlist = useAtomValue(watchlistAtom)
+
     return (
         <StyledCard>
             <Header>
-                <Image src={hopper.image} />
+                <a href={getHopperMarketUrl({ hopper: hopper.tokenId })} target="_blank">
+                    <Image src={hopper.image} />
+                </a>
                 <StatsList>
                     <Stat style={{ backgroundColor: HOPPER_STATS_SCALE(hopper.strength) }}>
                         {hopper.strength}
@@ -48,6 +58,16 @@ export default function HopperTableCard(props: HopperTableCardProps) {
                     </Stat>
                 </StatsList>
             </Header>
+
+            <Actions>
+                <InspectPageLink hopperId={hopper.tokenId} />
+                <Flex gap="sm">
+                    <WatchlistText>
+                        {watchlist.includes(hopper.tokenId) ? "Remove from" : "Add to"} watchlist
+                    </WatchlistText>
+                    <WatchlistButton hopperId={hopper.tokenId} />
+                </Flex>
+            </Actions>
 
             <List>
                 <Info>
@@ -137,11 +157,20 @@ const Header = styled("div", {
     gridTemplateColumns: "max-content 1fr",
     alignItems: "center",
     columnGap: "2rem",
-    marginBottom: "1rem",
 })
 const Image = styled("img", {
     size: 70,
     borderRadius: "$sm",
+})
+const Actions = styled("div", {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    margin: "1rem 0",
+})
+const WatchlistText = styled("span", {
+    fontSize: "0.75rem",
+    color: "$gray11",
 })
 const StatsList = styled("div", {
     display: "flex",

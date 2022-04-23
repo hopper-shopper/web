@@ -10,11 +10,7 @@ type InspectPageLinkProps = {
 export default function InspectPageLink(props: InspectPageLinkProps) {
     const { hopperId } = props
 
-    return (
-        <StyledLink to={getInspectPageUrl({ hopper: hopperId })} target="_blank">
-            Inspect
-        </StyledLink>
-    )
+    return <StyledLink to={getInspectPageUrl({ hopper: hopperId })}>Inspect</StyledLink>
 }
 
 const StyledLink = styled(Link, {
