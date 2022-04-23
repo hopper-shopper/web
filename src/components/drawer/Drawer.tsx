@@ -125,7 +125,10 @@ const StyledTitle = styled("h2", {
 const StyledCloseIconButton = styled(IconButton, {
     position: "absolute",
     top: "1rem",
-    right: "2rem",
+    right: "1rem",
+    "@md": {
+        right: "2rem",
+    },
 })
 
 function CloseButton(props: ComponentProps<typeof StyledCloseIconButton>) {

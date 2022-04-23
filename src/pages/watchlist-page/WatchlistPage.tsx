@@ -193,10 +193,12 @@ const Content = styled("div", {
 })
 const HoppersGrid = styled("div", {
     display: "grid",
-    gridTemplateColumns: "repeat(2, 1fr)",
     gap: "1rem",
     alignItems: "start",
     gridArea: "hoppers",
+    "@md": {
+        gridTemplateColumns: "repeat(2, 1fr)",
+    },
     "@xl": {
         gridTemplateColumns: "repeat(3, 1fr)",
     },
