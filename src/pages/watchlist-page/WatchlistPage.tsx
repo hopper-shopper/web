@@ -129,12 +129,16 @@ export default function WatchlistPage() {
                 </WatchlistList>
 
                 {watchlist.length === 0 && (
-                    <EmptyText>You have no Hoppers on your Watchlist yet</EmptyText>
+                    <EmptyText css={{ gridArea: "hoppers" }}>
+                        You have no Hoppers on your Watchlist yet
+                    </EmptyText>
                 )}
                 {watchlist.length > 0 && (
                     <>
                         {patchedHoppers.length === 0 && (
-                            <EmptyText>No Hoppers on watchlist match the given filters</EmptyText>
+                            <EmptyText css={{ gridArea: "hoppers" }}>
+                                No Hoppers on watchlist match the given filters
+                            </EmptyText>
                         )}
                         {patchedHoppers.length > 0 && (
                             <HoppersGrid>
