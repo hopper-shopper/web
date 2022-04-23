@@ -1150,6 +1150,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:^17.0.25":
+  version: 17.0.25
+  resolution: "@types/node@npm:17.0.25"
+  checksum: 6a820bd624e69ea772f52a6cdb326484eff5829443dc981939373929ade109f58c21698b9f0a831bd6ceea799e722a75dc49c5fa7a6bc32a81e1cbdfc6507b64
+  languageName: node
+  linkType: hard
+
 "@types/prop-types@npm:*":
   version: 15.7.4
   resolution: "@types/prop-types@npm:15.7.4"
@@ -3552,6 +3559,7 @@ __metadata:
     "@stitches/react": ^1.2.7
     "@tabler/icons": ^1.56.0
     "@types/d3-scale": ^4.0.2
+    "@types/node": ^17.0.25
     "@types/react": ^17.0.33
     "@types/react-dom": ^17.0.10
     "@types/validator": ^13.7.2

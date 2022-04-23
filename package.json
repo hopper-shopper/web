@@ -37,6 +37,7 @@
         "validator": "^13.7.0"
     },
     "devDependencies": {
+        "@types/node": "^17.0.25",
         "@types/react": "^17.0.33",
         "@types/react-dom": "^17.0.10",
         "@types/validator": "^13.7.2",
