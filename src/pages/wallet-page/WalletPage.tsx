@@ -132,24 +132,6 @@ export default function WalletPage() {
                     )}
 
                     <Section.Root>
-                        <Section.Title>Hoppers</Section.Title>
-                        {hoppers.length === 0 && (
-                            <EmptyText>This wallet does not have any hoppers</EmptyText>
-                        )}
-                        {hoppers.length > 0 && (
-                            <HoppersGrid>
-                                {hoppers.map(hopper => (
-                                    <WalletHopperCard
-                                        key={hopper.tokenId}
-                                        hopper={hopper}
-                                        listings={hopperListings}
-                                    />
-                                ))}
-                            </HoppersGrid>
-                        )}
-                    </Section.Root>
-
-                    <Section.Root>
                         <Section.Title>FLY Transfers</Section.Title>
 
                         <TransfersBreakdown transfers={combinedTransfers} />
@@ -166,6 +148,24 @@ export default function WalletPage() {
 
                             <TransfersTable transfers={selectedTransfers} />
                         </Flex>
+                    </Section.Root>
+
+                    <Section.Root>
+                        <Section.Title>Hoppers</Section.Title>
+                        {hoppers.length === 0 && (
+                            <EmptyText>This wallet does not have any hoppers</EmptyText>
+                        )}
+                        {hoppers.length > 0 && (
+                            <HoppersGrid>
+                                {hoppers.map(hopper => (
+                                    <WalletHopperCard
+                                        key={hopper.tokenId}
+                                        hopper={hopper}
+                                        listings={hopperListings}
+                                    />
+                                ))}
+                            </HoppersGrid>
+                        )}
                     </Section.Root>
                 </Container>
             )}
