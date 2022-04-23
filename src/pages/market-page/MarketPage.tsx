@@ -6,7 +6,11 @@ import HoppersTableFilter, {
     HoppersTableConfigFilters,
 } from "components/hoppers/hoppers-table/hoppers-table-filter/HoppersTableFilter"
 import useHoppersTableFilter from "components/hoppers/hoppers-table/hoppers-table-filter/useHoppersTableFilter"
+import HoppersTableSortSelect from "components/hoppers/hoppers-table/hoppers-table-sort-select/HoppersTableSortSelect"
 import HoppersTable from "components/hoppers/hoppers-table/HoppersTable"
+import Fieldset from "components/inputs/fieldset/Fieldset"
+import Label from "components/inputs/label/Label"
+import Screen from "components/layout/screen/Screen"
 import {
     getHoppersFertilityFilter,
     getHoppersPermitFilter,
@@ -44,6 +48,7 @@ export default function MarketPage() {
         setBy: setSortBy,
         by: sortBy,
         direction: sortDirection,
+        setDirection: setSortDirection,
     } = useSort({
         collection: filteredHoppers,
         sorter: sortHoppers,
@@ -59,6 +64,22 @@ export default function MarketPage() {
                 <HoppersTableFilter filter={filter} onChange={setFilter} />
                 <FloorPrice hoppers={filteredHoppers} />
             </Filter>
+
+            <Screen bp="xl" constraint="max">
+                <Fieldset css={{ marginBottom: "2rem" }}>
+                    <Label htmlFor="sort">Sort Hoppers by</Label>
+                    <HoppersTableSortSelect
+                        id="sort"
+                        filter={filter}
+                        active={sortBy}
+                        direction={sortDirection}
+                        onChange={(sortBy, direction) => {
+                            setSortBy(sortBy)
+                            setSortDirection(direction)
+                        }}
+                    />
+                </Fieldset>
+            </Screen>
 
             <SortContext.Provider
                 value={{ active: sortBy, direction: sortDirection, update: setSortBy }}>

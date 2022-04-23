@@ -1,4 +1,3 @@
-import { IconCheck, IconChevronDown, IconChevronUp, IconDirection } from "@tabler/icons"
 import * as Select from "components/inputs/select/Select"
 import { getMonth, isToday, isYesterday } from "date-fns"
 import { formatDateTime, formatMonth } from "formatters/date"
@@ -62,34 +61,20 @@ export default function TransfersByDaySelect(props: TransfersByDaySelectProps) {
         <Select.Root value={selected || undefined} onValueChange={handleValueChange}>
             <Select.Trigger>
                 <Select.Value />
-                <Select.Icon>
-                    <IconDirection />
-                </Select.Icon>
+                <Select.Icon />
             </Select.Trigger>
 
             <Select.Content>
-                <Select.ScrollUpButton>
-                    <IconChevronUp />
-                </Select.ScrollUpButton>
+                {groups.map(([key], index, groups) => (
+                    <React.Fragment key={key}>
+                        {renderMonthSeparator(key, index >= 1 ? groups[index - 1][0] : null)}
 
-                <Select.Viewport>
-                    {groups.map(([key], index, groups) => (
-                        <React.Fragment key={key}>
-                            {renderMonthSeparator(key, index >= 1 ? groups[index - 1][0] : null)}
-
-                            <Select.Item value={key}>
-                                <Select.ItemText>{renderValueForKey(key)}</Select.ItemText>
-                                <Select.ItemIndicator>
-                                    <IconCheck />
-                                </Select.ItemIndicator>
-                            </Select.Item>
-                        </React.Fragment>
-                    ))}
-                </Select.Viewport>
-
-                <Select.ScrollDownButton>
-                    <IconChevronDown />
-                </Select.ScrollDownButton>
+                        <Select.Item value={key}>
+                            <Select.ItemText>{renderValueForKey(key)}</Select.ItemText>
+                            <Select.ItemIndicator />
+                        </Select.Item>
+                    </React.Fragment>
+                ))}
             </Select.Content>
         </Select.Root>
     )

@@ -1,4 +1,6 @@
 import * as SelectPrimitives from "@radix-ui/react-select"
+import { ComponentProps } from "@stitches/react"
+import { IconCheck, IconChevronDown, IconChevronUp, IconDirection } from "@tabler/icons"
 import { styled, ThemeCSS } from "theme"
 
 const StyledTrigger = styled(SelectPrimitives.Trigger, {
@@ -113,17 +115,61 @@ const StyledScrollDownButton = styled(SelectPrimitives.ScrollDownButton, {
     ...scrollButtonStyles,
 })
 
+function WrappedContent(props: ComponentProps<typeof StyledContent>) {
+    return (
+        <StyledContent {...props}>
+            <WrappedScrollUpButton />
+
+            <StyledViewport>{props.children}</StyledViewport>
+
+            <WrappedScrollDownButton />
+        </StyledContent>
+    )
+}
+
+function WrappedIcon(props: ComponentProps<typeof StyledIcon>) {
+    return (
+        <StyledIcon {...props}>
+            <IconDirection />
+        </StyledIcon>
+    )
+}
+
+function WrappedItemIndicator(props: ComponentProps<typeof StyledItemIndicator>) {
+    return (
+        <StyledItemIndicator>
+            <IconCheck />
+        </StyledItemIndicator>
+    )
+}
+
+function WrappedScrollUpButton(props: ComponentProps<typeof StyledScrollUpButton>) {
+    return (
+        <StyledScrollUpButton {...props}>
+            <IconChevronUp />
+        </StyledScrollUpButton>
+    )
+}
+
+function WrappedScrollDownButton(props: ComponentProps<typeof StyledScrollDownButton>) {
+    return (
+        <StyledScrollDownButton {...props}>
+            <IconChevronDown />
+        </StyledScrollDownButton>
+    )
+}
+
 export const Root = SelectPrimitives.Root
 export const Trigger = StyledTrigger
 export const Value = SelectPrimitives.Value
-export const Icon = StyledIcon
-export const Content = StyledContent
+export const Icon = WrappedIcon
+export const Content = WrappedContent
 export const Viewport = StyledViewport
 export const Group = SelectPrimitives.Group
 export const Label = StyledLabel
 export const Item = StyledItem
 export const ItemText = SelectPrimitives.ItemText
-export const ItemIndicator = StyledItemIndicator
+export const ItemIndicator = WrappedItemIndicator
 export const Separator = StyledSeparator
-export const ScrollUpButton = StyledScrollUpButton
-export const ScrollDownButton = StyledScrollDownButton
+export const ScrollUpButton = WrappedScrollUpButton
+export const ScrollDownButton = WrappedScrollDownButton
