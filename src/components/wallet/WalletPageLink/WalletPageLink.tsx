@@ -17,11 +17,7 @@ export default function WalletPageLink(props: WalletPageLinkProps) {
         return <StyledMissingWallet>{formattedAddress}</StyledMissingWallet>
     }
 
-    return (
-        <StyledLink to={getWalletPageUrl({ wallet })} target="_blank">
-            {formattedAddress}
-        </StyledLink>
-    )
+    return <StyledLink to={getWalletPageUrl({ wallet })}>{formattedAddress}</StyledLink>
 }
 
 const StyledMissingWallet = styled("span", {
