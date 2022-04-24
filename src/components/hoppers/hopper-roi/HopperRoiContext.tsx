@@ -92,10 +92,10 @@ type HopperRoiMap = {
 }
 
 const INITIAL_ROI_MAP: HopperRoiMap = {
-    [Adventure.POND]: HopperRoiCalculatorError.NO_ROI,
-    [Adventure.STREAM]: HopperRoiCalculatorError.NO_ROI,
-    [Adventure.SWAMP]: HopperRoiCalculatorError.NO_ROI,
-    [Adventure.RIVER]: HopperRoiCalculatorError.NO_ROI,
-    [Adventure.FOREST]: HopperRoiCalculatorError.NO_ROI,
-    [Adventure.GREAT_LAKE]: HopperRoiCalculatorError.NO_ROI,
+    [Adventure.POND]: HopperRoiCalculatorError.BOUGHT_ZERO,
+    [Adventure.STREAM]: HopperRoiCalculatorError.BOUGHT_ZERO,
+    [Adventure.SWAMP]: HopperRoiCalculatorError.BOUGHT_ZERO,
+    [Adventure.RIVER]: HopperRoiCalculatorError.BOUGHT_ZERO,
+    [Adventure.FOREST]: HopperRoiCalculatorError.BOUGHT_ZERO,
+    [Adventure.GREAT_LAKE]: HopperRoiCalculatorError.BOUGHT_ZERO,
 }

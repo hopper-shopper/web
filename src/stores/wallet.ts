@@ -23,8 +23,19 @@ export const walletsHistoryAtom = atom(get => {
 })
 export const addWalletToHistoryAtom = atom(null, (_, set, wallet: WalletAddress) => {
     set(walletsHistoryEntriesAtom, prev => {
-        const next = new Set(prev)
-        next.add({ wallet, datetime: new Date().getTime() })
+        const next = [...prev]
+
+        let updated = false
+        for (const entry of next) {
+            if (entry.wallet === wallet) {
+                entry.datetime = new Date().getTime()
+                updated = true
+            }
+        }
+
+        if (!updated) {
+            next.push({ wallet, datetime: new Date().getTime() })
+        }
 
         return Array.from(next)
     })

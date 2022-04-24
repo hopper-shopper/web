@@ -20,6 +20,8 @@ export default function RoiInDaysRail(props: RoiInDaysRailProps) {
         }
 
         switch (roiInDays) {
+            case HopperRoiCalculatorError.BOUGHT_ZERO:
+                return 0
             case HopperRoiCalculatorError.NO_ROI:
                 return 100
             case HopperRoiCalculatorError.CANNOT_ENTER:
@@ -32,6 +34,8 @@ export default function RoiInDaysRail(props: RoiInDaysRailProps) {
         }
 
         switch (roiInDays) {
+            case HopperRoiCalculatorError.BOUGHT_ZERO:
+                return ""
             case HopperRoiCalculatorError.NO_ROI:
                 return "1000+ Days"
             case HopperRoiCalculatorError.CANNOT_ENTER:
@@ -90,16 +94,16 @@ const RoiIndicator = styled("div", {
     top: 0,
     left: 0,
     bottom: 0,
-    backgroundColor: "$gray6",
+    backgroundColor: "$gray9",
     variants: {
         best: {
             true: {
-                backgroundColor: "$teal6 !important",
+                backgroundColor: "$teal9 !important",
             },
         },
         worst: {
             true: {
-                backgroundColor: "$red6",
+                backgroundColor: "$red9",
             },
         },
     },

@@ -123,6 +123,7 @@ export default class HopperRoiCalculator {
 }
 
 export enum HopperRoiCalculatorError {
+    BOUGHT_ZERO = "BOUGHT_ZERO",
     NO_ROI = "NO_ROI",
     CANNOT_ENTER = "CANNOT_ENTER",
 }

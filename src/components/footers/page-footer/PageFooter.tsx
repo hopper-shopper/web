@@ -57,7 +57,7 @@ const Inner = styled("div", {
         flexDirection: "row",
     },
 })
-const Contribution = styled("p", {
+const Contribution = styled("div", {
     textAlign: "center",
     "@lg": {
         textAlign: "left",

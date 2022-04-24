@@ -3,8 +3,8 @@ import {
     WatchlistMarketFilter,
 } from "components/watchlist/configure-watchlist-filter/ConfigureWatchlistFilter"
 import { Hopper, HopperId } from "models/Hopper"
-import { Adventure, getRatingByAdventure } from "utils/adventures"
-import { normalize } from "utils/numbers"
+import { Adventure, getIdealAdventure, getRatingByAdventure } from "utils/adventures"
+import { hopperAdventureToAdventure } from "utils/hopper"
 import { compareNumber, FilterFn, NumberComparison } from "./_common"
 
 export function getHoppersRatingFilter(
@@ -104,5 +104,22 @@ export function getHoppersTierPermitFilter(permits: AdventureTierPermit[]): Filt
         })
     }
     filter.signature = `adventure-tier-filter-${permits.join(",")}`
+    return filter
+}
+
+export function getHoppersNotWithinIdealAdventure(): FilterFn<Hopper> {
+    const filter: FilterFn<Hopper> = hoppers => {
+        return hoppers.filter(hopper => {
+            const currentAdventure = hopperAdventureToAdventure(hopper)
+            const idealAdventure = getIdealAdventure(hopper)
+
+            if (currentAdventure === null) {
+                return false
+            }
+
+            return currentAdventure !== idealAdventure
+        })
+    }
+    filter.signature = `hopper-not-within-ideal-adventure`
     return filter
 }

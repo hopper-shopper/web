@@ -19,6 +19,7 @@ import TransfersTable from "components/transfers/transfers-table/TransfersTable"
 import EmptyText from "components/typography/empty-text/EmptyText"
 import FlyCap from "components/user/fly-cap/FlyCap"
 import UserEarnings from "components/user/user-earnings/UserEarnings"
+import NotIdealAdventuresNotice from "components/wallet/not-ideal-adventures-notice/NotIdealAdventuresNotice"
 import WalletHopperCard from "components/wallet/wallet-hopper-card/WalletHopperCard"
 import { formatWalletAddress } from "formatters/wallet"
 import { useAtomValue, useSetAtom } from "jotai"
@@ -195,15 +196,18 @@ export default function WalletPage() {
                             <EmptyText>This wallet does not have any hoppers</EmptyText>
                         )}
                         {hoppers.length > 0 && (
-                            <HoppersGrid>
-                                {hoppers.map(hopper => (
-                                    <WalletHopperCard
-                                        key={hopper.tokenId}
-                                        hopper={hopper}
-                                        listings={hopperListings}
-                                    />
-                                ))}
-                            </HoppersGrid>
+                            <>
+                                <NotIdealAdventuresNotice hoppers={hoppers} />
+                                <HoppersGrid>
+                                    {hoppers.map(hopper => (
+                                        <WalletHopperCard
+                                            key={hopper.tokenId}
+                                            hopper={hopper}
+                                            listings={hopperListings}
+                                        />
+                                    ))}
+                                </HoppersGrid>
+                            </>
                         )}
                     </Section.Root>
                 </Container>
