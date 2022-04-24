@@ -21,6 +21,7 @@ export async function fetchUserCap(filter: UserCapFilter): Promise<UserCap> {
         return Promise.resolve({
             cap: 0,
             current: 0,
+            time: 0,
         })
     }
 

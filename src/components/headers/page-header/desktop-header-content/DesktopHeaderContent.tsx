@@ -26,7 +26,10 @@ export default function DesktopHeaderContent() {
                     <Info>
                         <InfoLabel>Gas</InfoLabel>
                         <InfoValue>{formatGwei(gasGwei)}</InfoValue>
-                        <InfoExternal href="https://howmuchgas.xyz" target="_blank">
+                        <InfoExternal
+                            href="https://howmuchgas.xyz"
+                            target="_blank"
+                            onClick={() => window.plausible("Clicked Gas Collector link")}>
                             <IconExternalLink />
                         </InfoExternal>
                     </Info>

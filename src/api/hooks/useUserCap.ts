@@ -29,4 +29,5 @@ export default function useUserCap(filter: UserCapFilter): UseUserCapReturn {
 const DEFAULT_USER_CAP: UserCap = {
     cap: 0,
     current: 0,
+    time: 0,
 }

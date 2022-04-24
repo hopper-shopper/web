@@ -11,7 +11,7 @@ export default function PageFooter() {
                         size="sm"
                         content={import.meta.env.VITE_CREATOR_WALLET}
                         text="Wallet copied! Thank you :)"
-                        onClick={() => window.plausible("Owner Wallet clicked")}>
+                        onClick={() => window.plausible("Clicked Owner Wallet")}>
                         steschwa
                     </ClipboardButton>
                     <br />
@@ -26,7 +26,10 @@ export default function PageFooter() {
                         <img src="/hoppers.webp" />
                     </StyledLink>
 
-                    <StyledLink href="https://howmuchgas.xyz" target="_blank">
+                    <StyledLink
+                        href="https://howmuchgas.xyz"
+                        target="_blank"
+                        onClick={() => window.plausible("Clicked Gas Collector link")}>
                         Gas Tracker
                         <img src="/howmuchgas.png" />
                     </StyledLink>

@@ -1,6 +1,7 @@
 export type UserCap = {
     cap: number
     current: number
+    time: number
 }
 
 export type UserEarnings = {

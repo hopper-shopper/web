@@ -1,7 +1,10 @@
 import useUserCap from "api/hooks/useUserCap"
+import Flex from "components/layout/flex/Flex"
 import * as Progress from "components/progress/Progress"
+import { addSeconds } from "date-fns"
 import { formatAdventure } from "formatters/adventure"
 import { Currency, formatCurrency } from "formatters/currency"
+import { formatDateTime } from "formatters/date"
 import { WalletAddress } from "models/User"
 import { styled } from "theme"
 import { Adventure } from "utils/adventures"
@@ -20,16 +23,21 @@ export default function FlyCap(props: FlyCapProps) {
     })
 
     const userCapPercent = userCap.cap === 0 ? 0 : (userCap.current / userCap.cap) * 100
+    const userCapTime = addSeconds(new Date(), userCap.time)
 
     return (
         <StyledCap>
             <AdventureTitle>
                 {formatAdventure(adventure)}
 
-                <FlyCapSummary>
-                    {formatCurrency(userCap.current, Currency.FLY)} /{" "}
-                    {formatCurrency(userCap.cap, Currency.FLY)}
-                </FlyCapSummary>
+                <Flex direction="column" gap="none" y="end" css={{ marginLeft: "auto" }}>
+                    <FlyCapSummary>
+                        {formatCurrency(userCap.current, Currency.FLY)} /{" "}
+                        {formatCurrency(userCap.cap, Currency.FLY)}
+                    </FlyCapSummary>
+
+                    <FlyCapSummary>{formatDateTime(userCapTime)}</FlyCapSummary>
+                </Flex>
             </AdventureTitle>
             <Progress.Root>
                 <Progress.Indicator
@@ -58,7 +66,6 @@ const AdventureTitle = styled("h3", {
     alignItems: "center",
 })
 const FlyCapSummary = styled("span", {
-    marginLeft: "auto",
     whiteSpace: "nowrap",
     fontSize: "0.75rem",
     color: "$gray11",
