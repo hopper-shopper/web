@@ -1626,6 +1626,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dequal@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "dequal@npm:2.0.2"
+  checksum: 86c7a2c59f7b0797ed397c74b5fcdb744e48fc19440b70ad6ac59f57550a96b0faef3f1cfd5760ec5e6d3f7cb101f634f1f80db4e727b1dc8389bf62d977c0a0
+  languageName: node
+  linkType: hard
+
 "detect-node-es@npm:^1.1.0":
   version: 1.1.0
   resolution: "detect-node-es@npm:1.1.0"
@@ -3566,6 +3573,7 @@ __metadata:
     "@vitejs/plugin-react": ^1.0.7
     d3-scale: ^4.0.2
     date-fns: ^2.28.0
+    dequal: ^2.0.2
     jotai: ^1.6.4
     prettier: ^2.6.0
     react: ^17.0.2
