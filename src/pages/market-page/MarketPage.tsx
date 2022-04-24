@@ -11,6 +11,7 @@ import HoppersTable from "components/hoppers/hoppers-table/HoppersTable"
 import Fieldset from "components/inputs/fieldset/Fieldset"
 import Label from "components/inputs/label/Label"
 import Screen from "components/layout/screen/Screen"
+import MarketHelpDialog from "components/market/market-help-dialog/MarketHelpDialog"
 import {
     getHoppersFertilityFilter,
     getHoppersPermitFilter,
@@ -65,6 +66,10 @@ export default function MarketPage() {
                 <FloorPrice hoppers={filteredHoppers} />
             </Filter>
 
+            <HelpContainer>
+                <MarketHelpDialog />
+            </HelpContainer>
+
             <Screen bp="xl" constraint="max">
                 <Fieldset css={{ marginBottom: "2rem" }}>
                     <Label htmlFor="sort">Sort Hoppers by</Label>
@@ -110,5 +115,12 @@ const Filter = styled("div", {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "flex-start",
+    },
+})
+const HelpContainer = styled("div", {
+    display: "flex",
+    marginBottom: "1rem",
+    "@md": {
+        justifyContent: "flex-end",
     },
 })

@@ -83,7 +83,7 @@ export default function HopperTableCard(props: HopperTableCardProps) {
                     <span>{formatCurrency(hopper.listing.price, Currency.AVAX)}</span>
                 </Info>
                 <Info striped>
-                    <span>Level costs</span>
+                    <span>Level Costs</span>
                     <span>{formatCurrency(hopper.levelCosts, Currency.AVAX)}</span>
                 </Info>
                 {filter.type === HoppersTableConfigFilters.PERMIT && (
@@ -128,7 +128,7 @@ export default function HopperTableCard(props: HopperTableCardProps) {
                 )}
                 {filter.type === HoppersTableConfigFilters.FERTILITY && (
                     <Info striped>
-                        <span>Cost 50 % chance</span>
+                        <span>Cost 50 % Chance</span>
                         <span>
                             {formatCurrency(
                                 calculateLevelUpCosts(

@@ -63,7 +63,7 @@ export default function HoppersTableDesktop(props: HoppersTableProps) {
                             Price
                         </Table.SortableHeaderCell>
                         <Table.SortableHeaderCell align="right" sortBy={SortHopperBy.LEVEL_COSTS}>
-                            Level costs
+                            Level Costs
                         </Table.SortableHeaderCell>
                         {filter.type === HoppersTableConfigFilters.PERMIT && (
                             <Table.SortableHeaderCell
@@ -90,7 +90,7 @@ export default function HoppersTableDesktop(props: HoppersTableProps) {
 
                         {filter.type === HoppersTableConfigFilters.FERTILITY && (
                             <Table.HeaderCell css={{ textAlign: "right" }}>
-                                Cost 50 % chance
+                                Cost 50 % Chance
                             </Table.HeaderCell>
                         )}
 

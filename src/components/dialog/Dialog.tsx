@@ -25,6 +25,8 @@ const StyledContent = styled(DialogPrimitives.Content, {
     maxWidth: Screens.sm,
     maxHeight: "80vh",
     padding: "2rem",
+    display: "flex",
+    flexDirection: "column",
     "&:focus": {
         outline: "none",
     },
