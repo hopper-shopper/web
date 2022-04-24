@@ -66,10 +66,6 @@ export default function MarketPage() {
                 <FloorPrice hoppers={filteredHoppers} />
             </Filter>
 
-            <HelpContainer>
-                <MarketHelpDialog />
-            </HelpContainer>
-
             <Screen bp="xl" constraint="max">
                 <Fieldset css={{ marginBottom: "2rem" }}>
                     <Label htmlFor="sort">Sort Hoppers by</Label>
@@ -85,6 +81,10 @@ export default function MarketPage() {
                     />
                 </Fieldset>
             </Screen>
+
+            <HelpContainer>
+                <MarketHelpDialog />
+            </HelpContainer>
 
             <SortContext.Provider
                 value={{ active: sortBy, direction: sortDirection, update: setSortBy }}>
@@ -120,7 +120,5 @@ const Filter = styled("div", {
 const HelpContainer = styled("div", {
     display: "flex",
     marginBottom: "1rem",
-    "@md": {
-        justifyContent: "flex-end",
-    },
+    justifyContent: "flex-end",
 })

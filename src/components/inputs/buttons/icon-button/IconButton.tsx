@@ -1,6 +1,7 @@
 import { styled } from "theme"
 
 const IconButton = styled("button", {
+    all: "unset",
     backgroundColor: "$gray3",
     color: "$gray11",
     borderRadius: "50%",
