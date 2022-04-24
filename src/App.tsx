@@ -1,5 +1,6 @@
 import useGasUpdater from "api/hooks/useGasUpdater"
 import usePricesUpdater from "api/hooks/usePricesUpdater"
+import PageFooter from "components/footers/page-footer/PageFooter"
 import PageHeader from "components/headers/page-header/PageHeader"
 import useApplyDarkMode from "hooks/useApplyDarkMode"
 import InspectPage from "pages/inspect-page/InspectPage"
@@ -34,6 +35,9 @@ function App() {
 
 export default App
 
+const Main = styled("main", {
+    minHeight: "100vh",
+})
 const Container = styled("div", {
     padding: "1rem",
     "@md": {
@@ -50,10 +54,13 @@ const globalStyles = globalCss({
 function Layout() {
     return (
         <>
-            <PageHeader />
-            <Container>
-                <Outlet />
-            </Container>
+            <Main>
+                <PageHeader />
+                <Container>
+                    <Outlet />
+                </Container>
+            </Main>
+            <PageFooter />
         </>
     )
 }
