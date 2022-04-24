@@ -1,9 +1,11 @@
+import { IconX } from "@tabler/icons"
 import { SoldFilter } from "api/filters/market"
 import { TransferDirection } from "api/filters/transfers"
 import useHoppersListings from "api/hooks/useHoppersListings"
 import useTransfers from "api/hooks/useTransfers"
 import useWalletHoppers from "api/hooks/useWalletHoppers"
 import Button from "components/inputs/buttons/button/Button"
+import IconButton from "components/inputs/buttons/icon-button/IconButton"
 import Fieldset from "components/inputs/fieldset/Fieldset"
 import InputForm from "components/inputs/input-form/InputForm"
 import Input from "components/inputs/input/Input"
@@ -18,8 +20,16 @@ import EmptyText from "components/typography/empty-text/EmptyText"
 import FlyCap from "components/user/fly-cap/FlyCap"
 import UserEarnings from "components/user/user-earnings/UserEarnings"
 import WalletHopperCard from "components/wallet/wallet-hopper-card/WalletHopperCard"
+import { formatWalletAddress } from "formatters/wallet"
+import { useAtomValue, useSetAtom } from "jotai"
 import { Transfer } from "models/Transfer"
+import { WalletAddress } from "models/User"
 import { useState } from "react"
+import {
+    addWalletToHistoryAtom,
+    removeWalletFromHistoryAtom,
+    walletsHistoryAtom,
+} from "stores/wallet"
 import { Screens, styled } from "theme"
 import { Adventure } from "utils/adventures"
 import { hopperAdventureToAdventure } from "utils/hopper"
@@ -29,6 +39,10 @@ import useWalletPageState from "./useWalletPageState"
 export default function WalletPage() {
     const [state, setState] = useWalletPageState()
     const [selectedTransfers, setSelectedTransfers] = useState<Transfer[]>([])
+
+    const walletsHistory = useAtomValue(walletsHistoryAtom)
+    const addWalletToHistory = useSetAtom(addWalletToHistoryAtom)
+    const removeWalletFromHistory = useSetAtom(removeWalletFromHistoryAtom)
 
     const { hoppers } = useWalletHoppers(state.wallet)
     const {
@@ -67,7 +81,11 @@ export default function WalletPage() {
             return
         }
 
-        setState({ wallet: walletAddress.toString() })
+        setWallet(walletAddress.toString())
+        addWalletToHistory(walletAddress.toString())
+    }
+    const setWallet = (wallet: WalletAddress) => {
+        setState({ wallet })
         setSelectedTransfers([])
     }
 
@@ -79,7 +97,7 @@ export default function WalletPage() {
 
     return (
         <>
-            <InputForm css={{ maxWidth: Screens.sm }} onSubmit={handleWalletSubmit}>
+            <InputForm onSubmit={handleWalletSubmit} css={{ maxWidth: Screens.sm }}>
                 <Fieldset css={{ flex: 1 }}>
                     <Label htmlFor="wallet-address">Your Wallet address</Label>
                     <Input
@@ -93,6 +111,27 @@ export default function WalletPage() {
 
                 <Button type="submit">Load</Button>
             </InputForm>
+
+            {walletsHistory.length > 0 && !state.wallet && (
+                <Flex
+                    direction="column"
+                    y="stretch"
+                    css={{ maxWidth: Screens.sm, mx: "auto", mt: "2rem" }}>
+                    <PrevWalletTitle>Previous searches</PrevWalletTitle>
+                    {walletsHistory.slice(0, 3).map(prevWallet => (
+                        <PrevWalletItem key={prevWallet}>
+                            <PrevWalletAddress onClick={() => setWallet(prevWallet)}>
+                                {formatWalletAddress(prevWallet)}
+                            </PrevWalletAddress>
+                            <IconButton
+                                size="sm"
+                                onClick={() => removeWalletFromHistory(prevWallet)}>
+                                <IconX />
+                            </IconButton>
+                        </PrevWalletItem>
+                    ))}
+                </Flex>
+            )}
 
             {!state.wallet && (
                 <EmptyText align="center" padding="md">
@@ -174,6 +213,27 @@ export default function WalletPage() {
 }
 
 // Components
+const PrevWalletTitle = styled("h3", {
+    fontSize: "1rem",
+    color: "$gray12",
+    fontWeight: 400,
+})
+const PrevWalletItem = styled("div", {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: "0.25rem 0.5rem",
+})
+const PrevWalletAddress = styled("span", {
+    color: "$gray11",
+    fontSize: "0.875rem",
+    padding: "0.25rem 0.5rem",
+    borderRadius: "$md",
+    cursor: "default",
+    "&:hover": {
+        backgroundColor: "$gray3",
+    },
+})
 const Container = styled("div", {
     maxWidth: Screens.lg,
     margin: "5rem auto",

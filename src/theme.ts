@@ -62,6 +62,20 @@ export const {
             paddingTop: padding,
             paddingBottom: padding,
         }),
+        mx: (margin: PropertyValue<"marginLeft">) => ({
+            marginLeft: margin,
+            marginRight: margin,
+        }),
+        my: (margin: PropertyValue<"marginTop">) => ({
+            marginTop: margin,
+            marginBottom: margin,
+        }),
+        mt: (margin: PropertyValue<"marginTop">) => ({
+            marginTop: margin,
+        }),
+        mb: (margin: PropertyValue<"marginBottom">) => ({
+            marginBottom: margin,
+        }),
     },
 })
 

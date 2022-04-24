@@ -47,7 +47,9 @@ export default function TransfersTable(props: TransfersTableProps) {
 
             <tbody>
                 {sortedTransfers.map((transfer, index) => (
-                    <Table.Row key={transfer.timestamp} striped={index % 2 === 1}>
+                    <Table.Row
+                        key={`${transfer.timestamp}-${transfer.amount}`}
+                        striped={index % 2 === 1}>
                         <Screen bp="md" constraint="max">
                             <Table.Cell align="left">
                                 <p>{formatDateTime(transfer.timestamp)}</p>
