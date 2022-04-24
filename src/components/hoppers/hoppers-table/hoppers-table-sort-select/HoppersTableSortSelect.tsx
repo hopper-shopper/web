@@ -133,7 +133,7 @@ function formatSortable(sortable: Sortable): string {
         case Sortable.PRICE:
             return "Price"
         case Sortable.LEVEL_COSTS:
-            return "Level costs"
+            return "Level Costs"
         case Sortable.RATING:
             return "Rating"
         case Sortable.MAX_PRICE_PERMIT:
@@ -141,7 +141,7 @@ function formatSortable(sortable: Sortable): string {
         case Sortable.MAX_PRICE_FERTILITY:
             return "Max. Price Fertility"
         case Sortable.BASE_FLY:
-            return "Base FLY / level"
+            return "Base FLY / Level"
     }
 }
 
