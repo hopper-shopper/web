@@ -22,10 +22,13 @@ import UserEarnings from "components/user/user-earnings/UserEarnings"
 import NotIdealAdventuresNotice from "components/wallet/not-ideal-adventures-notice/NotIdealAdventuresNotice"
 import WalletHopperCard from "components/wallet/wallet-hopper-card/WalletHopperCard"
 import { formatWalletAddress } from "formatters/wallet"
+import useSort from "hooks/useSort"
 import { useAtomValue, useSetAtom } from "jotai"
 import { Transfer } from "models/Transfer"
 import { WalletAddress } from "models/User"
-import { useState } from "react"
+import { useMemo, useState } from "react"
+import { SortAdventureBy, sortAdventures } from "sorters/adventures"
+import { SortDirection } from "sorters/_common"
 import {
     addWalletToHistoryAtom,
     removeWalletFromHistoryAtom,
@@ -92,9 +95,20 @@ export default function WalletPage() {
 
     const combinedTransfers = [...inTransfers, ...outTransfers]
 
-    const adventuresOfStakedHoppers = new Set(
-        hoppers.map(hopperAdventureToAdventure).filter(Boolean) as Adventure[],
-    )
+    const adventuresOfStakedHoppers = useMemo(() => {
+        return Array.from(
+            new Set(hoppers.map(hopperAdventureToAdventure).filter(Boolean) as Adventure[]),
+        )
+    }, [hoppers])
+
+    const { sorted: sortedAdventuresOfStakedHoppers } = useSort({
+        collection: adventuresOfStakedHoppers,
+        sorter: sortAdventures,
+        initial: {
+            by: SortAdventureBy.RANK,
+            direction: SortDirection.ASC,
+        },
+    })
 
     return (
         <>
@@ -141,12 +155,12 @@ export default function WalletPage() {
             )}
             {state.wallet && (
                 <Container>
-                    {adventuresOfStakedHoppers.size > 0 && state.wallet && (
+                    {sortedAdventuresOfStakedHoppers.length > 0 && state.wallet && (
                         <>
                             <Section.Root>
                                 <Section.Title>FLY cap</Section.Title>
                                 <Grid gap="md">
-                                    {Array.from(adventuresOfStakedHoppers).map(adventure => (
+                                    {sortedAdventuresOfStakedHoppers.map(adventure => (
                                         <FlyCap
                                             key={adventure}
                                             user={state.wallet}
@@ -159,7 +173,7 @@ export default function WalletPage() {
                             <Section.Root>
                                 <Section.Title>Estimated earnings / Day</Section.Title>
                                 <EarningsGrid>
-                                    {Array.from(adventuresOfStakedHoppers).map(adventure => (
+                                    {sortedAdventuresOfStakedHoppers.map(adventure => (
                                         <UserEarnings
                                             key={adventure}
                                             user={state.wallet}
