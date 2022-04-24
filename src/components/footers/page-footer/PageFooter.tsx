@@ -10,7 +10,8 @@ export default function PageFooter() {
                     <ClipboardButton
                         size="sm"
                         content={import.meta.env.VITE_CREATOR_WALLET}
-                        text="Wallet copied! Thank you :)">
+                        text="Wallet copied! Thank you :)"
+                        onClick={() => window.plausible("Owner Wallet clicked")}>
                         steschwa
                     </ClipboardButton>
                     <br />
