@@ -8,7 +8,12 @@ import {
     HoppersTableAnyFilter,
     HoppersTableConfigFilters,
 } from "../hoppers-table-filter/HoppersTableFilter"
-import { BaseFlySortPreset, MaxPriceSortPreset, RatingSortPreset } from "../hoppersTable.utils"
+import {
+    BaseFlyPerLevelSortPreset,
+    BaseFlySortPreset,
+    MaxPriceSortPreset,
+    RatingSortPreset,
+} from "../hoppersTable.utils"
 
 type HoppersTableSortSelectProps = {
     id?: string
@@ -88,6 +93,7 @@ enum Sortable {
     PRICE = "PRICE",
     MAX_PRICE_PERMIT = "MAX_PRICE_PERMIT",
     MAX_PRICE_FERTILITY = "MAX_PRICE_FERTILITY",
+    BASE_FLY_LEVEL = "BASE_FLY_LEVEL",
     BASE_FLY = "BASE_FLY",
 }
 
@@ -108,6 +114,7 @@ const PERMIT_FILTER_SORTABLES: Sortable[] = [
     ...BASE_SORTABLES,
     Sortable.RATING,
     Sortable.MAX_PRICE_PERMIT,
+    Sortable.BASE_FLY_LEVEL,
     Sortable.BASE_FLY,
 ]
 
@@ -140,8 +147,10 @@ function formatSortable(sortable: Sortable): string {
             return "Max. Price"
         case Sortable.MAX_PRICE_FERTILITY:
             return "Max. Price Fertility"
-        case Sortable.BASE_FLY:
+        case Sortable.BASE_FLY_LEVEL:
             return "Base FLY / Level"
+        case Sortable.BASE_FLY:
+            return "Base FLY"
     }
 }
 
@@ -201,6 +210,18 @@ function convertToSortable(sortHopperBy: SortHopperBy): Sortable {
             return Sortable.MAX_PRICE_PERMIT
         case SortHopperBy.MAX_PRICE_FERTILITY:
             return Sortable.MAX_PRICE_FERTILITY
+        case SortHopperBy.BASE_FLY_LEVEL_POND:
+            return Sortable.BASE_FLY_LEVEL
+        case SortHopperBy.BASE_FLY_LEVEL_STREAM:
+            return Sortable.BASE_FLY_LEVEL
+        case SortHopperBy.BASE_FLY_LEVEL_SWAMP:
+            return Sortable.BASE_FLY_LEVEL
+        case SortHopperBy.BASE_FLY_LEVEL_RIVER:
+            return Sortable.BASE_FLY_LEVEL
+        case SortHopperBy.BASE_FLY_LEVEL_FOREST:
+            return Sortable.BASE_FLY_LEVEL
+        case SortHopperBy.BASE_FLY_LEVEL_GREAT_LAKE:
+            return Sortable.BASE_FLY_LEVEL
         case SortHopperBy.BASE_FLY_POND:
             return Sortable.BASE_FLY
         case SortHopperBy.BASE_FLY_STREAM:
@@ -250,6 +271,12 @@ function convertToSortByHopper(sortable: Sortable, filter: HoppersTableAnyFilter
         }
         case Sortable.MAX_PRICE_FERTILITY:
             return SortHopperBy.MAX_PRICE_FERTILITY
+        case Sortable.BASE_FLY_LEVEL: {
+            if (filter.type === HoppersTableConfigFilters.PERMIT) {
+                return BaseFlyPerLevelSortPreset[filter.permit]
+            }
+            return SortHopperBy.TOKEN_ID
+        }
         case Sortable.BASE_FLY: {
             if (filter.type === HoppersTableConfigFilters.PERMIT) {
                 return BaseFlySortPreset[filter.permit]

@@ -26,6 +26,14 @@ export const MaxPriceSortPreset: SortPresetByAdventure = {
     [Adventure.FOREST]: SortHopperBy.MAX_PRICE_FOREST,
     [Adventure.GREAT_LAKE]: SortHopperBy.MAX_PRICE_GREAT_LAKE,
 }
+export const BaseFlyPerLevelSortPreset: SortPresetByAdventure = {
+    [Adventure.POND]: SortHopperBy.BASE_FLY_LEVEL_POND,
+    [Adventure.STREAM]: SortHopperBy.BASE_FLY_LEVEL_STREAM,
+    [Adventure.SWAMP]: SortHopperBy.BASE_FLY_LEVEL_SWAMP,
+    [Adventure.RIVER]: SortHopperBy.BASE_FLY_LEVEL_RIVER,
+    [Adventure.FOREST]: SortHopperBy.BASE_FLY_LEVEL_FOREST,
+    [Adventure.GREAT_LAKE]: SortHopperBy.BASE_FLY_LEVEL_GREAT_LAKE,
+}
 export const BaseFlySortPreset: SortPresetByAdventure = {
     [Adventure.POND]: SortHopperBy.BASE_FLY_POND,
     [Adventure.STREAM]: SortHopperBy.BASE_FLY_STREAM,

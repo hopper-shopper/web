@@ -3,7 +3,12 @@ import { TableVirtuoso } from "react-virtuoso"
 import { SortHopperBy } from "sorters/hoppers"
 import { HoppersTableConfigFilters } from "../hoppers-table-filter/HoppersTableFilter"
 import { HoppersTableProps } from "../HoppersTable"
-import { BaseFlySortPreset, MaxPriceSortPreset, RatingSortPreset } from "../hoppersTable.utils"
+import {
+    BaseFlyPerLevelSortPreset,
+    BaseFlySortPreset,
+    MaxPriceSortPreset,
+    RatingSortPreset,
+} from "../hoppersTable.utils"
 import HopperRow from "./hopper-row/HopperRow"
 
 export default function HoppersTableDesktop(props: HoppersTableProps) {
@@ -22,40 +27,42 @@ export default function HoppersTableDesktop(props: HoppersTableProps) {
                     <Table.Row>
                         <Table.HeaderCell css={{ width: 90 }}>Image</Table.HeaderCell>
                         <Table.SortableHeaderCell
-                            css={{ width: 120 }}
+                            css={{ width: 100 }}
                             sortBy={SortHopperBy.TOKEN_ID}>
-                            Hopper-ID
+                            ID
                         </Table.SortableHeaderCell>
-                        <Table.SortableHeaderCell css={{ width: 100 }} sortBy={SortHopperBy.LEVEL}>
+                        <Table.SortableHeaderCell css={{ width: 80 }} sortBy={SortHopperBy.LEVEL}>
                             Level
                         </Table.SortableHeaderCell>
                         <Table.SortableHeaderCell
-                            css={{ width: 135 }}
+                            css={{ width: 100 }}
                             sortBy={SortHopperBy.STRENGTH}>
                             Strength
                         </Table.SortableHeaderCell>
                         <Table.SortableHeaderCell
-                            css={{ width: 135 }}
+                            css={{ width: 100 }}
                             sortBy={SortHopperBy.AGILITY}>
                             Agility
                         </Table.SortableHeaderCell>
                         <Table.SortableHeaderCell
-                            css={{ width: 135 }}
+                            css={{ width: 100 }}
                             sortBy={SortHopperBy.VITALITY}>
                             Vitality
                         </Table.SortableHeaderCell>
                         <Table.SortableHeaderCell
-                            css={{ width: 135 }}
+                            css={{ width: 100 }}
                             sortBy={SortHopperBy.INTELLIGENCE}>
                             Intelligence
                         </Table.SortableHeaderCell>
                         <Table.SortableHeaderCell
-                            css={{ width: 135 }}
+                            css={{ width: 100 }}
                             sortBy={SortHopperBy.FERTILITY}>
                             Fertility
                         </Table.SortableHeaderCell>
                         {filter.type === HoppersTableConfigFilters.PERMIT && (
-                            <Table.SortableHeaderCell sortBy={RatingSortPreset[filter.permit]}>
+                            <Table.SortableHeaderCell
+                                sortBy={RatingSortPreset[filter.permit]}
+                                css={{ width: 100 }}>
                                 Rating
                             </Table.SortableHeaderCell>
                         )}
@@ -81,11 +88,18 @@ export default function HoppersTableDesktop(props: HoppersTableProps) {
                         )}
 
                         {filter.type === HoppersTableConfigFilters.PERMIT && (
-                            <Table.SortableHeaderCell
-                                align="right"
-                                sortBy={BaseFlySortPreset[filter.permit]}>
-                                Base Fly / Level
-                            </Table.SortableHeaderCell>
+                            <>
+                                <Table.SortableHeaderCell
+                                    align="right"
+                                    sortBy={BaseFlyPerLevelSortPreset[filter.permit]}>
+                                    Base FLY / Level
+                                </Table.SortableHeaderCell>
+                                <Table.SortableHeaderCell
+                                    align="right"
+                                    sortBy={BaseFlySortPreset[filter.permit]}>
+                                    Base FLY
+                                </Table.SortableHeaderCell>
+                            </>
                         )}
 
                         {filter.type === HoppersTableConfigFilters.FERTILITY && (
@@ -94,7 +108,7 @@ export default function HoppersTableDesktop(props: HoppersTableProps) {
                             </Table.HeaderCell>
                         )}
 
-                        <Table.HeaderCell css={{ width: 80 }} />
+                        <Table.HeaderCell css={{ width: 60 }} />
                     </Table.Row>
                 )
             }}

@@ -23,7 +23,7 @@ export default function FlyCap(props: FlyCapProps) {
     })
 
     const userCapPercent = userCap.cap === 0 ? 0 : (userCap.current / userCap.cap) * 100
-    const userCapTime = addSeconds(new Date(), userCap.time)
+    const userCapTime = userCap.time > 0 ? addSeconds(new Date(), userCap.time) : null
 
     return (
         <StyledCap>
@@ -36,7 +36,9 @@ export default function FlyCap(props: FlyCapProps) {
                         {formatCurrency(userCap.cap, Currency.FLY)}
                     </FlyCapSummary>
 
-                    <FlyCapSummary>{formatDateTime(userCapTime)}</FlyCapSummary>
+                    {userCapTime !== null && (
+                        <FlyCapSummary>~ {formatDateTime(userCapTime)}</FlyCapSummary>
+                    )}
                 </Flex>
             </AdventureTitle>
             <Progress.Root>

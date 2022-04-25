@@ -1,5 +1,5 @@
 import { Hopper } from "models/Hopper"
-import { Adventure, calculateMaxRatingPrice } from "utils/adventures"
+import { Adventure, calculateMaxRatingPrice, getEarningsByAdventure } from "utils/adventures"
 import { calculateMaxFertilityRatingPrice } from "utils/fertility"
 import { SortDirection, SortOptions } from "./_common"
 
@@ -26,6 +26,12 @@ export enum SortHopperBy {
     MAX_PRICE_FOREST = "MAX_PRICE_FOREST",
     MAX_PRICE_GREAT_LAKE = "MAX_PRICE_GREAT_LAKE",
     MAX_PRICE_FERTILITY = "MAX_PRICE_FERTILITY",
+    BASE_FLY_LEVEL_POND = "BASE_FLY_LEVEL_POND",
+    BASE_FLY_LEVEL_STREAM = "BASE_FLY_LEVEL_STREAM",
+    BASE_FLY_LEVEL_SWAMP = "BASE_FLY_LEVEL_SWAMP",
+    BASE_FLY_LEVEL_RIVER = "BASE_FLY_LEVEL_RIVER",
+    BASE_FLY_LEVEL_FOREST = "BASE_FLY_LEVEL_FOREST",
+    BASE_FLY_LEVEL_GREAT_LAKE = "BASE_FLY_LEVEL_GREAT_LAKE",
     BASE_FLY_POND = "BASE_FLY_POND",
     BASE_FLY_STREAM = "BASE_FLY_STREAM",
     BASE_FLY_SWAMP = "BASE_FLY_SWAMP",
@@ -107,6 +113,24 @@ export function sortHoppers(hoppers: Hopper[], options: HopperSortOptions): Hopp
             break
         case SortHopperBy.MAX_PRICE_FERTILITY:
             sorted = sortByMaxPriceFertility(hoppers)
+            break
+        case SortHopperBy.BASE_FLY_LEVEL_POND:
+            sorted = sortByBaseFlyPerLevelPond(hoppers)
+            break
+        case SortHopperBy.BASE_FLY_LEVEL_STREAM:
+            sorted = sortByBaseFlyPerLevelStream(hoppers)
+            break
+        case SortHopperBy.BASE_FLY_LEVEL_SWAMP:
+            sorted = sortByBaseFlyPerLevelSwamp(hoppers)
+            break
+        case SortHopperBy.BASE_FLY_LEVEL_RIVER:
+            sorted = sortByBaseFlyPerLevelRiver(hoppers)
+            break
+        case SortHopperBy.BASE_FLY_LEVEL_FOREST:
+            sorted = sortByBaseFlyPerLevelForest(hoppers)
+            break
+        case SortHopperBy.BASE_FLY_LEVEL_GREAT_LAKE:
+            sorted = sortByBaseFlyPerLevelGreatLake(hoppers)
             break
         case SortHopperBy.BASE_FLY_POND:
             sorted = sortByBaseFlyPond(hoppers)
@@ -227,33 +251,76 @@ function sortByMaxPriceFertility(hoppers: Hopper[]): Hopper[] {
         (a, b) => calculateMaxFertilityRatingPrice(a) - calculateMaxFertilityRatingPrice(b),
     )
 }
-function sortByBaseFlyPond(hoppers: Hopper[]): Hopper[] {
+function sortByBaseFlyPerLevelPond(hoppers: Hopper[]): Hopper[] {
     return [...hoppers].sort((a, b) => {
         return a.baseFly.pond - b.baseFly.pond
     })
 }
-function sortByBaseFlyStream(hoppers: Hopper[]): Hopper[] {
+function sortByBaseFlyPerLevelStream(hoppers: Hopper[]): Hopper[] {
     return [...hoppers].sort((a, b) => {
         return a.baseFly.stream - b.baseFly.stream
     })
 }
-function sortByBaseFlySwamp(hoppers: Hopper[]): Hopper[] {
+function sortByBaseFlyPerLevelSwamp(hoppers: Hopper[]): Hopper[] {
     return [...hoppers].sort((a, b) => {
         return a.baseFly.swamp - b.baseFly.swamp
     })
 }
-function sortByBaseFlyRiver(hoppers: Hopper[]): Hopper[] {
+function sortByBaseFlyPerLevelRiver(hoppers: Hopper[]): Hopper[] {
     return [...hoppers].sort((a, b) => {
         return a.baseFly.river - b.baseFly.river
     })
 }
-function sortByBaseFlyForest(hoppers: Hopper[]): Hopper[] {
+function sortByBaseFlyPerLevelForest(hoppers: Hopper[]): Hopper[] {
     return [...hoppers].sort((a, b) => {
         return a.baseFly.forest - b.baseFly.forest
     })
 }
-function sortByBaseFlyGreatLake(hoppers: Hopper[]): Hopper[] {
+function sortByBaseFlyPerLevelGreatLake(hoppers: Hopper[]): Hopper[] {
     return [...hoppers].sort((a, b) => {
         return a.baseFly.greatLake - b.baseFly.greatLake
+    })
+}
+function sortByBaseFlyPond(hoppers: Hopper[]): Hopper[] {
+    return [...hoppers].sort((a, b) => {
+        return getEarningsByAdventure(Adventure.POND, a) - getEarningsByAdventure(Adventure.POND, b)
+    })
+}
+function sortByBaseFlyStream(hoppers: Hopper[]): Hopper[] {
+    return [...hoppers].sort((a, b) => {
+        return (
+            getEarningsByAdventure(Adventure.STREAM, a) -
+            getEarningsByAdventure(Adventure.STREAM, b)
+        )
+    })
+}
+function sortByBaseFlySwamp(hoppers: Hopper[]): Hopper[] {
+    return [...hoppers].sort((a, b) => {
+        return (
+            getEarningsByAdventure(Adventure.SWAMP, a) - getEarningsByAdventure(Adventure.SWAMP, b)
+        )
+    })
+}
+function sortByBaseFlyRiver(hoppers: Hopper[]): Hopper[] {
+    return [...hoppers].sort((a, b) => {
+        return (
+            getEarningsByAdventure(Adventure.RIVER, a) - getEarningsByAdventure(Adventure.RIVER, b)
+        )
+    })
+}
+function sortByBaseFlyForest(hoppers: Hopper[]): Hopper[] {
+    return [...hoppers].sort((a, b) => {
+        return (
+            getEarningsByAdventure(Adventure.FOREST, a) -
+            getEarningsByAdventure(Adventure.FOREST, b)
+        )
+    })
+}
+function sortByBaseFlyGreatLake(hoppers: Hopper[]): Hopper[] {
+    return [...hoppers].sort((a, b) => {
+        return (
+            getEarningsByAdventure(Adventure.GREAT_LAKE, a) -
+            getEarningsByAdventure(Adventure.GREAT_LAKE, b)
+        )
     })
 }

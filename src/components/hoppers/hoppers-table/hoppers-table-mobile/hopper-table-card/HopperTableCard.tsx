@@ -14,6 +14,7 @@ import { styled } from "theme"
 import {
     calculateMaxRatingPrice,
     getBaseFlyByAdventure,
+    getEarningsByAdventure,
     getRatingByAdventure,
 } from "utils/adventures"
 import {
@@ -104,15 +105,26 @@ export default function HopperTableCard(props: HopperTableCardProps) {
                     </Info>
                 )}
                 {filter.type === HoppersTableConfigFilters.PERMIT && (
-                    <Info>
-                        <span>Base FLY / level</span>
-                        <span>
-                            {formatCurrency(
-                                getBaseFlyByAdventure(filter.permit, hopper),
-                                Currency.FLY,
-                            )}
-                        </span>
-                    </Info>
+                    <>
+                        <Info>
+                            <span>Base FLY / level</span>
+                            <span>
+                                {formatCurrency(
+                                    getBaseFlyByAdventure(filter.permit, hopper),
+                                    Currency.FLY,
+                                )}
+                            </span>
+                        </Info>
+                        <Info>
+                            <span>Base FLY</span>
+                            <span>
+                                {formatCurrency(
+                                    getEarningsByAdventure(filter.permit, hopper),
+                                    Currency.FLY,
+                                )}
+                            </span>
+                        </Info>
+                    </>
                 )}
 
                 {filter.type === HoppersTableConfigFilters.FERTILITY && (

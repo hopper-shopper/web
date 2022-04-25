@@ -8,6 +8,7 @@ import { styled } from "theme"
 import {
     calculateMaxRatingPrice,
     getBaseFlyByAdventure,
+    getEarningsByAdventure,
     getRatingByAdventure,
 } from "utils/adventures"
 import {
@@ -44,27 +45,27 @@ export default function HopperRow(props: HopperRowProps) {
             </Cell>
             <Cell align="center">{hopper.tokenId}</Cell>
             <Cell align="center">{hopper.level}</Cell>
-            <Cell align="center">
+            <Cell align="center" css={{ px: "0.5rem" }}>
                 <Value style={{ backgroundColor: HOPPER_STATS_SCALE(hopper.strength) }}>
                     {hopper.strength}
                 </Value>
             </Cell>
-            <Cell align="center">
+            <Cell align="center" css={{ px: "0.5rem" }}>
                 <Value style={{ backgroundColor: HOPPER_STATS_SCALE(hopper.agility) }}>
                     {hopper.agility}
                 </Value>
             </Cell>
-            <Cell align="center">
+            <Cell align="center" css={{ px: "0.5rem" }}>
                 <Value style={{ backgroundColor: HOPPER_STATS_SCALE(hopper.vitality) }}>
                     {hopper.vitality}
                 </Value>
             </Cell>
-            <Cell align="center">
+            <Cell align="center" css={{ px: "0.5rem" }}>
                 <Value style={{ backgroundColor: HOPPER_STATS_SCALE(hopper.intelligence) }}>
                     {hopper.intelligence}
                 </Value>
             </Cell>
-            <Cell align="center">
+            <Cell align="center" css={{ px: "0.5rem" }}>
                 <Value style={{ backgroundColor: HOPPER_STATS_SCALE(hopper.fertility) }}>
                     {hopper.fertility}
                 </Value>
@@ -88,9 +89,17 @@ export default function HopperRow(props: HopperRowProps) {
                 </Cell>
             )}
             {filter.type === HoppersTableConfigFilters.PERMIT && (
-                <Cell align="right">
-                    {formatCurrency(getBaseFlyByAdventure(filter.permit, hopper), Currency.FLY)}
-                </Cell>
+                <>
+                    <Cell align="right">
+                        {formatCurrency(getBaseFlyByAdventure(filter.permit, hopper), Currency.FLY)}
+                    </Cell>
+                    <Cell align="right">
+                        {formatCurrency(
+                            getEarningsByAdventure(filter.permit, hopper),
+                            Currency.FLY,
+                        )}
+                    </Cell>
+                </>
             )}
 
             {filter.type === HoppersTableConfigFilters.FERTILITY && (
@@ -123,7 +132,7 @@ const Image = styled("img", {
 })
 const Value = styled("div", {
     display: "inline-flex",
-    width: 100,
+    width: "100%",
     borderRadius: "$md",
     alignItems: "center",
     justifyContent: "center",
