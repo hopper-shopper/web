@@ -22,6 +22,7 @@ export default function HoppersTableDesktop(props: HoppersTableProps) {
                 Table: ({ style, ...props }) => <Table.Root {...props} style={style} />,
                 TableRow: props => <Table.Row striped={props["data-index"] % 2 === 1} {...props} />,
             }}
+            style={{ marginBottom: TABLE_HEADER_HEIGHT }}
             fixedHeaderContent={() => {
                 return (
                     <Table.Row>
@@ -118,3 +119,5 @@ export default function HoppersTableDesktop(props: HoppersTableProps) {
         />
     )
 }
+
+const TABLE_HEADER_HEIGHT = 42
