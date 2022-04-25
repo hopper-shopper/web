@@ -6,18 +6,12 @@ export default function PageFooter() {
         <Container>
             <Inner>
                 <Contribution>
-                    <Text>Hopper Shopper made by </Text>
-                    <ClipboardButton
-                        size="sm"
-                        content={import.meta.env.VITE_CREATOR_WALLET}
-                        text="Wallet copied! Thank you :)"
-                        onClick={() => window.plausible("Clicked Owner Wallet")}>
-                        steschwa
-                    </ClipboardButton>
+                    <Text>
+                        Hopper Shopper made by <Author>steschwa#3314</Author>
+                    </Text>
+
                     <br />
-                    <FeatureIdea>
-                        Want so send feedback or feature ideas? Contact me on Discord!
-                    </FeatureIdea>
+                    <Sub>Want so send feedback or feature ideas? Contact me on Discord!</Sub>
                 </Contribution>
 
                 <Links>
@@ -71,7 +65,11 @@ const Text = styled("span", {
     color: "$gray12",
     fontSize: "1rem",
 })
-const FeatureIdea = styled("p", {
+const Author = styled("span", {
+    color: "$blue11",
+    fontSize: "1rem",
+})
+const Sub = styled("p", {
     color: "$gray11",
     fontSize: "0.75rem",
     marginTop: "1rem",
