@@ -54,6 +54,7 @@ export default function FlyCap(props: FlyCapProps) {
 const StyledCap = styled("div", {
     display: "grid",
     rowGap: "0.5rem",
+    height: "2.5rem",
     "@md": {
         gridTemplateColumns: "300px 1fr",
         alignItems: "center",

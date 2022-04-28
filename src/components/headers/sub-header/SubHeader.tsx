@@ -9,6 +9,9 @@ const SubHeader = styled("div", {
     "@md": {
         marginTop: "-2rem",
         mx: "-2rem",
+        padding: "1rem 2rem",
+    },
+    "@lg": {
         padding: "2rem",
     },
 })

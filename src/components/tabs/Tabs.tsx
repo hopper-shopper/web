@@ -29,6 +29,7 @@ const StyledTab = styled("button", {
     padding: "0 1rem",
     borderRadius: "$md",
     fontSize: "1rem",
+    flex: 1,
     variants: {
         active: {
             true: {
