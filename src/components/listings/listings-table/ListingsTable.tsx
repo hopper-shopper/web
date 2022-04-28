@@ -1,6 +1,6 @@
 import Screen from "components/layout/screen/Screen"
 import * as Table from "components/table/Table"
-import WalletPageLink from "components/wallet/WalletPageLink/WalletPageLink"
+import WalletPageLink from "components/wallet/wallet-page-link/WalletPageLink"
 import { Currency, formatCurrency } from "formatters/currency"
 import { formatDateTime } from "formatters/date"
 import useSort from "hooks/useSort"
