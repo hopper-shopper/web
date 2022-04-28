@@ -8,14 +8,17 @@ import { styled } from "theme"
 type WalletNavigationContentProps = {
     wallet: WalletAddress
     onClear: () => void
+
+    view: WalletNavigationView
+    onViewChange: (view: WalletNavigationView) => void
 }
 
 export default function WalletNavigationContent(props: WalletNavigationContentProps) {
-    const { wallet, onClear } = props
+    const { wallet, onClear, view, onViewChange } = props
 
     return (
         <SubHeader>
-            <Flex x="between">
+            <Flex x="between" y="end">
                 <Flex gap="md" y="end">
                     <div>
                         <StyledLabel>Selected wallet</StyledLabel>
@@ -26,14 +29,24 @@ export default function WalletNavigationContent(props: WalletNavigationContentPr
                     </Button>
                 </Flex>
 
-                <Tabs.Root defaultValue="gameplay">
-                    <Tabs.Tab value="gameplay">Gameplay</Tabs.Tab>
-                    <Tabs.Tab value="analytics">Analytics</Tabs.Tab>
+                <Tabs.Root
+                    value={view}
+                    onValueChange={value => onViewChange(value as WalletNavigationView)}>
+                    <Tabs.Tab value={WalletNavigationView.GAMEPLAY}>Gameplay</Tabs.Tab>
+                    <Tabs.Tab value={WalletNavigationView.ANALYTICS}>Analytics</Tabs.Tab>
                 </Tabs.Root>
             </Flex>
         </SubHeader>
     )
 }
+
+// Types
+export enum WalletNavigationView {
+    GAMEPLAY = "GAMEPLAY",
+    ANALYTICS = "ANALYTICS",
+}
+
+// Components
 
 const StyledLabel = styled("p", {
     color: "$gray11",

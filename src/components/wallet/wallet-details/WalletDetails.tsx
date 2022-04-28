@@ -138,27 +138,6 @@ export default function WalletDetails(props: WalletDetailsProps) {
     )
 }
 
-const PrevWalletTitle = styled("h3", {
-    fontSize: "1rem",
-    color: "$gray12",
-    fontWeight: 400,
-})
-const PrevWalletItem = styled("div", {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "0.25rem 0.5rem",
-})
-const PrevWalletAddress = styled("span", {
-    color: "$gray11",
-    fontSize: "0.875rem",
-    padding: "0.25rem 0.5rem",
-    borderRadius: "$md",
-    cursor: "default",
-    "&:hover": {
-        backgroundColor: "$gray3",
-    },
-})
 const Container = styled("div", {
     maxWidth: Screens.lg,
     margin: "3rem auto",
