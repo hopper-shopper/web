@@ -1,14 +1,14 @@
-import { Transfer } from "models/Transfer"
+import { Transfer, TransferType } from "models/Transfer"
 import { getTransferAmountChange, TransferAmountChange } from "utils/transfer"
 import { Currency, formatCurrency } from "./currency"
 
-export function formatTransferType(type: Transfer["type"]): string {
+export function formatTransferType(type: TransferType): string {
     switch (type) {
         case "claim":
             return "Claim FLY"
-        case "vefly-deposit":
+        case "stake-deposit":
             return "Stake FLY"
-        case "levelup":
+        case "level-up":
             return "Level Up"
         case "breeding":
             return "Breeding"

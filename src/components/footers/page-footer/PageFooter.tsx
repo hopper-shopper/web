@@ -1,4 +1,3 @@
-import ClipboardButton from "components/inputs/buttons/clipboard-button/ClipboardButton"
 import { Screens, styled } from "theme"
 
 export default function PageFooter() {
@@ -7,11 +6,16 @@ export default function PageFooter() {
             <Inner>
                 <Contribution>
                     <Text>
-                        Hopper Shopper made by <Author>steschwa#3314</Author>
+                        Hopper Shopper made by{" "}
+                        <Author href="https://twitter.com/0x_steschwa" target="_blank">
+                            steschwa
+                        </Author>
                     </Text>
 
                     <br />
-                    <Sub>Want so send feedback or feature ideas? Contact me on Discord!</Sub>
+                    <Sub>
+                        Want so send feedback or feature ideas? Contact me on Discord or Twitter!
+                    </Sub>
                 </Contribution>
 
                 <Links>
@@ -65,7 +69,8 @@ const Text = styled("span", {
     color: "$gray12",
     fontSize: "1rem",
 })
-const Author = styled("span", {
+const Author = styled("a", {
+    textDecoration: "none",
     color: "$blue11",
     fontSize: "1rem",
 })

@@ -54,8 +54,8 @@ function deriveSearchParamsFromState(state: WalletPageState): URLSearchParams {
 
     if (state.wallet) {
         params.set(WALLET_KEY, state.wallet)
+        params.set(VIEW_KEY, urlifyView(state.view))
     }
-    params.set(VIEW_KEY, urlifyView(state.view))
 
     return params
 }

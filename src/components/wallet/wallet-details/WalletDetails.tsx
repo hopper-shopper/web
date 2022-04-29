@@ -40,6 +40,7 @@ export default function WalletDetails(props: WalletDetailsProps) {
     } = useTransfers({
         user: wallet,
         direction: TransferDirection.IN,
+        type: "any",
     })
     const {
         transfers: outTransfers,
@@ -48,6 +49,7 @@ export default function WalletDetails(props: WalletDetailsProps) {
     } = useTransfers({
         user: wallet,
         direction: TransferDirection.OUT,
+        type: "any",
     })
     const { listings: hopperListings } = useHoppersListings({
         tokenIds: hoppers.map(hopper => hopper.tokenId),

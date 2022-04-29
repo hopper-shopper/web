@@ -1,4 +1,4 @@
-import { WalletAddress } from "models/User"
+import { WalletPageState } from "pages/wallet-page/useWalletPageState"
 import { Screens, styled } from "theme"
 import EnterWalletContent from "./enter-wallet-content/EnterWalletContent"
 import WalletNavigationContent, {
@@ -6,30 +6,30 @@ import WalletNavigationContent, {
 } from "./wallet-navigation-content/WalletNavigationContent"
 
 type WalletPageSubheaderProps = {
-    wallet: WalletAddress
-    onChange: (wallet: WalletAddress) => void
-
-    view: WalletNavigationView
-    onViewChange: (view: WalletNavigationView) => void
+    state: WalletPageState
+    onChange: (update: Partial<WalletPageState>) => void
 }
 
 export default function WalletPageSubheader(props: WalletPageSubheaderProps) {
-    const { wallet, onChange, view, onViewChange } = props
+    const { state, onChange } = props
 
-    if (!wallet) {
+    if (!state.wallet) {
         return (
             <Container>
-                <EnterWalletContent initialWallet={wallet} onChange={onChange} />
+                <EnterWalletContent
+                    initialWallet={state.wallet}
+                    onChange={wallet => onChange({ wallet, view: WalletNavigationView.GAMEPLAY })}
+                />
             </Container>
         )
     }
 
     return (
         <WalletNavigationContent
-            wallet={wallet}
-            onClear={() => onChange("")}
-            view={view}
-            onViewChange={onViewChange}
+            wallet={state.wallet}
+            onClear={() => onChange({ wallet: "", view: WalletNavigationView.GAMEPLAY })}
+            view={state.view}
+            onViewChange={view => onChange({ view })}
         />
     )
 }

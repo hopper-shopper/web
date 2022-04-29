@@ -17,12 +17,7 @@ export default function WalletPage() {
 
     return (
         <>
-            <WalletPageSubheader
-                wallet={state.wallet}
-                onChange={wallet => updateState({ wallet })}
-                view={state.view}
-                onViewChange={view => updateState({ view })}
-            />
+            <WalletPageSubheader state={state} onChange={updateState} />
 
             {!state.wallet && (
                 <EmptyText align="center" padding="md">

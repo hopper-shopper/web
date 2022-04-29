@@ -45,6 +45,9 @@ const StyledChange = styled("button", {
         color: "$gray12",
         backgroundColor: "$gray3",
     },
+    "&:focus": {
+        outline: "2px solid $blue8",
+    },
     "& > svg": {
         fontSize: "1.25rem",
     },
@@ -54,11 +57,20 @@ type RootOwnProps = {
     defaultValue?: number
     value?: number
     onValueChange?: (value: number) => void
+    min?: number
+    max?: number
 }
 type RootProps = OmitOwnProps<typeof StyledRoot, RootOwnProps>
 
 function WrappedRoot(props: RootProps) {
-    const { defaultValue, value: controlledValue, onValueChange, ...restRootProps } = props
+    const {
+        defaultValue,
+        value: controlledValue,
+        onValueChange,
+        min = -Infinity,
+        max = Infinity,
+        ...restRootProps
+    } = props
 
     const [value, setValue] = useControllableState({
         value: controlledValue,
@@ -66,8 +78,23 @@ function WrappedRoot(props: RootProps) {
         onChange: onValueChange,
     })
 
-    const increment = () => setValue(prev => (prev || 0) + 1)
-    const decrement = () => setValue(prev => (prev || 0) - 1)
+    const increment = () => {
+        setValue(prev => {
+            const next = (prev || 0) + 1
+            if (next > max) {
+                return max
+            }
+            return next
+        })
+    }
+    const decrement = () =>
+        setValue(prev => {
+            const next = (prev || 0) - 1
+            if (next < min) {
+                return min
+            }
+            return next
+        })
 
     return (
         <StepperContext.Provider value={{ value: value || 0, increment, decrement }}>

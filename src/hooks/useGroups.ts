@@ -1,12 +1,12 @@
 import { GroupByFn, PrimitiveGroupByKey } from "grouping/_common"
 import { useMemo } from "react"
 
-type UseGroupsReturn<T, K extends PrimitiveGroupByKey> = Map<K, T[]>
+type UseGroupsReturn<K extends PrimitiveGroupByKey, T> = Map<K, T[]>
 
-export default function useGroups<T, K extends PrimitiveGroupByKey = string>(
+export default function useGroups<K extends PrimitiveGroupByKey, T>(
     collection: T[],
-    groupBy: GroupByFn<T, K>,
-): UseGroupsReturn<T, K> {
+    groupBy: GroupByFn<K, T>,
+): UseGroupsReturn<K, T> {
     const groups = useMemo(() => {
         const mapper = new Map<K, T[]>()
 

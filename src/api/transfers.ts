@@ -11,6 +11,7 @@ export function getTransfersUrl(filter: TransfersFilter): string {
     const params = new URLSearchParams([
         ["user", filter.user.toLowerCase()],
         ["direction", urlifyTransferDirection(filter.direction ?? TransferDirection.OUT)],
+        ["type", filter.type.toLowerCase()],
     ])
 
     return `${ENDPOINT}/transfers?${params.toString()}`
