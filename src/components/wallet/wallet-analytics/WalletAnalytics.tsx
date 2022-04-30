@@ -1,4 +1,3 @@
-import EmptyText from "components/typography/empty-text/EmptyText"
 import { WalletAddress } from "models/User"
 import { Screens, styled } from "theme"
 import ClaimedChartCard from "../claimed-chart-card/ClaimedChartCard"
@@ -14,17 +13,14 @@ export default function WalletAnalytics(props: WalletAnalyticsProps) {
         <Container>
             <ClaimedChartCard wallet={wallet} />
 
-            <FutureText>
-                More to come
-                <br />
-                <br />
+            <ContributionText>
                 You have an chart idea or a feature request in general?
                 <br />
                 Write me on Discord @ steschwa#3314 or{" "}
                 <StyledLink href="https://twitter.com/0x_steschwa" target="_blank">
                     Twitter
                 </StyledLink>
-            </FutureText>
+            </ContributionText>
         </Container>
     )
 }
@@ -36,13 +32,14 @@ const Container = styled("div", {
     maxWidth: Screens.xl,
     margin: "3rem auto",
 })
-const FutureText = styled("p", {
+const ContributionText = styled("p", {
     color: "$gray11",
+    fontSize: "0.75rem",
     textAlign: "center",
-    lineHeight: 1.5,
+    lineHeight: 2,
 })
 const StyledLink = styled("a", {
     textDecoration: "none",
     color: "$blue11",
-    fontSize: "1rem",
+    fontSize: "0.75rem",
 })
