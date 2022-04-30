@@ -29,6 +29,7 @@ const StyledRoot = styled("div", {
 const StyledValue = styled("span", {
     fontSize: "1rem",
     color: "$gray12",
+    whiteSpace: "nowrap",
 })
 
 const StyledChange = styled("button", {

@@ -18,6 +18,8 @@ import { ChartData, DayDate } from "./useClaimedChartData"
 import { GridRows } from "@visx/grid"
 import Flex from "components/layout/flex/Flex"
 import EmptyText from "components/typography/empty-text/EmptyText"
+import Screen from "components/layout/screen/Screen"
+import useScreenSize from "hooks/useScreenSize"
 
 type ClaimedChartProps = {
     width: number
@@ -30,8 +32,10 @@ type ClaimedChartProps = {
 export default function ClaimedChart(props: ClaimedChartProps) {
     const { width, height, data, visible } = props
 
-    const marginLeft = 80
-    const marginRight = 20
+    const isTabletUp = useScreenSize("md")
+
+    const marginLeft = isTabletUp ? 60 : 10
+    const marginRight = 10
     const marginTop = 0
     const marginBottom = 30
 
@@ -71,7 +75,7 @@ export default function ClaimedChart(props: ClaimedChartProps) {
             domain: [0, dataMax],
             range: [yMax, 0],
         })
-    }, [data, dataMax])
+    }, [data, dataMax, height])
 
     const colorScale = useMemo(() => {
         return scaleOrdinal({
@@ -127,9 +131,10 @@ export default function ClaimedChart(props: ClaimedChartProps) {
             <AxisBottom
                 top={yMax + marginTop}
                 left={marginLeft}
-                tickFormat={formatDate}
                 scale={dayScale}
                 stroke={grayDark.gray6}
+                numTicks={isTabletUp ? undefined : 5}
+                tickFormat={formatDate}
                 tickStroke={grayDark.gray6}
                 tickLabelProps={() => ({
                     fill: grayDark.gray11,
@@ -138,21 +143,23 @@ export default function ClaimedChart(props: ClaimedChartProps) {
                 })}
             />
 
-            <AxisLeft
-                tickFormat={value => formatClaimed(Number(value))}
-                scale={claimedScale}
-                left={marginLeft}
-                stroke={grayDark.gray11}
-                tickStroke={grayDark.gray11}
-                hideAxisLine
-                hideTicks
-                tickLabelProps={() => ({
-                    fill: grayDark.gray11,
-                    fontSize: 10,
-                    textAnchor: "end",
-                    verticalAnchor: "middle",
-                })}
-            />
+            <Screen bp="md" constraint="min">
+                <AxisLeft
+                    scale={claimedScale}
+                    left={marginLeft}
+                    stroke={grayDark.gray11}
+                    hideAxisLine
+                    hideTicks
+                    tickStroke={grayDark.gray11}
+                    tickFormat={value => formatClaimed(Number(value))}
+                    tickLabelProps={() => ({
+                        fill: grayDark.gray11,
+                        fontSize: 10,
+                        textAnchor: "end",
+                        verticalAnchor: "middle",
+                    })}
+                />
+            </Screen>
         </svg>
     )
 }
@@ -205,7 +212,8 @@ function claimedMax(item: ChartData, visibleKeys: Array<keyof ChartData>): numbe
 // Formatters
 function formatDate(date: DayDate): string {
     const formatter = new Intl.DateTimeFormat([], {
-        dateStyle: "short",
+        month: "numeric",
+        day: "numeric",
     })
 
     return formatter.format(Date.parse(date))

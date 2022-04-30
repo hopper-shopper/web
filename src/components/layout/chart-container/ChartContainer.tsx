@@ -8,13 +8,18 @@ const StyledRoot = styled("div", {
 
 const StyledHeader = styled("div", {
     marginBottom: "1rem",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    columnGap: "2rem",
     borderTopLeftRadius: "$md",
     borderTopRightRadius: "$md",
     padding: "1rem",
+    display: "flex",
+    flexDirection: "column",
+    rowGap: "1rem",
+    "@lg": {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "flex-start",
+        columnGap: "2rem",
+    },
 })
 
 const StyledTitle = styled("h3", {
@@ -32,9 +37,13 @@ const StyledDescription = styled("p", {
 
 const StyledActions = styled("div", {
     display: "flex",
-    justifyContent: "flex-end",
-    alignItems: "center",
-    columnGap: "0.5rem",
+    flexDirection: "column",
+    gap: "1rem",
+    "@lg": {
+        flexDirection: "row",
+        justifyContent: "flex-end",
+        alignItems: "center",
+    },
 })
 
 const StyledContent = styled("div", {

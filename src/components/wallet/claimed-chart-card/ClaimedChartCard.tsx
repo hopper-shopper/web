@@ -3,14 +3,15 @@ import { TransferDirection } from "api/filters/transfers"
 import useTransfers from "api/hooks/useTransfers"
 import * as Stepper from "components/inputs/stepper/Stepper"
 import * as ChartContainer from "components/layout/chart-container/ChartContainer"
-import Flex from "components/layout/flex/Flex"
 import * as Tag from "components/tag/Tag"
 import { formatAdventure } from "formatters/adventure"
 import { getSPFormatter } from "formatters/text"
+import useScreenSize from "hooks/useScreenSize"
 import { WalletAddress } from "models/User"
 import { useEffect, useState } from "react"
 import { SortAdventureBy, sortAdventures } from "sorters/adventures"
 import { SortDirection } from "sorters/_common"
+import { styled } from "theme"
 import { Adventure, ALL_ADVENTURES } from "utils/adventures"
 import { getAdventureForTransfer } from "utils/transfer"
 import ClaimedChart, { CLAIMED_CHARTS_COLORS } from "./claimed-chart/ClaimedChart"
@@ -22,6 +23,9 @@ type ClaimedChartCardProps = {
 
 export default function ClaimedChartCard(props: ClaimedChartCardProps) {
     const { wallet } = props
+
+    const isTabletUp = useScreenSize("md")
+    const isLaptopUp = useScreenSize("lg")
 
     const [visible, setVisible] = useState(new Set<Adventure>())
     const [days, setDays] = useState(10)
@@ -59,6 +63,16 @@ export default function ClaimedChartCard(props: ClaimedChartCardProps) {
         })
     }
 
+    const chartHeight = ((): number => {
+        if (isLaptopUp) {
+            return 700
+        } else if (isTabletUp) {
+            return 500
+        }
+
+        return 300
+    })()
+
     return (
         <ChartContainer.Root>
             <ChartContainer.Header>
@@ -77,19 +91,23 @@ export default function ClaimedChartCard(props: ClaimedChartCardProps) {
                         <Stepper.Increment />
                     </Stepper.Root>
 
-                    {sortedAdventures.map((adventure, index) => (
-                        <Tag.Root
-                            key={adventure}
-                            disabled={!visible.has(adventure)}
-                            onClick={() => toggleVisible(adventure)}>
-                            <Tag.Marker css={{ backgroundColor: CLAIMED_CHARTS_COLORS[index] }} />
-                            <Tag.Text>{formatAdventure(adventure)}</Tag.Text>
-                        </Tag.Root>
-                    ))}
+                    <TagsList>
+                        {sortedAdventures.map((adventure, index) => (
+                            <Tag.Root
+                                key={adventure}
+                                disabled={!visible.has(adventure)}
+                                onClick={() => toggleVisible(adventure)}>
+                                <Tag.Marker
+                                    css={{ backgroundColor: CLAIMED_CHARTS_COLORS[index] }}
+                                />
+                                <Tag.Text>{formatAdventure(adventure)}</Tag.Text>
+                            </Tag.Root>
+                        ))}
+                    </TagsList>
                 </ChartContainer.Actions>
             </ChartContainer.Header>
 
-            <ChartContainer.Content css={{ height: 700 }}>
+            <ChartContainer.Content css={{ height: chartHeight }}>
                 <ParentSizeModern>
                     {({ width, height }) => (
                         <>
@@ -116,3 +134,12 @@ const sortedAdventures = sortAdventures(ALL_ADVENTURES, {
 })
 
 const daySPFormatter = getSPFormatter("Day", "Days")
+
+const TagsList = styled("div", {
+    display: "grid",
+    gridTemplateColumns: "repeat(2, 1fr)",
+    gap: "0.5rem",
+    "@md": {
+        display: "flex",
+    },
+})
