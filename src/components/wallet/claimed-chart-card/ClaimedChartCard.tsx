@@ -78,14 +78,10 @@ export default function ClaimedChartCard(props: ClaimedChartCardProps) {
             <ChartContainer.Header>
                 <ChartContainer.Title>Claimed FLY</ChartContainer.Title>
 
-                <ChartContainer.Actions>
-                    <Stepper.Root
-                        min={1}
-                        value={days}
-                        onValueChange={setDays}
-                        css={{ marginRight: "1rem" }}>
+                <Actions>
+                    <Stepper.Root min={1} value={days} onValueChange={setDays}>
                         <Stepper.Decrement />
-                        <Stepper.Value>
+                        <Stepper.Value css={{ minWidth: 70 }}>
                             {days} {daySPFormatter(days)}
                         </Stepper.Value>
                         <Stepper.Increment />
@@ -104,7 +100,7 @@ export default function ClaimedChartCard(props: ClaimedChartCardProps) {
                             </Tag.Root>
                         ))}
                     </TagsList>
-                </ChartContainer.Actions>
+                </Actions>
             </ChartContainer.Header>
 
             <ChartContainer.Content css={{ height: chartHeight }}>
@@ -135,6 +131,16 @@ const sortedAdventures = sortAdventures(ALL_ADVENTURES, {
 
 const daySPFormatter = getSPFormatter("Day", "Days")
 
+const Actions = styled("div", {
+    display: "flex",
+    flexDirection: "column",
+    rowGap: "1rem",
+    "@md": {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+    },
+})
 const TagsList = styled("div", {
     display: "grid",
     gridTemplateColumns: "repeat(2, 1fr)",

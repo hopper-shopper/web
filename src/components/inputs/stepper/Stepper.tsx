@@ -30,6 +30,7 @@ const StyledValue = styled("span", {
     fontSize: "1rem",
     color: "$gray12",
     whiteSpace: "nowrap",
+    textAlign: "center",
 })
 
 const StyledChange = styled("button", {

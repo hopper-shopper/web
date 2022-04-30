@@ -11,15 +11,6 @@ const StyledHeader = styled("div", {
     borderTopLeftRadius: "$md",
     borderTopRightRadius: "$md",
     padding: "1rem",
-    display: "flex",
-    flexDirection: "column",
-    rowGap: "1rem",
-    "@lg": {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "flex-start",
-        columnGap: "2rem",
-    },
 })
 
 const StyledTitle = styled("h3", {
@@ -28,22 +19,12 @@ const StyledTitle = styled("h3", {
     color: "$gray12",
     fontWeight: 400,
     lineHeight: 1.5,
+    marginBottom: "1rem",
 })
 
 const StyledDescription = styled("p", {
     fontSize: "0.75rem",
     color: "$gray11",
-})
-
-const StyledActions = styled("div", {
-    display: "flex",
-    flexDirection: "column",
-    gap: "1rem",
-    "@lg": {
-        flexDirection: "row",
-        justifyContent: "flex-end",
-        alignItems: "center",
-    },
 })
 
 const StyledContent = styled("div", {
@@ -55,5 +36,4 @@ export const Root = StyledRoot
 export const Header = StyledHeader
 export const Title = StyledTitle
 export const Description = StyledDescription
-export const Actions = StyledActions
 export const Content = StyledContent
