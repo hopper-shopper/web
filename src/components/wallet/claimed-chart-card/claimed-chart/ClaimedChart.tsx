@@ -8,18 +8,21 @@ import {
     skyDark,
 } from "@radix-ui/colors"
 import { AxisBottom, AxisLeft } from "@visx/axis"
+import { localPoint } from "@visx/event"
+import { GridRows } from "@visx/grid"
 import { Group } from "@visx/group"
-import { scaleBand, scaleLinear, scaleOrdinal } from "@visx/scale"
-import { BarGroup } from "@visx/shape"
+import { scaleBand, scaleLinear, scaleOrdinal, scaleQuantize } from "@visx/scale"
+import { Bar, BarGroup } from "@visx/shape"
+import { useTooltip, useTooltipInPortal } from "@visx/tooltip"
+import Flex from "components/layout/flex/Flex"
+import Screen from "components/layout/screen/Screen"
+import EmptyText from "components/typography/empty-text/EmptyText"
 import { Currency, formatCurrency } from "formatters/currency"
-import { useMemo } from "react"
+import useScreenSize from "hooks/useScreenSize"
+import { MouseEvent, TouchEvent, useMemo, useState } from "react"
+import { styled } from "theme"
 import { Adventure } from "utils/adventures"
 import { ChartData, DayDate } from "./useClaimedChartData"
-import { GridRows } from "@visx/grid"
-import Flex from "components/layout/flex/Flex"
-import EmptyText from "components/typography/empty-text/EmptyText"
-import Screen from "components/layout/screen/Screen"
-import useScreenSize from "hooks/useScreenSize"
 
 type ClaimedChartProps = {
     width: number
@@ -33,6 +36,7 @@ export default function ClaimedChart(props: ClaimedChartProps) {
     const { width, height, data, visible } = props
 
     const isTabletUp = useScreenSize("md")
+    const [columnOverlay, setColumnOverlay] = useState<ColumnOverlayState | null>(null)
 
     const marginLeft = isTabletUp ? 60 : 10
     const marginRight = 10
@@ -55,10 +59,18 @@ export default function ClaimedChart(props: ClaimedChartProps) {
     const dayScale = useMemo(() => {
         return scaleBand({
             domain: data.map(getDate),
-            padding: 0.4,
+            padding: 0.2,
             range: [0, xMax],
         })
     }, [data, xMax])
+    const dayScaleInvert = useMemo(() => {
+        const domain = dayScale.domain()
+        const range = dayScale.range()
+        return scaleQuantize({
+            domain: range,
+            range: domain,
+        })
+    }, [dayScale])
 
     const bandWidth = dayScale.bandwidth()
     const adventureScale = useMemo(() => {
@@ -84,6 +96,44 @@ export default function ClaimedChart(props: ClaimedChartProps) {
         })
     }, [visibleKeys])
 
+    const { tooltipLeft, tooltipTop, tooltipOpen, tooltipData, showTooltip, hideTooltip } =
+        useTooltip<TooltipData>({
+            tooltipOpen: false,
+        })
+    const { containerRef, TooltipInPortal } = useTooltipInPortal({
+        detectBounds: true,
+        scroll: true,
+    })
+
+    const handleColumnOverlay = (
+        event: TouchEvent<SVGRectElement> | MouseEvent<SVGRectElement>,
+    ) => {
+        let { x } = localPoint(event) || { x: marginLeft }
+        x -= marginLeft
+
+        const column = dayScaleInvert(x)
+        const start = dayScale(column)
+
+        if (typeof start === "number") {
+            setColumnOverlay({
+                x: start,
+                width: dayScale.bandwidth(),
+            })
+            console.log(yMax)
+            showTooltip({
+                tooltipData: {
+                    date: column,
+                    width: dayScale.bandwidth(),
+                },
+                tooltipLeft: start + marginLeft - marginRight,
+            })
+        }
+    }
+    const hideColumnOverlay = () => {
+        setColumnOverlay(null)
+        hideTooltip()
+    }
+
     if (dataMax === 0 || visible.length === 0 || data.length === 0) {
         return (
             <Flex x="center" y="center" css={{ width, height }}>
@@ -93,74 +143,119 @@ export default function ClaimedChart(props: ClaimedChartProps) {
     }
 
     return (
-        <svg width={width} height={height}>
-            <GridRows scale={claimedScale} width={xMax} left={marginLeft} stroke={grayDark.gray6} />
-
-            <Group top={marginTop} left={marginLeft}>
-                <BarGroup
-                    data={data}
-                    keys={visibleKeys}
-                    height={yMax}
-                    x0={getDate}
-                    x0Scale={dayScale}
-                    x1Scale={adventureScale}
-                    yScale={claimedScale}
-                    color={colorScale}>
-                    {barGroups => {
-                        return barGroups.map(barGroup => (
-                            <Group
-                                key={`bar-group-${barGroup.index}-${barGroup.x0}`}
-                                left={barGroup.x0}>
-                                {barGroup.bars.map(bar => (
-                                    <rect
-                                        key={`bar-group-bar-${barGroup.index}-${bar.index}-${bar.value}-${bar.key}`}
-                                        x={bar.x}
-                                        y={bar.y}
-                                        width={bar.width}
-                                        height={bar.height < 0 ? 0 : bar.height}
-                                        fill={bar.color}
-                                        rx={2}
-                                    />
-                                ))}
-                            </Group>
-                        ))
-                    }}
-                </BarGroup>
-            </Group>
-
-            <AxisBottom
-                top={yMax + marginTop}
-                left={marginLeft}
-                scale={dayScale}
-                stroke={grayDark.gray6}
-                numTicks={isTabletUp ? undefined : 5}
-                tickFormat={formatDate}
-                tickStroke={grayDark.gray6}
-                tickLabelProps={() => ({
-                    fill: grayDark.gray11,
-                    fontSize: 12,
-                    textAnchor: "middle",
-                })}
-            />
-
-            <Screen bp="md" constraint="min">
-                <AxisLeft
+        <>
+            <svg ref={containerRef} width={width} height={height}>
+                <GridRows
                     scale={claimedScale}
+                    width={xMax}
                     left={marginLeft}
-                    stroke={grayDark.gray11}
-                    hideAxisLine
-                    hideTicks
-                    tickStroke={grayDark.gray11}
-                    tickFormat={value => formatClaimed(Number(value))}
+                    stroke={grayDark.gray6}
+                />
+
+                {columnOverlay !== null && (
+                    <Bar
+                        x={columnOverlay.x + marginLeft}
+                        y={marginTop}
+                        width={columnOverlay.width}
+                        height={yMax}
+                        fill={grayDark.gray6}
+                        rx={4}
+                        pointerEvents="none"
+                    />
+                )}
+
+                <Group top={marginTop} left={marginLeft}>
+                    <BarGroup
+                        data={data}
+                        keys={visibleKeys}
+                        height={yMax}
+                        x0={getDate}
+                        x0Scale={dayScale}
+                        x1Scale={adventureScale}
+                        yScale={claimedScale}
+                        color={colorScale}>
+                        {barGroups => {
+                            return barGroups.map(barGroup => (
+                                <Group
+                                    key={`bar-group-${barGroup.index}-${barGroup.x0}`}
+                                    left={barGroup.x0}>
+                                    {barGroup.bars.map(bar => (
+                                        <rect
+                                            key={`bar-group-bar-${barGroup.index}-${bar.index}-${bar.value}-${bar.key}`}
+                                            x={bar.x}
+                                            y={bar.y}
+                                            width={bar.width}
+                                            height={bar.height < 0 ? 0 : bar.height}
+                                            fill={bar.color}
+                                            rx={2}
+                                        />
+                                    ))}
+                                </Group>
+                            ))
+                        }}
+                    </BarGroup>
+                </Group>
+
+                <Bar
+                    x={marginLeft}
+                    y={marginTop}
+                    width={xMax}
+                    height={yMax}
+                    fill="transparent"
+                    onTouchStart={handleColumnOverlay}
+                    onTouchMove={handleColumnOverlay}
+                    onMouseMove={handleColumnOverlay}
+                    onMouseLeave={hideColumnOverlay}
+                />
+
+                <AxisBottom
+                    top={yMax + marginTop}
+                    left={marginLeft}
+                    scale={dayScale}
+                    stroke={grayDark.gray6}
+                    numTicks={isTabletUp ? undefined : 5}
+                    tickFormat={formatDateShort}
+                    tickStroke={grayDark.gray6}
                     tickLabelProps={() => ({
                         fill: grayDark.gray11,
-                        fontSize: 10,
-                        textAnchor: "end",
-                        verticalAnchor: "middle",
+                        fontSize: 12,
+                        textAnchor: "middle",
                     })}
                 />
-            </Screen>
-        </svg>
+
+                <Screen bp="md" constraint="min">
+                    <AxisLeft
+                        scale={claimedScale}
+                        left={marginLeft}
+                        stroke={grayDark.gray11}
+                        hideAxisLine
+                        hideTicks
+                        tickStroke={grayDark.gray11}
+                        tickFormat={value => formatClaimed(Number(value))}
+                        tickLabelProps={() => ({
+                            fill: grayDark.gray11,
+                            fontSize: 10,
+                            textAnchor: "end",
+                            verticalAnchor: "middle",
+                        })}
+                    />
+                </Screen>
+            </svg>
+
+            {tooltipOpen && tooltipData && (
+                <TooltipInPortal
+                    key={Date.now()}
+                    offsetTop={-4}
+                    unstyled
+                    applyPositionStyle
+                    top={yMax}
+                    left={tooltipLeft}>
+                    <StlyedTooltipContainer style={{ minWidth: tooltipData.width }}>
+                        <StyledTooltip>{formatDateLong(tooltipData.date)}</StyledTooltip>
+                    </StlyedTooltipContainer>
+                </TooltipInPortal>
+            )}
+        </>
     )
 }
 
@@ -191,6 +286,16 @@ export const CLAIMED_CHARTS_COLORS = [
     grassDark.grass9,
 ]
 
+// Types
+type ColumnOverlayState = {
+    x: number
+    width: number
+}
+type TooltipData = {
+    date: DayDate
+    width: number
+}
+
 // Getters
 function getDate(item: ChartData): DayDate {
     return item.date
@@ -210,10 +315,17 @@ function claimedMax(item: ChartData, visibleKeys: Array<keyof ChartData>): numbe
 }
 
 // Formatters
-function formatDate(date: DayDate): string {
+function formatDateShort(date: DayDate): string {
     const formatter = new Intl.DateTimeFormat([], {
         month: "numeric",
         day: "numeric",
+    })
+
+    return formatter.format(Date.parse(date))
+}
+function formatDateLong(date: DayDate): string {
+    const formatter = new Intl.DateTimeFormat([], {
+        dateStyle: "long",
     })
 
     return formatter.format(Date.parse(date))
@@ -238,3 +350,22 @@ function sortKeys(keys: Array<keyof ChartData>): Array<keyof ChartData> {
         return ranking[a] - ranking[b]
     })
 }
+
+// Components
+const StlyedTooltipContainer = styled("div", {
+    position: "relative",
+})
+const StyledTooltip = styled("span", {
+    position: "absolute",
+    whiteSpace: "nowrap",
+    display: "inline-block",
+    textAlign: "center",
+    padding: "0.125rem 0.5rem",
+    border: "1px solid $blue6",
+    borderRadius: "$sm",
+    backgroundColor: "$blue9",
+    color: "$blue12",
+    fontSize: "0.875rem",
+    left: "50%",
+    transform: "translateX(-50%)",
+})
