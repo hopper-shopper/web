@@ -1,4 +1,5 @@
 export const MARKET = "/market"
 export const WALLET = "/wallet"
+export const WALLET_ANALYTICS = "/wallet/analytics"
 export const WATCHLIST = "/watchlist"
 export const INSPECT = "/inspect"

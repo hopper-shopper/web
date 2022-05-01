@@ -1,6 +1,9 @@
+import { TransferType } from "models/Transfer"
+
 export type TransfersFilter = {
     direction?: TransferDirection
     user: string
+    type: TransferType
 }
 
 export enum TransferDirection {

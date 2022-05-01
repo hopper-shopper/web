@@ -11,17 +11,19 @@ type UseTransfersReturn = {
 }
 
 export default function useTransfers(filter: TransfersFilter): UseTransfersReturn {
-    const { user, direction } = filter
+    const { user, direction, type } = filter
 
-    const signature = `${user}-${direction}`
+    const signature = `${user}-${direction}-${type}`
     const { data, dataSignature, loading, error } = useFetch(() => {
-        return fetchTransfers({ user, direction })
+        return fetchTransfers({ user, direction, type })
     }, signature)
 
     return {
-        transfers: data ?? [],
+        transfers: data ?? EMPTY_DATA,
         dataSignature,
         loading,
         error,
     }
 }
+
+const EMPTY_DATA: Transfer[] = []
