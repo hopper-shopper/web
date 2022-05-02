@@ -10,6 +10,8 @@ export function formatTransferType(type: TransferType): string {
             return "Stake FLY"
         case "level-up":
             return "Level Up"
+        case "multi-level-up":
+            return "Level Up (Multi)"
         case "breeding":
             return "Breeding"
         default:

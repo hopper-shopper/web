@@ -6,7 +6,12 @@ export type Transfer = {
 }
 
 export type TransferTypeIn = "claim"
-export type TransferTypeOut = "level-up" | "vefly-vote" | "stake-deposit" | "breeding"
+export type TransferTypeOut =
+    | "level-up"
+    | "multi-level-up"
+    | "vefly-vote"
+    | "stake-deposit"
+    | "breeding"
 export type TransferType = TransferTypeIn | TransferTypeOut | "any"
 
 export type TransferContract =
@@ -19,4 +24,5 @@ export type TransferContract =
     | "ballot"
     | "fly"
     | "ve-fly"
+    | "multi-level-up"
     | "unknown"

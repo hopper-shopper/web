@@ -4,12 +4,12 @@ import { Adventure } from "./adventures"
 export enum TransferAmountChange {
     INCREASE,
     DECREASE,
-    NO_CHANGE = "NO_CHANGE",
+    NO_CHANGE,
 }
 
 export function getTransferAmountChange(transfer: Transfer): TransferAmountChange {
     const amountChangeIncrease: TransferType[] = ["claim"]
-    const amountChangeDecrease: TransferType[] = ["level-up", "breeding"]
+    const amountChangeDecrease: TransferType[] = ["level-up", "multi-level-up", "breeding"]
 
     if (amountChangeIncrease.includes(transfer.type)) {
         return TransferAmountChange.INCREASE
