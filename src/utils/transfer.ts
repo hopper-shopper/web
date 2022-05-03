@@ -9,7 +9,12 @@ export enum TransferAmountChange {
 
 export function getTransferAmountChange(transfer: Transfer): TransferAmountChange {
     const amountChangeIncrease: TransferType[] = ["claim"]
-    const amountChangeDecrease: TransferType[] = ["level-up", "multi-level-up", "breeding"]
+    const amountChangeDecrease: TransferType[] = [
+        "level-up",
+        "multi-level-up",
+        "breeding",
+        "change-name",
+    ]
 
     if (amountChangeIncrease.includes(transfer.type)) {
         return TransferAmountChange.INCREASE

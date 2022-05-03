@@ -8,31 +8,73 @@ const StyledTable = styled("table", {
     borderSpacing: 0,
     color: "$gray12",
     tableLayout: "fixed",
-    "& thead tr th:first-child": {
-        borderTopLeftRadius: "$md",
-        borderLeft: "1px solid $gray6",
-    },
-    "& thead tr th:last-child": {
-        borderTopRightRadius: "$md",
-        borderRight: "1px solid $gray6",
-    },
-    "& thead tr th": {
-        borderTop: "1px solid $gray6",
-        borderBottom: "1px solid $gray6",
-    },
-    "& tbody tr td:first-child": {
-        borderLeft: "1px solid $gray6",
-    },
-    "& tbody tr td:last-child": {
-        borderRight: "1px solid $gray6",
-    },
-    "& tbody tr:last-child td": {
-        borderBottom: "1px solid $gray6",
-        "&:first-child": {
-            borderBottomLeftRadius: "$md",
+    variants: {
+        border: {
+            true: {
+                "& thead tr th:first-child": {
+                    borderLeft: "1px solid $gray6",
+                },
+                "& thead tr th:last-child": {
+                    borderRight: "1px solid $gray6",
+                },
+                "& thead tr th": {
+                    borderTop: "1px solid $gray6",
+                    borderBottom: "1px solid $gray6",
+                },
+                "& tbody tr td:first-child": {
+                    borderLeft: "1px solid $gray6",
+                },
+                "& tbody tr td:last-child": {
+                    borderRight: "1px solid $gray6",
+                },
+                "& tbody tr:last-child td": {
+                    borderBottom: "1px solid $gray6",
+                },
+            },
         },
-        "&:last-child": {
-            borderBottomRightRadius: "$md",
+        rounded: {
+            true: {
+                "& thead tr th:first-child": {
+                    borderTopLeftRadius: "$md",
+                },
+                "& thead tr th:last-child": {
+                    borderTopRightRadius: "$md",
+                },
+                "& tbody tr:last-child td": {
+                    "&:first-child": {
+                        borderBottomLeftRadius: "$md",
+                    },
+                    "&:last-child": {
+                        borderBottomRightRadius: "$md",
+                    },
+                },
+            },
+        },
+    },
+    defaultVariants: {
+        border: true,
+        rounded: true,
+    },
+})
+
+const StyledTableHead = styled("thead", {
+    variants: {
+        sticky: {
+            true: {
+                position: "sticky",
+                insetBlockStart: 0,
+            },
+        },
+    },
+})
+
+const StyledTableFoot = styled("tfoot", {
+    variants: {
+        sticky: {
+            true: {
+                position: "sticky",
+                insetBlockEnd: 0,
+            },
         },
     },
 })
@@ -78,6 +120,8 @@ const StyledSummaryCell = styled(StyledTableCell, {
 })
 
 export const Root = StyledTable
+export const Head = StyledTableHead
+export const Foot = StyledTableFoot
 export const Row = StyledTableRow
 export const HeaderCell = StyledTableHeaderCell
 export const Cell = StyledTableCell

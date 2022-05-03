@@ -1,6 +1,8 @@
+import { IsoDatetime } from "utils/types"
+
 export type Transfer = {
     amount: number
-    timestamp: string // ISO-Datetime
+    timestamp: IsoDatetime
     type: TransferType
     contract: TransferContract
 }
@@ -12,6 +14,11 @@ export type TransferTypeOut =
     | "vefly-vote"
     | "stake-deposit"
     | "breeding"
+    | "change-name"
+    | "sell-fly"
+    | "buy-fly"
+    | "provide-liquidity"
+    | "remove-liquidity"
 export type TransferType = TransferTypeIn | TransferTypeOut | "any"
 
 export type TransferContract =
@@ -25,4 +32,5 @@ export type TransferContract =
     | "fly"
     | "ve-fly"
     | "multi-level-up"
+    | "joe-router"
     | "unknown"

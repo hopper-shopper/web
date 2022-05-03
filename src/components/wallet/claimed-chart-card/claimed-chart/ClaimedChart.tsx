@@ -119,7 +119,6 @@ export default function ClaimedChart(props: ClaimedChartProps) {
                 x: start,
                 width: dayScale.bandwidth(),
             })
-            console.log(yMax)
             showTooltip({
                 tooltipData: {
                     date: column,

@@ -23,6 +23,8 @@ import useSort from "hooks/useSort"
 import { SortAdventureBy, sortAdventures } from "sorters/adventures"
 import { SortDirection } from "sorters/_common"
 import { Transfer } from "models/Transfer"
+import Button from "components/inputs/buttons/button/Button"
+import RealizedProfitsDialog from "components/transfers/realized-profits-dialog/RealizedProfitsDialog"
 
 type WalletDetailsProps = {
     wallet: WalletAddress
@@ -78,7 +80,9 @@ export default function WalletDetails(props: WalletDetailsProps) {
             {sortedAdventuresOfStakedHoppers.length > 0 && wallet && (
                 <>
                     <Section.Root>
-                        <Section.Title>FLY cap</Section.Title>
+                        <Section.Header>
+                            <Section.Title>FLY cap</Section.Title>
+                        </Section.Header>
                         <Grid gap="md">
                             {sortedAdventuresOfStakedHoppers.map(adventure => (
                                 <FlyCap key={adventure} user={wallet} adventure={adventure} />
@@ -87,7 +91,9 @@ export default function WalletDetails(props: WalletDetailsProps) {
                     </Section.Root>
 
                     <Section.Root>
-                        <Section.Title>Estimated earnings / Day</Section.Title>
+                        <Section.Header>
+                            <Section.Title>Estimated earnings / Day</Section.Title>
+                        </Section.Header>
                         <EarningsGrid>
                             {sortedAdventuresOfStakedHoppers.map(adventure => (
                                 <UserEarnings key={adventure} user={wallet} adventure={adventure} />
@@ -98,7 +104,13 @@ export default function WalletDetails(props: WalletDetailsProps) {
             )}
 
             <Section.Root>
-                <Section.Title>FLY Transfers</Section.Title>
+                <Section.Header>
+                    <Section.Title>FLY Transfers</Section.Title>
+
+                    <RealizedProfitsDialog wallet={wallet}>
+                        <Button size="sm">View realized profits</Button>
+                    </RealizedProfitsDialog>
+                </Section.Header>
 
                 <TransfersBreakdown transfers={combinedTransfers} />
 
@@ -117,7 +129,10 @@ export default function WalletDetails(props: WalletDetailsProps) {
             </Section.Root>
 
             <Section.Root>
-                <Section.Title>Hoppers</Section.Title>
+                <Section.Header>
+                    <Section.Title>Hoppers</Section.Title>
+                </Section.Header>
+
                 {hoppers.length === 0 && (
                     <EmptyText>This wallet does not have any hoppers</EmptyText>
                 )}

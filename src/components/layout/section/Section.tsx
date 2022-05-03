@@ -5,7 +5,20 @@ const StyledRoot = styled("section", {
     flexDirection: "column",
     rowGap: "2rem",
 })
+
+const StyledHeader = styled("div", {
+    display: "flex",
+    flexDirection: "column",
+    gap: "1rem",
+    "@md": {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+    },
+})
+
 const StyledTitle = styled("h2", {
+    flex: 1,
     color: "$gray12",
     fontSize: "1.25rem",
     lineHeight: 1.5,
@@ -23,4 +36,5 @@ const StyledTitle = styled("h2", {
 })
 
 export const Root = StyledRoot
+export const Header = StyledHeader
 export const Title = StyledTitle

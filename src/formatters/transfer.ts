@@ -14,6 +14,16 @@ export function formatTransferType(type: TransferType): string {
             return "Level Up (Multi)"
         case "breeding":
             return "Breeding"
+        case "change-name":
+            return "Change name"
+        case "sell-fly":
+            return "Sell FLY"
+        case "buy-fly":
+            return "Buy FLY"
+        case "provide-liquidity":
+            return "Provide Liquidity"
+        case "remove-liquidity":
+            return "Remove Liquidity"
         default:
             return "Unknown"
     }

@@ -70,12 +70,18 @@ export default function InspectPage() {
             {hopper && (
                 <Container>
                     <Section.Root>
-                        <Section.Title>Hopper</Section.Title>
+                        <Section.Header>
+                            <Section.Title>Hopper</Section.Title>
+                        </Section.Header>
+
                         <HopperPreview hopper={hopper} />
                     </Section.Root>
 
                     <Section.Root>
-                        <Section.Title>Listings</Section.Title>
+                        <Section.Header>
+                            <Section.Title>Listings</Section.Title>
+                        </Section.Header>
+
                         {listings.length === 0 && (
                             <EmptyText>Could not find any listings for Hopper</EmptyText>
                         )}
@@ -83,7 +89,10 @@ export default function InspectPage() {
                     </Section.Root>
 
                     <Section.Root>
-                        <Section.Title>ROI</Section.Title>
+                        <Section.Header>
+                            <Section.Title>ROI</Section.Title>
+                        </Section.Header>
+
                         <HopperRoi hopper={hopper} />
                     </Section.Root>
                 </Container>
