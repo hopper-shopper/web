@@ -3,6 +3,7 @@ import { TransferDirection } from "api/filters/transfers"
 import useHistoricalPrices from "api/hooks/useHistoricalPrices"
 import useTransfers from "api/hooks/useTransfers"
 import * as Dialog from "components/dialog/Dialog"
+import Screen from "components/layout/screen/Screen"
 import * as Table from "components/table/Table"
 import { Currency, formatCurrency } from "formatters/currency"
 import { formatDateTime } from "formatters/date"
@@ -89,30 +90,62 @@ export default function RealizedProfitsDialog(props: RealizedProfitsDialogProps)
                                     <Table.Cell css={{ color: "$gray11" }}>
                                         {formatDateTime(transfer.timestamp)}
                                     </Table.Cell>
-                                    <Table.Cell align="right" css={{ width: 120 }}>
-                                        {formatCurrency(transfer.amount, Currency.FLY)}
-                                    </Table.Cell>
 
-                                    <Table.Cell
-                                        align="right"
-                                        css={{ width: 120, color: "$blue11" }}>
-                                        {formatCurrency(
-                                            getFiatValue(transfer.timestamp, transfer.amount),
-                                            userCurrency,
-                                        )}
-                                    </Table.Cell>
+                                    <Screen bp="md" constraint="max">
+                                        <Table.Cell align="right">
+                                            {formatCurrency(transfer.amount, Currency.FLY)}
+                                            <br />
+                                            <Blue>
+                                                {formatCurrency(
+                                                    getFiatValue(
+                                                        transfer.timestamp,
+                                                        transfer.amount,
+                                                    ),
+                                                    userCurrency,
+                                                )}
+                                            </Blue>
+                                        </Table.Cell>
+                                    </Screen>
+
+                                    <Screen bp="md" constraint="min">
+                                        <Table.Cell align="right" css={{ width: 120 }}>
+                                            {formatCurrency(transfer.amount, Currency.FLY)}
+                                        </Table.Cell>
+
+                                        <Table.Cell
+                                            align="right"
+                                            css={{ width: 120, color: "$blue11" }}>
+                                            {formatCurrency(
+                                                getFiatValue(transfer.timestamp, transfer.amount),
+                                                userCurrency,
+                                            )}
+                                        </Table.Cell>
+                                    </Screen>
                                 </Table.Row>
                             ))}
                         </tbody>
 
                         <Table.Foot sticky>
-                            <Table.SummaryCell />
-                            <Table.SummaryCell align="right">
-                                {formatCurrency(totalFly, Currency.FLY)}
-                            </Table.SummaryCell>
-                            <Table.SummaryCell align="right">
-                                {formatCurrency(totalFiat, userCurrency)}
-                            </Table.SummaryCell>
+                            <Table.Row>
+                                <Table.SummaryCell />
+
+                                <Screen bp="md" constraint="max">
+                                    <Table.SummaryCell align="right">
+                                        {formatCurrency(totalFly, Currency.FLY)}
+                                        <br />
+                                        <Blue>{formatCurrency(totalFiat, userCurrency)}</Blue>
+                                    </Table.SummaryCell>
+                                </Screen>
+
+                                <Screen bp="md" constraint="min">
+                                    <Table.SummaryCell align="right">
+                                        {formatCurrency(totalFly, Currency.FLY)}
+                                    </Table.SummaryCell>
+                                    <Table.SummaryCell align="right">
+                                        {formatCurrency(totalFiat, userCurrency)}
+                                    </Table.SummaryCell>
+                                </Screen>
+                            </Table.Row>
                         </Table.Foot>
                     </Table.Root>
                 </Content>
@@ -131,4 +164,7 @@ const Content = styled("div", {
     px: "2rem",
     mx: "-2rem",
     overflowY: "auto",
+})
+const Blue = styled("span", {
+    color: "$blue11",
 })
