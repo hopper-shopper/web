@@ -10,7 +10,7 @@ import WatchlistPage from "pages/watchlist-page/WatchlistPage"
 import { Outlet, Route, Routes } from "react-router-dom"
 import Redirect from "routing/Redirect"
 import * as ROUTES from "routing/routes"
-import { globalCss, styled } from "./theme"
+import { globalStyles, styled } from "./theme"
 
 function App() {
     globalStyles()
@@ -42,12 +42,6 @@ const Container = styled("div", {
     padding: "1rem",
     "@md": {
         padding: "2rem",
-    },
-})
-
-const globalStyles = globalCss({
-    body: {
-        backgroundColor: "$gray1",
     },
 })
 

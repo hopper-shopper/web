@@ -81,8 +81,6 @@ export const {
     },
 })
 
-export type ThemeCSS = CSS<typeof config>
-
 export const darkTheme = createTheme({
     colors: {
         ...grayDark,
@@ -93,6 +91,7 @@ export const darkTheme = createTheme({
     },
 })
 
+export type ThemeCSS = CSS<typeof config>
 export type ColorScheme = "light" | "dark" | "system"
 
 export function getPreferredColorScheme(): Extract<ColorScheme, "light" | "dark"> {
@@ -101,3 +100,9 @@ export function getPreferredColorScheme(): Extract<ColorScheme, "light" | "dark"
     }
     return "light"
 }
+
+export const globalStyles = globalCss({
+    body: {
+        backgroundColor: "$gray1",
+    },
+})

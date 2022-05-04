@@ -19,3 +19,7 @@ export function round(value: number, decimals: number): number {
 export function avg(values: number[]): number {
     return values.reduce((acc, cur) => acc + cur, 0) / values.length
 }
+
+export function random(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min + 1) + min)
+}
