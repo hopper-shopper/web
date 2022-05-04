@@ -4,7 +4,7 @@ import {
 } from "components/watchlist/configure-watchlist-filter/ConfigureWatchlistFilter"
 import { Hopper, HopperId } from "models/Hopper"
 import { Adventure, getIdealAdventure, getRatingByAdventure } from "utils/adventures"
-import { hopperAdventureToAdventure } from "utils/hopper"
+import { activityToAdventure } from "utils/hopper"
 import { compareNumber, FilterFn, NumberComparison } from "./_common"
 
 export function getHoppersRatingFilter(
@@ -53,9 +53,9 @@ export function getHoppersMarketFilter(marketFilter: WatchlistMarketFilter): Fil
                 case WatchlistMarketFilter.ANY:
                     return true
                 case WatchlistMarketFilter.ON_MARKET:
-                    return hopper.listing.active
+                    return hopper.price > 0
                 case WatchlistMarketFilter.OFF_MARKET:
-                    return !hopper.listing.active
+                    return hopper.price === 0
             }
         })
     }
@@ -110,7 +110,7 @@ export function getHoppersTierPermitFilter(permits: AdventureTierPermit[]): Filt
 export function getHoppersNotWithinIdealAdventure(): FilterFn<Hopper> {
     const filter: FilterFn<Hopper> = hoppers => {
         return hoppers.filter(hopper => {
-            const currentAdventure = hopperAdventureToAdventure(hopper)
+            const currentAdventure = activityToAdventure(hopper.activity)
             const idealAdventure = getIdealAdventure(hopper)
 
             if (currentAdventure === null) {

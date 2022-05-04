@@ -75,7 +75,7 @@ export default function HopperRow(props: HopperRowProps) {
                     {formatRating(getRatingByAdventure(filter.permit, hopper))}
                 </StyledRatingCell>
             )}
-            <Cell align="right">{formatCurrency(hopper.listing.price, Currency.AVAX)}</Cell>
+            <Cell align="right">{formatCurrency(hopper.price, Currency.AVAX)}</Cell>
             <Cell align="right">{formatCurrency(hopper.levelCosts, Currency.AVAX)}</Cell>
             {filter.type === HoppersTableConfigFilters.PERMIT && (
                 <Cell align="right">

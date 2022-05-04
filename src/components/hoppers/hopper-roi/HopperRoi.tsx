@@ -25,7 +25,7 @@ export default function HopperRoi(props: HopperRoiProps) {
     const avaxPrice = useAtomValue(avaxPriceByCurrencyAtom)
     const initialFlyPrice = useAtomValue(flyPriceByCurrencyAtom)
 
-    const [boughtFor, setBoughtFor] = useObservableState(round(hopper.listing.price, 2))
+    const [boughtFor, setBoughtFor] = useObservableState(round(hopper.price, 2))
     const [startAtLevel, setStartAtLevel] = useState(hopper.level)
     const [flyPrice, setFlyPrice] = useObservableState(round(initialFlyPrice, 2))
 

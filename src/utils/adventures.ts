@@ -19,20 +19,16 @@ export const ALL_ADVENTURES: Adventure[] = [
 ]
 
 export function urlifyAdventure(adventure: Adventure): string {
-    switch (adventure) {
-        case Adventure.POND:
-            return "pond"
-        case Adventure.STREAM:
-            return "stream"
-        case Adventure.SWAMP:
-            return "swamp"
-        case Adventure.RIVER:
-            return "river"
-        case Adventure.FOREST:
-            return "forest"
-        case Adventure.GREAT_LAKE:
-            return "great-lake"
+    const mapping: Record<Adventure, string> = {
+        [Adventure.POND]: "pond",
+        [Adventure.STREAM]: "stream",
+        [Adventure.SWAMP]: "swamp",
+        [Adventure.RIVER]: "river",
+        [Adventure.FOREST]: "forest",
+        [Adventure.GREAT_LAKE]: "great-Lake",
     }
+
+    return mapping[adventure]
 }
 
 /**
@@ -43,40 +39,32 @@ export function urlifyAdventure(adventure: Adventure): string {
  */
 export function calculateMaxRatingPrice(adventure: Adventure, hopper: Hopper): number {
     const rating = getRatingByAdventure(adventure, hopper)
-    return hopper.listing.price / rating
+    return hopper.price / rating
 }
 
 export function getRatingByAdventure(adventure: Adventure, hopper: Hopper): number {
-    switch (adventure) {
-        case Adventure.POND:
-            return hopper.rating.pond
-        case Adventure.STREAM:
-            return hopper.rating.stream
-        case Adventure.SWAMP:
-            return hopper.rating.swamp
-        case Adventure.RIVER:
-            return hopper.rating.river
-        case Adventure.FOREST:
-            return hopper.rating.forest
-        case Adventure.GREAT_LAKE:
-            return hopper.rating.greatLake
+    const mapping: Record<Adventure, number> = {
+        [Adventure.POND]: hopper.rating.pond,
+        [Adventure.STREAM]: hopper.rating.stream,
+        [Adventure.SWAMP]: hopper.rating.swamp,
+        [Adventure.RIVER]: hopper.rating.river,
+        [Adventure.FOREST]: hopper.rating.forest,
+        [Adventure.GREAT_LAKE]: hopper.rating.greatLake,
     }
+
+    return mapping[adventure]
 }
 export function getBaseFlyByAdventure(adventure: Adventure, hopper: Hopper): number {
-    switch (adventure) {
-        case Adventure.POND:
-            return hopper.baseFly.pond
-        case Adventure.STREAM:
-            return hopper.baseFly.stream
-        case Adventure.SWAMP:
-            return hopper.baseFly.swamp
-        case Adventure.RIVER:
-            return hopper.baseFly.river
-        case Adventure.FOREST:
-            return hopper.baseFly.forest
-        case Adventure.GREAT_LAKE:
-            return hopper.baseFly.greatLake
+    const mapping: Record<Adventure, number> = {
+        [Adventure.POND]: hopper.baseFly.pond,
+        [Adventure.STREAM]: hopper.baseFly.stream,
+        [Adventure.SWAMP]: hopper.baseFly.swamp,
+        [Adventure.RIVER]: hopper.baseFly.river,
+        [Adventure.FOREST]: hopper.baseFly.forest,
+        [Adventure.GREAT_LAKE]: hopper.baseFly.greatLake,
     }
+
+    return mapping[adventure]
 }
 
 export function getIdealAdventure(hopper: Hopper): Adventure {

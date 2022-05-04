@@ -81,7 +81,7 @@ export default function HopperTableCard(props: HopperTableCardProps) {
                 </Info>
                 <Info>
                     <span>Price</span>
-                    <span>{formatCurrency(hopper.listing.price, Currency.AVAX)}</span>
+                    <span>{formatCurrency(hopper.price, Currency.AVAX)}</span>
                 </Info>
                 <Info striped>
                     <span>Level Costs</span>

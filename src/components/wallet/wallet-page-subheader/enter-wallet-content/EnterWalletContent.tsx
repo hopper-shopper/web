@@ -48,6 +48,11 @@ export default function EnterWalletContent(props: EnterWalletContentProps) {
         addWalletToHistory(walletAddress.toString())
     }
 
+    const handlePreviousWalletClick = (wallet: WalletAddress) => {
+        addWalletToHistory(wallet)
+        onChange(wallet)
+    }
+
     return (
         <>
             <InputForm onSubmit={handleWalletSubmit} css={{ maxWidth: Screens.sm }}>
@@ -73,7 +78,8 @@ export default function EnterWalletContent(props: EnterWalletContentProps) {
                     <PrevWalletTitle>Previous searches</PrevWalletTitle>
                     {walletsHistory.slice(0, 3).map(prevWallet => (
                         <PrevWalletItem key={prevWallet}>
-                            <PrevWalletAddress onClick={() => onChange(prevWallet)}>
+                            <PrevWalletAddress
+                                onClick={() => handlePreviousWalletClick(prevWallet)}>
                                 {formatWalletAddress(prevWallet)}
                             </PrevWalletAddress>
                             <IconButton

@@ -1,4 +1,3 @@
-import * as Sentry from "@sentry/react"
 import { fetchPrices } from "api/prices"
 import { useSetAtom } from "jotai"
 import { useInterval, useMount } from "react-use"
@@ -13,7 +12,6 @@ export default function usePricesUpdater() {
             setPrices(prices)
         } catch (error) {
             console.error(error)
-            Sentry.captureException(error)
         }
     }
 

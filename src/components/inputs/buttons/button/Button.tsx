@@ -20,6 +20,18 @@ const Button = styled("button", {
         },
         color: {
             neutral: {
+                backgroundColor: "$gray3",
+                color: "$gray11",
+                border: "1px solid $gray7",
+                "&:hover": {
+                    backgroundColor: "$gray4",
+                    borderColor: "$gray8",
+                },
+                "&:focus": {
+                    outline: "2px solid $gray8",
+                },
+            },
+            info: {
                 backgroundColor: "$blue2",
                 color: "$blue11",
                 border: "1px solid $blue7",
@@ -44,10 +56,17 @@ const Button = styled("button", {
                 },
             },
         },
+        fullWidth: {
+            true: {
+                flex: 1,
+                width: "100%",
+            },
+        },
     },
     defaultVariants: {
-        color: "neutral",
         size: "md",
+        color: "info",
+        fullWidth: false,
     },
 })
 

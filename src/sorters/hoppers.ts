@@ -203,7 +203,7 @@ function sortByRatingGreatLake(hoppers: Hopper[]): Hopper[] {
     return [...hoppers].sort((a, b) => a.rating.greatLake - b.rating.greatLake)
 }
 function sortByPrice(hoppers: Hopper[]): Hopper[] {
-    return [...hoppers].sort((a, b) => a.listing.price - b.listing.price)
+    return [...hoppers].sort((a, b) => a.price - b.price)
 }
 function sortByMaxPricePond(hoppers: Hopper[]): Hopper[] {
     return [...hoppers].sort(

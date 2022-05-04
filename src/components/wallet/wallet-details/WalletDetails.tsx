@@ -1,30 +1,30 @@
-import { WalletAddress } from "models/User"
-import { Screens, styled } from "theme"
-import * as Section from "components/layout/section/Section"
 import { SoldFilter } from "api/filters/market"
 import { TransferDirection } from "api/filters/transfers"
 import useHoppersListings from "api/hooks/useHoppersListings"
 import useTransfers from "api/hooks/useTransfers"
 import useWalletHoppers from "api/hooks/useWalletHoppers"
+import Button from "components/inputs/buttons/button/Button"
 import Flex from "components/layout/flex/Flex"
+import Grid from "components/layout/grid/Grid"
+import * as Section from "components/layout/section/Section"
+import RealizedProfitsDialog from "components/transfers/realized-profits-dialog/RealizedProfitsDialog"
 import TransfersBreakdown from "components/transfers/transfers-breakdown/TransfersBreakdown"
 import TransfersByDaySelect from "components/transfers/transfers-by-day-select/TransfersByDaySelect"
 import TransfersTable from "components/transfers/transfers-table/TransfersTable"
 import EmptyText from "components/typography/empty-text/EmptyText"
 import FlyCap from "components/user/fly-cap/FlyCap"
 import UserEarnings from "components/user/user-earnings/UserEarnings"
-import NotIdealAdventuresNotice from "../not-ideal-adventures-notice/NotIdealAdventuresNotice"
-import WalletHopperCard from "../wallet-hopper-card/WalletHopperCard"
-import Grid from "components/layout/grid/Grid"
-import { useMemo, useState } from "react"
-import { hopperAdventureToAdventure } from "utils/hopper"
-import { Adventure } from "utils/adventures"
 import useSort from "hooks/useSort"
+import { Transfer } from "models/Transfer"
+import { WalletAddress } from "models/User"
+import { useMemo, useState } from "react"
 import { SortAdventureBy, sortAdventures } from "sorters/adventures"
 import { SortDirection } from "sorters/_common"
-import { Transfer } from "models/Transfer"
-import Button from "components/inputs/buttons/button/Button"
-import RealizedProfitsDialog from "components/transfers/realized-profits-dialog/RealizedProfitsDialog"
+import { Screens, styled } from "theme"
+import { Adventure } from "utils/adventures"
+import { activityToAdventure } from "utils/hopper"
+import NotIdealAdventuresNotice from "../not-ideal-adventures-notice/NotIdealAdventuresNotice"
+import WalletHopperCard from "../wallet-hopper-card/WalletHopperCard"
 
 type WalletDetailsProps = {
     wallet: WalletAddress
@@ -62,7 +62,11 @@ export default function WalletDetails(props: WalletDetailsProps) {
 
     const adventuresOfStakedHoppers = useMemo(() => {
         return Array.from(
-            new Set(hoppers.map(hopperAdventureToAdventure).filter(Boolean) as Adventure[]),
+            new Set(
+                hoppers
+                    .map(hopper => activityToAdventure(hopper.activity))
+                    .filter(Boolean) as Adventure[],
+            ),
         )
     }, [hoppers])
 

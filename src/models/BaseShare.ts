@@ -1,7 +1,9 @@
-import { HopperAdventure } from "./Hopper"
+import { IsoDatetime } from "utils/types"
 
 export type BaseShare = {
-    adventure: HopperAdventure
+    adventure: BaseShareAdventure
     baseShares: number
-    datetime: string // ISO-Datetime
+    datetime: IsoDatetime
 }
+
+export type BaseShareAdventure = "pond" | "stream" | "swamp" | "river" | "forest" | "great-lake"

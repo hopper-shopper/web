@@ -10,9 +10,7 @@ export default function MarketPrice() {
         <Feature.Root>
             <Feature.Title>Market Price</Feature.Title>
             <StyledPrice>
-                {hopper.listing.active
-                    ? formatCurrency(hopper.listing.price, Currency.AVAX)
-                    : "Not on market"}
+                {hopper.price > 0 ? formatCurrency(hopper.price, Currency.AVAX) : "Not on market"}
             </StyledPrice>
         </Feature.Root>
     )

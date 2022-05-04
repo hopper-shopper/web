@@ -1,5 +1,5 @@
-import { clamp, normalize, parseIntFromString, round } from "utils/numbers"
-import { describe, test, expect } from "vitest"
+import { clamp, parseIntFromString, round } from "utils/numbers"
+import { describe, expect, test } from "vitest"
 
 describe("clamp", () => {
     test("should return value if between range", () => {
@@ -16,18 +16,6 @@ describe("clamp", () => {
     test("should return max if value is above", () => {
         expect(clamp(0, 10, 100)).toBe(10)
         expect(clamp(-50, -10, 10)).toBe(-10)
-    })
-})
-
-describe("normalize", () => {
-    test("should return value if between range", () => {
-        expect(normalize(0, 10, 5)).toBe(5)
-        expect(normalize(-20, -10, -15)).toBe(-15)
-    })
-
-    test("should normalize value", () => {
-        expect(normalize(0, 10, 500)).toBe(5)
-        expect(normalize(0, 100, 500)).toBe(50)
     })
 })
 

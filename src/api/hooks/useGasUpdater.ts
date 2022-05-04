@@ -1,4 +1,3 @@
-import * as Sentry from "@sentry/react"
 import { fetchCurrentGas } from "api/gas"
 import { useSetAtom } from "jotai"
 import { useInterval, useMount } from "react-use"
@@ -13,7 +12,6 @@ export default function useGasUpdater() {
             setGasGwei(gas.gwei)
         } catch (error) {
             console.error(error)
-            Sentry.captureException(error)
         }
     }
 

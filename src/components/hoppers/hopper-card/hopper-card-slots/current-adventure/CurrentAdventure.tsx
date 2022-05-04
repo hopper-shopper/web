@@ -2,12 +2,12 @@ import { useHopperContext } from "contests/HopperContext"
 import { formatAdventure } from "formatters/adventure"
 import { styled } from "theme"
 import { getIdealAdventure } from "utils/adventures"
-import { hopperAdventureToAdventure } from "utils/hopper"
+import { activityToAdventure } from "utils/hopper"
 
 export default function CurrentAdventure() {
     const { hopper } = useHopperContext()
 
-    const hopperAdventure = hopperAdventureToAdventure(hopper)
+    const hopperAdventure = activityToAdventure(hopper.activity)
     const idealAdventure = getIdealAdventure(hopper)
 
     return (

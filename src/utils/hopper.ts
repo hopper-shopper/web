@@ -1,29 +1,22 @@
-import { scaleQuantize } from "d3-scale"
-import { Hopper, HopperId } from "models/Hopper"
-import { Adventure, getRatingByAdventure } from "./adventures"
 import { grassDark, tomatoDark } from "@radix-ui/colors"
+import { scaleQuantize } from "d3-scale"
+import { HopperActivity, HopperId } from "models/Hopper"
+import { Adventure } from "./adventures"
 
-export function hopperAdventureToAdventure(hopper: Hopper): Adventure | null {
-    if (!hopper.inAdventure || !hopper.adventure) {
-        return null
+export function activityToAdventure(activity: HopperActivity): Adventure | null {
+    const mapping: Record<HopperActivity, Adventure | null> = {
+        pond: Adventure.POND,
+        stream: Adventure.STREAM,
+        swamp: Adventure.SWAMP,
+        river: Adventure.RIVER,
+        forest: Adventure.FOREST,
+        "great-lake": Adventure.GREAT_LAKE,
+        breeding: null,
+        idle: null,
+        marketplace: null,
     }
 
-    switch (hopper.adventure) {
-        case "pond":
-            return Adventure.POND
-        case "stream":
-            return Adventure.STREAM
-        case "swamp":
-            return Adventure.SWAMP
-        case "river":
-            return Adventure.RIVER
-        case "forest":
-            return Adventure.FOREST
-        case "great-lake":
-            return Adventure.GREAT_LAKE
-        default:
-            return null
-    }
+    return mapping[activity]
 }
 
 export const HOPPER_STATS_SCALE = scaleQuantize([

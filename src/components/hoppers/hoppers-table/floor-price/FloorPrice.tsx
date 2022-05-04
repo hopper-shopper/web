@@ -15,8 +15,8 @@ export default function FloorPrice(props: FloorPriceProps) {
 
         for (let i = 0; i < hoppers.length; i++) {
             const hopper = hoppers[i]
-            if (hopper.listing.active) {
-                prices.push(hopper.listing.price)
+            if (hopper.price > 0) {
+                prices.push(hopper.price)
             }
         }
 

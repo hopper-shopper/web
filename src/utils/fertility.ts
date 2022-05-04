@@ -7,7 +7,7 @@ import { Hopper } from "models/Hopper"
  */
 export function calculateMaxFertilityRatingPrice(hopper: Hopper): number {
     const rating = hopper.fertility / 10
-    return (hopper.listing.price - hopper.levelCosts) / rating
+    return (hopper.price - hopper.levelCosts) / rating
 }
 
 /**

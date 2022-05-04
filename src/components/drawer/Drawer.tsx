@@ -7,12 +7,8 @@ import { createContext, useContext, useEffect } from "react"
 import { Slot, SlotProps } from "@radix-ui/react-slot"
 import useControllableState from "hooks/useControllableState"
 
-export type RootProps = {
-    defaultOpen?: boolean
-    open?: boolean
-    onOpenChange?: (open: boolean) => void
-    children?: React.ReactNode
-}
+// Context
+
 type DialogContextProps = {
     open: boolean
     onOpenChange: (open: boolean) => void
@@ -25,6 +21,63 @@ function useDialogContext() {
     return useContext(DialogContext)
 }
 
+// Components
+
+const StyledRoot = styled("div", {
+    position: "fixed",
+    inset: 0,
+})
+
+const StyledOverlay = styled("div", {
+    zIndex: 99,
+    backgroundColor: "$blackA9",
+    position: "fixed",
+    inset: 0,
+    backdropFilter: "blur(3px)",
+})
+
+const StyledContent = styled("div", {
+    zIndex: 100,
+    position: "absolute",
+    top: 0,
+    right: 0,
+    bottom: 0,
+    backdropFilter: "blur(0px)",
+    backgroundColor: "$gray2",
+    borderLeft: "1px solid $gray6",
+    padding: "2rem",
+    width: "100vw",
+    maxWidth: "80vw",
+    "@sm": {
+        maxWidth: 350,
+    },
+})
+
+const StyledTitle = styled("h2", {
+    margin: 0,
+    fontWeight: 500,
+    fontSize: "1.25rem",
+    color: "$gray12",
+    marginBottom: "2rem",
+})
+
+const StyledCloseIconButton = styled(IconButton, {
+    position: "absolute",
+    top: "1rem",
+    right: "1rem",
+    "@md": {
+        right: "2rem",
+    },
+})
+
+// Wrapped components
+
+type RootProps = {
+    defaultOpen?: boolean
+    open?: boolean
+    onOpenChange?: (open: boolean) => void
+    children?: React.ReactNode
+}
 function WrappedRoot(props: RootProps) {
     const { defaultOpen, open: controlledOpen, onOpenChange, children } = props
 
@@ -53,11 +106,6 @@ function WrappedRoot(props: RootProps) {
     )
 }
 
-const StyledRoot = styled("div", {
-    position: "fixed",
-    inset: 0,
-})
-
 function WrappedTrigger(props: SlotProps) {
     const { open, onOpenChange } = useDialogContext()
 
@@ -67,31 +115,6 @@ function WrappedTrigger(props: SlotProps) {
 
     return <Slot {...props} onClick={handleClick} />
 }
-
-const StyledOverlay = styled("div", {
-    zIndex: 99,
-    backgroundColor: "$blackA9",
-    position: "fixed",
-    inset: 0,
-    backdropFilter: "blur(3px)",
-})
-
-const StyledContent = styled("div", {
-    zIndex: 100,
-    position: "absolute",
-    top: 0,
-    right: 0,
-    bottom: 0,
-    backdropFilter: "blur(0px)",
-    backgroundColor: "$gray2",
-    borderLeft: "1px solid $gray6",
-    padding: "2rem",
-    width: "100vw",
-    maxWidth: "80vw",
-    "@sm": {
-        maxWidth: 350,
-    },
-})
 
 function WrappedContent(props: ComponentProps<typeof StyledContent>) {
     const { open, onOpenChange } = useDialogContext()
@@ -113,23 +136,6 @@ function WrappedContent(props: ComponentProps<typeof StyledContent>) {
         </Portal.Root>
     )
 }
-
-const StyledTitle = styled("h2", {
-    margin: 0,
-    fontWeight: 500,
-    fontSize: "1.25rem",
-    color: "$gray12",
-    marginBottom: "2rem",
-})
-
-const StyledCloseIconButton = styled(IconButton, {
-    position: "absolute",
-    top: "1rem",
-    right: "1rem",
-    "@md": {
-        right: "2rem",
-    },
-})
 
 function CloseButton(props: ComponentProps<typeof StyledCloseIconButton>) {
     const { onOpenChange } = useDialogContext()
