@@ -24,13 +24,7 @@ type GetHistoricalPricesResponse = {
 }
 
 export function getHistoricalPricesUrl(filter: HistoricalPricesFilter): string {
-    const params = new URLSearchParams([
-        ["at", filter.dates.join(",")],
-        ["coin", filter.coin],
-        ["currency", filter.currency],
-    ])
-
-    return `${ENDPOINT}/prices/historical?${params.toString()}`
+    return `${ENDPOINT}/prices/historical`
 }
 export async function fetchHistoricalPrices(
     filter: HistoricalPricesFilter,
@@ -39,7 +33,17 @@ export async function fetchHistoricalPrices(
         return Promise.resolve({})
     }
 
-    const response = await fetch(getHistoricalPricesUrl(filter))
+    const response = await fetch(getHistoricalPricesUrl(filter), {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            dates: filter.dates,
+            coin: filter.coin,
+            currency: filter.currency,
+        }),
+    })
     const json = (await response.json()) as GetHistoricalPricesResponse
 
     return json.data
