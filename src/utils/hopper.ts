@@ -1,4 +1,4 @@
-import { grassDark, tomatoDark } from "@radix-ui/colors"
+import { grass, tomato, grassDark, tomatoDark } from "@radix-ui/colors"
 import { scaleQuantize } from "d3-scale"
 import { HopperActivity, HopperId } from "models/Hopper"
 import { Adventure } from "./adventures"
@@ -19,7 +19,19 @@ export function activityToAdventure(activity: HopperActivity): Adventure | null 
     return mapping[activity]
 }
 
-export const HOPPER_STATS_SCALE = scaleQuantize([
+export const HOPPER_STATS_SCALE_LIGHT = scaleQuantize([
+    tomato.tomato5,
+    tomato.tomato6,
+    tomato.tomato7,
+    tomato.tomato8,
+    tomato.tomato9,
+    grass.grass5,
+    grass.grass6,
+    grass.grass7,
+    grass.grass8,
+    grass.grass9,
+]).domain([1, 10])
+export const HOPPER_STATS_SCALE_DARK = scaleQuantize([
     tomatoDark.tomato5,
     tomatoDark.tomato6,
     tomatoDark.tomato7,

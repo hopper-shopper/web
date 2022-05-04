@@ -7,6 +7,7 @@ import * as Tag from "components/tag/Tag"
 import { formatAdventure } from "formatters/adventure"
 import { getSPFormatter } from "formatters/text"
 import useScreenSize from "hooks/useScreenSize"
+import useThemeValue from "hooks/useThemeValue"
 import { WalletAddress } from "models/User"
 import { useEffect, useState } from "react"
 import { SortAdventureBy, sortAdventures } from "sorters/adventures"
@@ -14,7 +15,10 @@ import { SortDirection } from "sorters/_common"
 import { styled } from "theme"
 import { Adventure, ALL_ADVENTURES } from "utils/adventures"
 import { getAdventureForTransfer } from "utils/transfer"
-import ClaimedChart, { CLAIMED_CHARTS_COLORS } from "./claimed-chart/ClaimedChart"
+import ClaimedChart, {
+    CLAIMED_CHARTS_COLORS_DARK,
+    CLAIMED_CHARTS_COLORS_LIGHT,
+} from "./claimed-chart/ClaimedChart"
 import useClaimedChartData from "./claimed-chart/useClaimedChartData"
 
 type ClaimedChartCardProps = {
@@ -50,6 +54,7 @@ export default function ClaimedChartCard(props: ClaimedChartCardProps) {
     }, [transfers])
 
     const chartData = useClaimedChartData(transfers, { days })
+    const tagColors = useThemeValue(CLAIMED_CHARTS_COLORS_LIGHT, CLAIMED_CHARTS_COLORS_DARK)
 
     const toggleVisible = (adventure: Adventure) => {
         setVisible(prev => {
@@ -93,9 +98,7 @@ export default function ClaimedChartCard(props: ClaimedChartCardProps) {
                                 key={adventure}
                                 disabled={!visible.has(adventure)}
                                 onClick={() => toggleVisible(adventure)}>
-                                <Tag.Marker
-                                    css={{ backgroundColor: CLAIMED_CHARTS_COLORS[index] }}
-                                />
+                                <Tag.Marker css={{ backgroundColor: tagColors[index] }} />
                                 <Tag.Text>{formatAdventure(adventure)}</Tag.Text>
                             </Tag.Root>
                         ))}

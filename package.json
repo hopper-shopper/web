@@ -7,7 +7,9 @@
         "dev": "vite",
         "build": "tsc && vite build",
         "preview": "vite preview",
-        "test": "vitest"
+        "test": "vitest",
+        "deploy:staging": "yarn dlx vercel@latest deploy",
+        "deploy:prod": "yarn dlx vercel@latest deploy --prod"
     },
     "dependencies": {
         "@radix-ui/colors": "^0.1.8",

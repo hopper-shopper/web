@@ -7,6 +7,7 @@ import Flex from "components/layout/flex/Flex"
 import WatchlistButton from "components/watchlist/watchlist-button/WatchlistButton"
 import { Currency, formatCurrency } from "formatters/currency"
 import { formatRating } from "formatters/rating"
+import useThemeValue from "hooks/useThemeValue"
 import { useAtomValue } from "jotai"
 import { Hopper } from "models/Hopper"
 import { watchlistAtom } from "stores/watchlist"
@@ -21,7 +22,7 @@ import {
     calculateHopperLevelAtTadpoleChange,
     calculateMaxFertilityRatingPrice,
 } from "utils/fertility"
-import { HOPPER_STATS_SCALE } from "utils/hopper"
+import { HOPPER_STATS_SCALE_DARK, HOPPER_STATS_SCALE_LIGHT } from "utils/hopper"
 import { calculateLevelUpCosts } from "utils/level"
 import { getHopperMarketUrl } from "utils/url"
 
@@ -34,6 +35,7 @@ export default function HopperTableCard(props: HopperTableCardProps) {
     const { hopper, filter } = props
 
     const watchlist = useAtomValue(watchlistAtom)
+    const colorScale = useThemeValue(HOPPER_STATS_SCALE_LIGHT, HOPPER_STATS_SCALE_DARK)
 
     return (
         <StyledCard>
@@ -42,19 +44,19 @@ export default function HopperTableCard(props: HopperTableCardProps) {
                     <Image src={hopper.image} />
                 </a>
                 <StatsList>
-                    <Stat style={{ backgroundColor: HOPPER_STATS_SCALE(hopper.strength) }}>
+                    <Stat style={{ backgroundColor: colorScale(hopper.strength) }}>
                         {hopper.strength}
                     </Stat>
-                    <Stat style={{ backgroundColor: HOPPER_STATS_SCALE(hopper.agility) }}>
+                    <Stat style={{ backgroundColor: colorScale(hopper.agility) }}>
                         {hopper.agility}
                     </Stat>
-                    <Stat style={{ backgroundColor: HOPPER_STATS_SCALE(hopper.vitality) }}>
+                    <Stat style={{ backgroundColor: colorScale(hopper.vitality) }}>
                         {hopper.vitality}
                     </Stat>
-                    <Stat style={{ backgroundColor: HOPPER_STATS_SCALE(hopper.intelligence) }}>
+                    <Stat style={{ backgroundColor: colorScale(hopper.intelligence) }}>
                         {hopper.intelligence}
                     </Stat>
-                    <Stat style={{ backgroundColor: HOPPER_STATS_SCALE(hopper.fertility) }}>
+                    <Stat style={{ backgroundColor: colorScale(hopper.fertility) }}>
                         {hopper.fertility}
                     </Stat>
                 </StatsList>

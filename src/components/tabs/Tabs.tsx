@@ -34,7 +34,7 @@ const StyledTab = styled("button", {
         active: {
             true: {
                 backgroundColor: "$blue9",
-                color: "$blue12",
+                color: "#ffffff",
             },
             false: {
                 color: "$gray11",

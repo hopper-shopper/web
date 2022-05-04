@@ -6,6 +6,13 @@ import {
     pinkDark,
     purpleDark,
     skyDark,
+    grass,
+    gray,
+    indigo,
+    mint,
+    pink,
+    purple,
+    sky,
 } from "@radix-ui/colors"
 import { AxisBottom, AxisLeft } from "@visx/axis"
 import { localPoint } from "@visx/event"
@@ -19,6 +26,7 @@ import Screen from "components/layout/screen/Screen"
 import EmptyText from "components/typography/empty-text/EmptyText"
 import { Currency, formatCurrency } from "formatters/currency"
 import useScreenSize from "hooks/useScreenSize"
+import useThemeValue from "hooks/useThemeValue"
 import { MouseEvent, TouchEvent, useMemo, useState } from "react"
 import { styled } from "theme"
 import { Adventure } from "utils/adventures"
@@ -45,6 +53,9 @@ export default function ClaimedChart(props: ClaimedChartProps) {
 
     const xMax = width - marginLeft - marginRight
     const yMax = height - marginTop - marginBottom
+
+    const colors = useThemeValue(CLAIMED_CHARTS_COLORS_LIGHT, CLAIMED_CHARTS_COLORS_DARK)
+    const grayScale = useThemeValue(gray, grayDark)
 
     const visibleKeys: Array<keyof ChartData> = useMemo(() => {
         const keys: Array<keyof ChartData> = []
@@ -92,9 +103,9 @@ export default function ClaimedChart(props: ClaimedChartProps) {
     const colorScale = useMemo(() => {
         return scaleOrdinal({
             domain: ALL_KEYS,
-            range: CLAIMED_CHARTS_COLORS,
+            range: colors,
         })
-    }, [visibleKeys])
+    }, [colors])
 
     const { tooltipLeft, tooltipTop, tooltipOpen, tooltipData, showTooltip, hideTooltip } =
         useTooltip<TooltipData>({
@@ -148,7 +159,7 @@ export default function ClaimedChart(props: ClaimedChartProps) {
                     scale={claimedScale}
                     width={xMax}
                     left={marginLeft}
-                    stroke={grayDark.gray6}
+                    stroke={grayScale.gray6}
                 />
 
                 {columnOverlay !== null && (
@@ -157,7 +168,7 @@ export default function ClaimedChart(props: ClaimedChartProps) {
                         y={marginTop}
                         width={columnOverlay.width}
                         height={yMax}
-                        fill={grayDark.gray6}
+                        fill={grayScale.gray6}
                         rx={4}
                         pointerEvents="none"
                     />
@@ -211,12 +222,12 @@ export default function ClaimedChart(props: ClaimedChartProps) {
                     top={yMax + marginTop}
                     left={marginLeft}
                     scale={dayScale}
-                    stroke={grayDark.gray6}
+                    stroke={grayScale.gray6}
                     numTicks={isTabletUp ? undefined : 5}
                     tickFormat={formatDateShort}
-                    tickStroke={grayDark.gray6}
+                    tickStroke={grayScale.gray6}
                     tickLabelProps={() => ({
-                        fill: grayDark.gray11,
+                        fill: grayScale.gray11,
                         fontSize: 12,
                         textAnchor: "middle",
                     })}
@@ -226,13 +237,13 @@ export default function ClaimedChart(props: ClaimedChartProps) {
                     <AxisLeft
                         scale={claimedScale}
                         left={marginLeft}
-                        stroke={grayDark.gray11}
+                        stroke={grayScale.gray11}
                         hideAxisLine
                         hideTicks
-                        tickStroke={grayDark.gray11}
+                        tickStroke={grayScale.gray11}
                         tickFormat={value => formatClaimed(Number(value))}
                         tickLabelProps={() => ({
-                            fill: grayDark.gray11,
+                            fill: grayScale.gray11,
                             fontSize: 10,
                             textAnchor: "end",
                             verticalAnchor: "middle",
@@ -276,7 +287,15 @@ const VISIBLITY_BY_ADVENTURE: Record<Adventure, keyof ChartData> = {
     [Adventure.GREAT_LAKE]: "claimedGreatLake",
 }
 
-export const CLAIMED_CHARTS_COLORS = [
+export const CLAIMED_CHARTS_COLORS_LIGHT = [
+    pink.pink9,
+    purple.purple9,
+    indigo.indigo9,
+    sky.sky9,
+    mint.mint9,
+    grass.grass9,
+]
+export const CLAIMED_CHARTS_COLORS_DARK = [
     pinkDark.pink9,
     purpleDark.purple9,
     indigoDark.indigo9,
@@ -363,7 +382,7 @@ const StyledTooltip = styled("span", {
     border: "1px solid $blue6",
     borderRadius: "$sm",
     backgroundColor: "$blue9",
-    color: "$blue12",
+    color: "#ffffff",
     fontSize: "0.875rem",
     left: "50%",
     transform: "translateX(-50%)",

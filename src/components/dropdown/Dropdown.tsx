@@ -63,7 +63,7 @@ const StyledLabel = styled(DropdownPrimitives.Label, {
 const StyledSeparator = styled(DropdownPrimitives.Separator, {
     height: 1,
     backgroundColor: "$gray6",
-    margin: "0.5rem",
+    margin: "0.5rem -0.5rem",
 })
 
 const StyledItemIndicator = styled(DropdownPrimitives.ItemIndicator, {

@@ -1,17 +1,19 @@
-import { IconMenu } from "@tabler/icons"
+import { IconDeviceDesktop, IconMenu, IconMoon, IconSun } from "@tabler/icons"
 import * as Drawer from "components/drawer/Drawer"
 import IconButton from "components/inputs/buttons/icon-button/IconButton"
 import Flex from "components/layout/flex/Flex"
 import RightSlot from "components/layout/flex/RightSlot"
+import Grid from "components/layout/grid/Grid"
 import { formatCurrency } from "formatters/currency"
 import { formatGwei } from "formatters/gas"
-import { useAtomValue } from "jotai"
+import { useAtom, useAtomValue } from "jotai"
 import { useState } from "react"
 import { Link, LinkProps, useMatch, useResolvedPath } from "react-router-dom"
 import * as ROUTES from "routing/routes"
 import { gasGweiAtom } from "stores/gas"
 import { avaxPriceByCurrencyAtom, flyPriceByCurrencyAtom } from "stores/prices"
 import { currencyAtom } from "stores/settings"
+import { themeAtom } from "stores/theme"
 import { styled } from "theme"
 
 export default function MobileHeaderContent() {
@@ -22,6 +24,7 @@ export default function MobileHeaderContent() {
     const currency = useAtomValue(currencyAtom)
     const avaxPrice = useAtomValue(avaxPriceByCurrencyAtom)
     const flyPrice = useAtomValue(flyPriceByCurrencyAtom)
+    const [theme, setTheme] = useAtom(themeAtom)
 
     return (
         <>
@@ -70,6 +73,29 @@ export default function MobileHeaderContent() {
                             </Flex>
                         </Flex>
 
+                        <Footer>
+                            <Grid columns="3" gap="sm" css={{ justifyItems: "center" }}>
+                                <ThemeButton
+                                    active={theme === "system"}
+                                    onClick={() => setTheme("system")}>
+                                    <IconDeviceDesktop />
+                                    System
+                                </ThemeButton>
+                                <ThemeButton
+                                    active={theme === "light"}
+                                    onClick={() => setTheme("light")}>
+                                    <IconSun />
+                                    Light
+                                </ThemeButton>
+                                <ThemeButton
+                                    active={theme === "dark"}
+                                    onClick={() => setTheme("dark")}>
+                                    <IconMoon />
+                                    Dark
+                                </ThemeButton>
+                            </Grid>
+                        </Footer>
+
                         <Drawer.Close />
                     </Drawer.Content>
                 </Drawer.Root>
@@ -102,6 +128,37 @@ const TileLabel = styled("p", {
 const TileValue = styled("p", {
     color: "$gray12",
     fontSize: "1rem",
+})
+const Footer = styled("div", {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: "1rem 2rem",
+    backgroundColor: "$gray3",
+})
+const ThemeButton = styled("button", {
+    all: "unset",
+    borderRadius: "$md",
+    border: "none",
+    backgroundColor: "$gray3",
+    color: "$gray11",
+    padding: "0.25rem 0.5rem",
+    display: "inline-flex",
+    alignItems: "center",
+    columnGap: "0.25rem",
+    fontSize: "0.75rem",
+    "& > svg": {
+        size: "1.125rem",
+    },
+    variants: {
+        active: {
+            true: {
+                backgroundColor: "$blue9",
+                color: "#fff",
+            },
+        },
+    },
 })
 
 function ActivatableLink(props: LinkProps) {

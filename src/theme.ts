@@ -48,6 +48,8 @@ export const {
         md: `(min-width: ${Screens.md}px)`,
         lg: `(min-width: ${Screens.lg}px)`,
         xl: `(min-width: ${Screens.xl}px)`,
+        light: "(prefers-color-scheme: light)",
+        dark: "(prefers-color-scheme: dark)",
     },
     utils: {
         size: (size: PropertyValue<"width">) => ({
@@ -90,3 +92,12 @@ export const darkTheme = createTheme({
         ...yellowDark,
     },
 })
+
+export type ColorScheme = "light" | "dark" | "system"
+
+export function getPreferredColorScheme(): Extract<ColorScheme, "light" | "dark"> {
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        return "dark"
+    }
+    return "light"
+}

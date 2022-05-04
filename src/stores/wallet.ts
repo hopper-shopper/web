@@ -1,8 +1,9 @@
 import { atom } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 import { WalletAddress } from "models/User"
+import { getStorageKey } from "utils/stores"
 
-const WALLETS_HISTORY_LS = "hoppershopper.wallet.history"
+const WALLETS_HISTORY_LS = getStorageKey("wallet.history")
 
 type WalletHistoryEntry = {
     wallet: WalletAddress

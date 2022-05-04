@@ -2,7 +2,7 @@ import useGasUpdater from "api/hooks/useGasUpdater"
 import usePricesUpdater from "api/hooks/usePricesUpdater"
 import PageFooter from "components/footers/page-footer/PageFooter"
 import PageHeader from "components/headers/page-header/PageHeader"
-import useApplyDarkMode from "hooks/useApplyDarkMode"
+import useApplyTheme from "hooks/useApplyTheme"
 import InspectPage from "pages/inspect-page/InspectPage"
 import MarketPage from "pages/market-page/MarketPage"
 import WalletPage from "pages/wallet-page/WalletPage"
@@ -14,7 +14,7 @@ import { globalCss, styled } from "./theme"
 
 function App() {
     globalStyles()
-    useApplyDarkMode()
+    useApplyTheme()
 
     useGasUpdater()
     usePricesUpdater()

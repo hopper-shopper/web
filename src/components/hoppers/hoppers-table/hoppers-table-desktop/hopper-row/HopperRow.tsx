@@ -3,6 +3,7 @@ import { Cell } from "components/table/Table"
 import WatchlistButton from "components/watchlist/watchlist-button/WatchlistButton"
 import { Currency, formatCurrency } from "formatters/currency"
 import { formatRating } from "formatters/rating"
+import useThemeValue from "hooks/useThemeValue"
 import { Hopper } from "models/Hopper"
 import { styled } from "theme"
 import {
@@ -15,7 +16,7 @@ import {
     calculateHopperLevelAtTadpoleChange,
     calculateMaxFertilityRatingPrice,
 } from "utils/fertility"
-import { HOPPER_STATS_SCALE } from "utils/hopper"
+import { HOPPER_STATS_SCALE_DARK, HOPPER_STATS_SCALE_LIGHT } from "utils/hopper"
 import { calculateLevelUpCosts } from "utils/level"
 import { getHopperMarketUrl } from "utils/url"
 import {
@@ -32,6 +33,8 @@ type HopperRowProps = {
 export default function HopperRow(props: HopperRowProps) {
     const { hopper, index, filter } = props
 
+    const colorScale = useThemeValue(HOPPER_STATS_SCALE_LIGHT, HOPPER_STATS_SCALE_DARK)
+
     return (
         <>
             <Cell>
@@ -46,27 +49,27 @@ export default function HopperRow(props: HopperRowProps) {
             <Cell align="center">{hopper.tokenId}</Cell>
             <Cell align="center">{hopper.level}</Cell>
             <Cell align="center" css={{ px: "0.5rem" }}>
-                <Value style={{ backgroundColor: HOPPER_STATS_SCALE(hopper.strength) }}>
+                <Value style={{ backgroundColor: colorScale(hopper.strength) }}>
                     {hopper.strength}
                 </Value>
             </Cell>
             <Cell align="center" css={{ px: "0.5rem" }}>
-                <Value style={{ backgroundColor: HOPPER_STATS_SCALE(hopper.agility) }}>
+                <Value style={{ backgroundColor: colorScale(hopper.agility) }}>
                     {hopper.agility}
                 </Value>
             </Cell>
             <Cell align="center" css={{ px: "0.5rem" }}>
-                <Value style={{ backgroundColor: HOPPER_STATS_SCALE(hopper.vitality) }}>
+                <Value style={{ backgroundColor: colorScale(hopper.vitality) }}>
                     {hopper.vitality}
                 </Value>
             </Cell>
             <Cell align="center" css={{ px: "0.5rem" }}>
-                <Value style={{ backgroundColor: HOPPER_STATS_SCALE(hopper.intelligence) }}>
+                <Value style={{ backgroundColor: colorScale(hopper.intelligence) }}>
                     {hopper.intelligence}
                 </Value>
             </Cell>
             <Cell align="center" css={{ px: "0.5rem" }}>
-                <Value style={{ backgroundColor: HOPPER_STATS_SCALE(hopper.fertility) }}>
+                <Value style={{ backgroundColor: colorScale(hopper.fertility) }}>
                     {hopper.fertility}
                 </Value>
             </Cell>
@@ -137,6 +140,7 @@ const Value = styled("div", {
     alignItems: "center",
     justifyContent: "center",
     padding: "0.25rem 0.5rem",
+    color: "$gray12",
 })
 
 const StyledRatingCell = styled(Cell, {

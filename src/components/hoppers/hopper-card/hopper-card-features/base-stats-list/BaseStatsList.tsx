@@ -1,6 +1,7 @@
 import { useHopperContext } from "contests/HopperContext"
+import useThemeValue from "hooks/useThemeValue"
 import { styled } from "theme"
-import { HOPPER_STATS_SCALE } from "utils/hopper"
+import { HOPPER_STATS_SCALE_DARK, HOPPER_STATS_SCALE_LIGHT } from "utils/hopper"
 import * as Feature from "../HopperCardFeature"
 
 type BaseStatsListProps = {
@@ -14,23 +15,25 @@ export default function BaseStatsList(props: BaseStatsListProps) {
     const { title = false } = props
     const { hopper } = useHopperContext()
 
+    const colorScale = useThemeValue(HOPPER_STATS_SCALE_LIGHT, HOPPER_STATS_SCALE_DARK)
+
     return (
         <Feature.Root>
             {title && <Feature.Title>Base stats</Feature.Title>}
             <StyledBaseStatsList>
-                <BaseStat style={{ backgroundColor: HOPPER_STATS_SCALE(hopper.strength) }}>
+                <BaseStat style={{ backgroundColor: colorScale(hopper.strength) }}>
                     {hopper.strength}
                 </BaseStat>
-                <BaseStat style={{ backgroundColor: HOPPER_STATS_SCALE(hopper.agility) }}>
+                <BaseStat style={{ backgroundColor: colorScale(hopper.agility) }}>
                     {hopper.agility}
                 </BaseStat>
-                <BaseStat style={{ backgroundColor: HOPPER_STATS_SCALE(hopper.vitality) }}>
+                <BaseStat style={{ backgroundColor: colorScale(hopper.vitality) }}>
                     {hopper.vitality}
                 </BaseStat>
-                <BaseStat style={{ backgroundColor: HOPPER_STATS_SCALE(hopper.intelligence) }}>
+                <BaseStat style={{ backgroundColor: colorScale(hopper.intelligence) }}>
                     {hopper.intelligence}
                 </BaseStat>
-                <BaseStat style={{ backgroundColor: HOPPER_STATS_SCALE(hopper.fertility) }}>
+                <BaseStat style={{ backgroundColor: colorScale(hopper.fertility) }}>
                     {hopper.fertility}
                 </BaseStat>
             </StyledBaseStatsList>
