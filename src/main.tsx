@@ -6,7 +6,7 @@ import { BrowserRouter } from "react-router-dom"
 import * as Sentry from "@sentry/react"
 import { BrowserTracing } from "@sentry/tracing"
 import { version } from "../package.json"
-import MaintenancePage from "pages/maintenance-page/MaintenancePage"
+// import MaintenancePage from "pages/maintenance-page/MaintenancePage"
 
 Sentry.init({
     dsn: import.meta.env.VITE_SENTRY_DSN,
@@ -20,8 +20,8 @@ Sentry.init({
 ReactDOM.render(
     <BrowserRouter>
         <React.StrictMode>
-            <MaintenancePage />
-            {/* <App /> */}
+            {/* <MaintenancePage /> */}
+            <App />
         </React.StrictMode>
     </BrowserRouter>,
     document.getElementById("root"),
