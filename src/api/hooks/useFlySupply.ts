@@ -1,0 +1,19 @@
+import { fetchFylSupply } from "api/fly-supply"
+import { FlySupply } from "models/FlySupply"
+import { useAsync } from "react-use"
+
+type UseFlySupplyReturn = {
+    supplies: FlySupply[]
+    loading: boolean
+    error: Error | null
+}
+
+export default function useFlySupply(): UseFlySupplyReturn {
+    const { value, loading, error } = useAsync(fetchFylSupply, [])
+
+    return {
+        supplies: value ?? [],
+        loading,
+        error: error ?? null,
+    }
+}
