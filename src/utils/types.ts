@@ -5,3 +5,5 @@ export type OmitOwnProps<Component, OwnProps> = Omit<ComponentProps<Component>, 
 
 export type IsoDate = string // YYYY-MM-DD
 export type IsoDatetime = string
+
+export type ObjectKey = string | number | symbol

@@ -1,10 +1,10 @@
 import SubHeader from "components/headers/sub-header/SubHeader"
 import Button from "components/inputs/buttons/button/Button"
-import Flex from "components/layout/flex/Flex"
 import Screen from "components/layout/screen/Screen"
 import * as Tabs from "components/tabs/Tabs"
 import { formatWalletAddress } from "formatters/wallet"
 import { WalletAddress } from "models/User"
+import { WalletNavigationView } from "pages/wallet-page/useWalletPageState"
 import { styled } from "theme"
 
 type WalletNavigationContentProps = {
@@ -47,12 +47,6 @@ export default function WalletNavigationContent(props: WalletNavigationContentPr
             </Container>
         </SubHeader>
     )
-}
-
-// Types
-export enum WalletNavigationView {
-    GAMEPLAY = "GAMEPLAY",
-    ANALYTICS = "ANALYTICS",
 }
 
 // Components

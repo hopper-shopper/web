@@ -1,19 +1,13 @@
 import EmptyText from "components/typography/empty-text/EmptyText"
 import WalletAnalytics from "components/wallet/wallet-analytics/WalletAnalytics"
 import WalletDetails from "components/wallet/wallet-details/WalletDetails"
-import { WalletNavigationView } from "components/wallet/wallet-page-subheader/wallet-navigation-content/WalletNavigationContent"
 import WalletPageSubheader from "components/wallet/wallet-page-subheader/WalletPageSubheader"
-import useWalletPageState, { WalletPageState } from "./useWalletPageState"
+import useStateUpdate from "hooks/useStateUpdate"
+import useWalletPageState, { WalletNavigationView } from "./useWalletPageState"
 
 export default function WalletPage() {
     const [state, setState] = useWalletPageState()
-
-    const updateState = (update: Partial<WalletPageState>) => {
-        setState(prev => ({
-            ...prev,
-            ...update,
-        }))
-    }
+    const updateState = useStateUpdate(setState)
 
     return (
         <>

@@ -1,4 +1,3 @@
-import { WalletNavigationView } from "components/wallet/wallet-page-subheader/wallet-navigation-content/WalletNavigationContent"
 import { WalletAddress } from "models/User"
 import { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
@@ -26,6 +25,11 @@ export type WalletPageState = {
     view: WalletNavigationView
 }
 
+export enum WalletNavigationView {
+    GAMEPLAY = "GAMEPLAY",
+    ANALYTICS = "ANALYTICS",
+}
+
 // Constants
 const WALLET_KEY = "wallet"
 const VIEW_KEY = "view"
@@ -36,7 +40,6 @@ const INITIAL_STATE: WalletPageState = {
 }
 
 // State update functions
-
 function deriveStateFromSearchParams(searchParams: URLSearchParams): WalletPageState {
     const walletAddress = searchParams.get(WALLET_KEY)
     const view = searchParams.has(VIEW_KEY)
@@ -61,7 +64,6 @@ function deriveSearchParamsFromState(state: WalletPageState): URLSearchParams {
 }
 
 // Parse / Urlify
-
 const viewMapping = createLookupMap([
     [WalletNavigationView.GAMEPLAY, "gameplay"],
     [WalletNavigationView.ANALYTICS, "analytics"],

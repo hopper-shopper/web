@@ -30,6 +30,10 @@ const StyledTab = styled("button", {
     borderRadius: "$md",
     fontSize: "1rem",
     flex: 1,
+    "&:disabled": {
+        pointerEvents: "none",
+        textDecoration: "line-through",
+    },
     variants: {
         active: {
             true: {
