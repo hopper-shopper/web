@@ -108,7 +108,7 @@ export default function ClaimedChart(props: ClaimedChartProps) {
         })
     }, [colors])
 
-    const { tooltipLeft, tooltipTop, tooltipOpen, tooltipData, showTooltip, hideTooltip } =
+    const { tooltipLeft, tooltipOpen, tooltipData, showTooltip, hideTooltip } =
         useTooltip<TooltipData>({
             tooltipOpen: false,
         })

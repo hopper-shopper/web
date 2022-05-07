@@ -1127,6 +1127,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/d3-array@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "@types/d3-array@npm:3.0.2"
+  checksum: 608cbdc3dcf2bbd6710a0b82e1fba0ee410002a5813b8628ea0673c3e4d6169ba39d7c136162fb7a08435411cfb78aa5cdd871196df129c744fbf3706aac116e
+  languageName: node
+  linkType: hard
+
 "@types/d3-color@npm:^1":
   version: 1.4.2
   resolution: "@types/d3-color@npm:1.4.2"
@@ -1319,7 +1326,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@visx/curve@npm:2.1.0":
+"@visx/curve@npm:2.1.0, @visx/curve@npm:^2.1.0":
   version: 2.1.0
   resolution: "@visx/curve@npm:2.1.0"
   dependencies:
@@ -1794,6 +1801,15 @@ __metadata:
   dependencies:
     internmap: ^1.0.0
   checksum: 97853b7b523aded17078f37c67742f45d81e88dda2107ae9994c31b9e36c5fa5556c4c4cf39650436f247813602dfe31bf7ad067ff80f127a16903827f10c6eb
+  languageName: node
+  linkType: hard
+
+"d3-array@npm:^3.1.6":
+  version: 3.1.6
+  resolution: "d3-array@npm:3.1.6"
+  dependencies:
+    internmap: 1 - 2
+  checksum: 32f515bd2559624681048ca86b0bd395047887b3473ddf136ddb4276620c39a0f3996865320ac49c74969a06a8e30e6f9d2d2097e908ba49c11b0f7fe0cbebda
   languageName: node
   linkType: hard
 
@@ -3989,12 +4005,14 @@ __metadata:
     "@sentry/tracing": ^6.19.6
     "@stitches/react": ^1.2.7
     "@tabler/icons": ^1.56.0
+    "@types/d3-array": ^3.0.2
     "@types/d3-scale": ^4.0.2
     "@types/node": ^17.0.25
     "@types/react": ^17.0.33
     "@types/react-dom": ^17.0.10
     "@types/validator": ^13.7.2
     "@visx/axis": ^2.6.0
+    "@visx/curve": ^2.1.0
     "@visx/event": ^2.6.0
     "@visx/grid": ^2.9.2
     "@visx/group": ^2.1.0
@@ -4003,6 +4021,7 @@ __metadata:
     "@visx/shape": ^2.4.0
     "@visx/tooltip": ^2.8.0
     "@vitejs/plugin-react": ^1.0.7
+    d3-array: ^3.1.6
     d3-scale: ^4.0.2
     date-fns: ^2.28.0
     dequal: ^2.0.2
