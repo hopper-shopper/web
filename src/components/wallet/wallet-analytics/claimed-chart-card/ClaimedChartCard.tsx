@@ -8,6 +8,7 @@ import { formatAdventure } from "formatters/adventure"
 import { getSPFormatter } from "formatters/text"
 import useScreenSize from "hooks/useScreenSize"
 import useThemeValue from "hooks/useThemeValue"
+import useUniqueToggleList from "hooks/useUniqueToggleList"
 import { WalletAddress } from "models/User"
 import { useEffect, useState } from "react"
 import { SortAdventureBy, sortAdventures } from "sorters/adventures"
@@ -31,7 +32,11 @@ export default function ClaimedChartCard(props: ClaimedChartCardProps) {
     const isTabletUp = useScreenSize("md")
     const isLaptopUp = useScreenSize("lg")
 
-    const [visible, setVisible] = useState(new Set<Adventure>())
+    const {
+        state: visible,
+        setState: setVisible,
+        toggle: toggleVisibility,
+    } = useUniqueToggleList<Adventure>([])
     const [days, setDays] = useState(10)
 
     const { transfers, dataSignature, loading } = useTransfers({
@@ -56,25 +61,12 @@ export default function ClaimedChartCard(props: ClaimedChartCardProps) {
     const chartData = useClaimedChartData(transfers, { days })
     const tagColors = useThemeValue(CLAIMED_CHARTS_COLORS_LIGHT, CLAIMED_CHARTS_COLORS_DARK)
 
-    const toggleVisible = (adventure: Adventure) => {
-        setVisible(prev => {
-            const next = new Set(prev)
-            if (next.has(adventure)) {
-                next.delete(adventure)
-            } else {
-                next.add(adventure)
-            }
-            return next
-        })
-    }
-
     const chartHeight = ((): number => {
         if (isLaptopUp) {
             return 700
         } else if (isTabletUp) {
             return 500
         }
-
         return 300
     })()
 
@@ -97,7 +89,7 @@ export default function ClaimedChartCard(props: ClaimedChartCardProps) {
                             <Tag.Root
                                 key={adventure}
                                 disabled={!visible.has(adventure)}
-                                onClick={() => toggleVisible(adventure)}>
+                                onClick={() => toggleVisibility(adventure)}>
                                 <Tag.Marker css={{ backgroundColor: tagColors[index] }} />
                                 <Tag.Text>{formatAdventure(adventure)}</Tag.Text>
                             </Tag.Root>
@@ -115,7 +107,7 @@ export default function ClaimedChartCard(props: ClaimedChartCardProps) {
                                     key={dataSignature}
                                     width={width}
                                     height={height}
-                                    visible={Array.from(visible)}
+                                    visible={visible}
                                     data={chartData}
                                 />
                             )}
@@ -138,6 +130,7 @@ const Actions = styled("div", {
     display: "flex",
     flexDirection: "column",
     rowGap: "1rem",
+    marginTop: "1rem",
     "@md": {
         flexDirection: "row",
         justifyContent: "space-between",

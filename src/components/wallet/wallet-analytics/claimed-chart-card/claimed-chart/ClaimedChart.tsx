@@ -30,14 +30,15 @@ import useThemeValue from "hooks/useThemeValue"
 import { MouseEvent, TouchEvent, useMemo, useState } from "react"
 import { styled } from "theme"
 import { Adventure } from "utils/adventures"
-import { ChartData, DayDate } from "./useClaimedChartData"
+import { IsoDate } from "utils/types"
+import { ClaimedChartData } from "./useClaimedChartData"
 
 type ClaimedChartProps = {
     width: number
     height: number
 
-    visible: Adventure[]
-    data: ChartData[]
+    visible: Set<Adventure>
+    data: ClaimedChartData[]
 }
 
 export default function ClaimedChart(props: ClaimedChartProps) {
@@ -57,8 +58,8 @@ export default function ClaimedChart(props: ClaimedChartProps) {
     const colors = useThemeValue(CLAIMED_CHARTS_COLORS_LIGHT, CLAIMED_CHARTS_COLORS_DARK)
     const grayScale = useThemeValue(gray, grayDark)
 
-    const visibleKeys: Array<keyof ChartData> = useMemo(() => {
-        const keys: Array<keyof ChartData> = []
+    const visibleKeys: Array<keyof ClaimedChartData> = useMemo(() => {
+        const keys: Array<keyof ClaimedChartData> = []
 
         for (const adventure of visible) {
             keys.push(VISIBLITY_BY_ADVENTURE[adventure])
@@ -144,7 +145,7 @@ export default function ClaimedChart(props: ClaimedChartProps) {
         hideTooltip()
     }
 
-    if (dataMax === 0 || visible.length === 0 || data.length === 0) {
+    if (dataMax === 0 || visible.size === 0 || data.length === 0) {
         return (
             <Flex x="center" y="center" css={{ width, height }}>
                 <EmptyText>No data</EmptyText>
@@ -270,7 +271,7 @@ export default function ClaimedChart(props: ClaimedChartProps) {
 }
 
 // Constants
-const ALL_KEYS: Array<keyof ChartData> = [
+const ALL_KEYS: Array<keyof ClaimedChartData> = [
     "claimedPond",
     "claimedStream",
     "claimedSwamp",
@@ -278,7 +279,7 @@ const ALL_KEYS: Array<keyof ChartData> = [
     "claimedForest",
     "claimedGreatLake",
 ]
-const VISIBLITY_BY_ADVENTURE: Record<Adventure, keyof ChartData> = {
+const VISIBLITY_BY_ADVENTURE: Record<Adventure, keyof ClaimedChartData> = {
     [Adventure.POND]: "claimedPond",
     [Adventure.STREAM]: "claimedStream",
     [Adventure.SWAMP]: "claimedSwamp",
@@ -310,16 +311,16 @@ type ColumnOverlayState = {
     width: number
 }
 type TooltipData = {
-    date: DayDate
+    date: IsoDate
     width: number
 }
 
 // Getters
-function getDate(item: ChartData): DayDate {
+function getDate(item: ClaimedChartData): IsoDate {
     return item.date
 }
 
-function claimedMax(item: ChartData, visibleKeys: Array<keyof ChartData>): number {
+function claimedMax(item: ClaimedChartData, visibleKeys: Array<keyof ClaimedChartData>): number {
     const values: number[] = []
 
     for (const key of visibleKeys) {
@@ -333,7 +334,7 @@ function claimedMax(item: ChartData, visibleKeys: Array<keyof ChartData>): numbe
 }
 
 // Formatters
-function formatDateShort(date: DayDate): string {
+function formatDateShort(date: IsoDate): string {
     const formatter = new Intl.DateTimeFormat([], {
         month: "numeric",
         day: "numeric",
@@ -341,7 +342,7 @@ function formatDateShort(date: DayDate): string {
 
     return formatter.format(Date.parse(date))
 }
-function formatDateLong(date: DayDate): string {
+function formatDateLong(date: IsoDate): string {
     const formatter = new Intl.DateTimeFormat([], {
         dateStyle: "long",
     })
@@ -354,7 +355,7 @@ function formatClaimed(claimed: number): string {
 }
 
 // Sorters
-const ranking: Record<keyof ChartData, number> = {
+const ranking: Record<keyof ClaimedChartData, number> = {
     date: -1,
     claimedPond: 0,
     claimedStream: 1,
@@ -363,7 +364,7 @@ const ranking: Record<keyof ChartData, number> = {
     claimedForest: 4,
     claimedGreatLake: 5,
 }
-function sortKeys(keys: Array<keyof ChartData>): Array<keyof ChartData> {
+function sortKeys(keys: Array<keyof ClaimedChartData>): Array<keyof ClaimedChartData> {
     return [...keys].sort((a, b) => {
         return ranking[a] - ranking[b]
     })

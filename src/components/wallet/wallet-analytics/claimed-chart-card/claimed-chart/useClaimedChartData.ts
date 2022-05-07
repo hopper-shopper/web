@@ -1,11 +1,13 @@
-import { endOfDay, format, isWithinInterval, startOfDay, subDays } from "date-fns"
+import { endOfDay, isWithinInterval, startOfDay, subDays } from "date-fns"
 import useSort from "hooks/useSort"
 import { Transfer } from "models/Transfer"
 import { useMemo } from "react"
 import { SortTransferBy, sortTransfers } from "sorters/transfers"
 import { SortDirection } from "sorters/_common"
 import { Adventure } from "utils/adventures"
+import { toIsoDate } from "utils/date"
 import { getAdventureForTransfer } from "utils/transfer"
+import { IsoDate } from "utils/types"
 
 type UseClaimedChartDataOptions = {
     days: number
@@ -14,7 +16,7 @@ type UseClaimedChartDataOptions = {
 export default function useClaimedChartData(
     transfers: Transfer[],
     options: UseClaimedChartDataOptions,
-): ChartData[] {
+): ClaimedChartData[] {
     const { days } = options
 
     const { sorted: sortedTransfers } = useSort({
@@ -26,8 +28,8 @@ export default function useClaimedChartData(
         },
     })
 
-    const data: ChartData[] = useMemo(() => {
-        const data: ChartData[] = []
+    const data: ClaimedChartData[] = useMemo(() => {
+        const data: ClaimedChartData[] = []
 
         for (let i = 1; i <= days; i++) {
             const pointerStart = startOfDay(subDays(new Date(), days - i))
@@ -42,7 +44,7 @@ export default function useClaimedChartData(
             })
 
             data.push({
-                date: formatKeyableDate(pointerStart),
+                date: toIsoDate(pointerStart),
                 claimedPond: sumClaimed(filterByAdventure(Adventure.POND, dayTransfers)),
                 claimedStream: sumClaimed(filterByAdventure(Adventure.STREAM, dayTransfers)),
                 claimedSwamp: sumClaimed(filterByAdventure(Adventure.SWAMP, dayTransfers)),
@@ -59,19 +61,14 @@ export default function useClaimedChartData(
 }
 
 // Types
-export type DayDate = string // YYYY-MM-DD
-export type ChartData = {
-    date: DayDate
+export type ClaimedChartData = {
+    date: IsoDate
     claimedPond: number
     claimedStream: number
     claimedSwamp: number
     claimedRiver: number
     claimedForest: number
     claimedGreatLake: number
-}
-
-function formatKeyableDate(date: Date): DayDate {
-    return format(date, "yyyy-MM-dd")
 }
 
 function filterByAdventure(adventure: Adventure, transfers: Transfer[]): Transfer[] {
