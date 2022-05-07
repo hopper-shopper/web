@@ -29,6 +29,7 @@ function App() {
                 <Route path={ROUTES.ANALYTICS} element={<AnalyticsPage />} />
 
                 <Route path="*" element={<Navigate to={ROUTES.MARKET} />} />
+                <Route index element={<Navigate to={ROUTES.MARKET} />} />
             </Route>
         </Routes>
     )
