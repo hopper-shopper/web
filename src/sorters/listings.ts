@@ -1,8 +1,12 @@
 import { Listing } from "models/Listing"
-import { SortDirection, SortOptions } from "./_common"
+import { applySortDirection, Sorter, SortOptions } from "./_common"
 
 export enum SortListingBy {
     TIMESTAMP = "TIMESTAMP",
+}
+
+const SORT_MAPPING: Record<SortListingBy, Sorter<Listing>> = {
+    [SortListingBy.TIMESTAMP]: sortByTimestamp,
 }
 
 export type ListingSortOptions = SortOptions<SortListingBy>
@@ -10,20 +14,9 @@ export type ListingSortOptions = SortOptions<SortListingBy>
 export function sortListings(listings: Listing[], options: ListingSortOptions): Listing[] {
     const { by, direction } = options
 
-    let sorted: Listing[] = [...listings]
+    const sorted = SORT_MAPPING[by]([...listings])
 
-    switch (by) {
-        case SortListingBy.TIMESTAMP:
-            sorted = sortByTimestamp(listings)
-            break
-    }
-
-    switch (direction) {
-        case SortDirection.ASC:
-            return sorted
-        case SortDirection.DESC:
-            return sorted.reverse()
-    }
+    return applySortDirection(sorted, direction)
 }
 
 function sortByTimestamp(listings: Listing[]): Listing[] {

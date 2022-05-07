@@ -1,6 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react"
-
-type StateUpdateFn<T> = T | ((prev: T) => T)
+import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from "react"
 
 export default function useObservableState<T>(observable: T) {
     const [state, setInternalState] = useState<T>(observable)
@@ -15,18 +13,18 @@ export default function useObservableState<T>(observable: T) {
         status.current = StateStatus.OBSERVED
     }, [observable])
 
-    const setState = useCallback((value: StateUpdateFn<T>) => {
+    const setState: Dispatch<SetStateAction<T>> = useCallback(value => {
         setInternalState(prev => {
-            if (value instanceof Function) {
-                return value(prev)
-            }
-            return value
+            const setter = value as SetStateFn<T>
+            return typeof value === "function" ? setter(prev) : value
         })
         status.current = StateStatus.TOUCHED
     }, [])
 
     return [state, setState] as const
 }
+
+type SetStateFn<T> = (prevState: T) => T
 
 enum StateStatus {
     INITIAL,

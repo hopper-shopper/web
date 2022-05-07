@@ -70,6 +70,9 @@ export default function MobileHeaderContent() {
                                 <ActivatableLink to={ROUTES.INSPECT} onClick={closeDrawer}>
                                     Inspect
                                 </ActivatableLink>
+                                <ActivatableLink to={ROUTES.ANALYTICS} onClick={closeDrawer}>
+                                    Analytics
+                                </ActivatableLink>
                             </Flex>
                         </Flex>
 

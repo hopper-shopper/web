@@ -1,7 +1,7 @@
 import { Hopper } from "models/Hopper"
 import { Adventure, calculateMaxRatingPrice, getEarningsByAdventure } from "utils/adventures"
 import { calculateMaxFertilityRatingPrice } from "utils/fertility"
-import { SortDirection, SortOptions } from "./_common"
+import { applySortDirection, Sorter, SortOptions } from "./_common"
 
 export enum SortHopperBy {
     TOKEN_ID = "TOKEN_ID",
@@ -40,124 +40,51 @@ export enum SortHopperBy {
     BASE_FLY_GREAT_LAKE = "BASE_FLY_GREAT_LAKE",
 }
 
+const SORT_MAPPING: Record<SortHopperBy, Sorter<Hopper>> = {
+    [SortHopperBy.TOKEN_ID]: sortByTokenId,
+    [SortHopperBy.LEVEL]: sortByLevel,
+    [SortHopperBy.LEVEL_COSTS]: sortByLevelCosts,
+    [SortHopperBy.STRENGTH]: sortByStrength,
+    [SortHopperBy.AGILITY]: sortByAgility,
+    [SortHopperBy.VITALITY]: sortByVitality,
+    [SortHopperBy.INTELLIGENCE]: sortByIntelligence,
+    [SortHopperBy.FERTILITY]: sortByFertility,
+    [SortHopperBy.RATING_POND]: sortByRatingPond,
+    [SortHopperBy.RATING_STREAM]: sortByRatingStream,
+    [SortHopperBy.RATING_SWAMP]: sortByRatingSwamp,
+    [SortHopperBy.RATING_RIVER]: sortByRatingRiver,
+    [SortHopperBy.RATING_FOREST]: sortByRatingForest,
+    [SortHopperBy.RATING_GREAT_LAKE]: sortByRatingGreatLake,
+    [SortHopperBy.PRICE]: sortByPrice,
+    [SortHopperBy.MAX_PRICE_POND]: sortByMaxPricePond,
+    [SortHopperBy.MAX_PRICE_STREAM]: sortByMaxPriceStream,
+    [SortHopperBy.MAX_PRICE_SWAMP]: sortByMaxPriceSwamp,
+    [SortHopperBy.MAX_PRICE_RIVER]: sortByMaxPriceRiver,
+    [SortHopperBy.MAX_PRICE_FOREST]: sortByMaxPriceForest,
+    [SortHopperBy.MAX_PRICE_GREAT_LAKE]: sortByMaxPriceGreatLake,
+    [SortHopperBy.MAX_PRICE_FERTILITY]: sortByMaxPriceFertility,
+    [SortHopperBy.BASE_FLY_LEVEL_POND]: sortByBaseFlyPond,
+    [SortHopperBy.BASE_FLY_LEVEL_STREAM]: sortByBaseFlyPerLevelStream,
+    [SortHopperBy.BASE_FLY_LEVEL_SWAMP]: sortByBaseFlyPerLevelSwamp,
+    [SortHopperBy.BASE_FLY_LEVEL_RIVER]: sortByBaseFlyPerLevelRiver,
+    [SortHopperBy.BASE_FLY_LEVEL_FOREST]: sortByBaseFlyPerLevelForest,
+    [SortHopperBy.BASE_FLY_LEVEL_GREAT_LAKE]: sortByBaseFlyGreatLake,
+    [SortHopperBy.BASE_FLY_POND]: sortByBaseFlyPond,
+    [SortHopperBy.BASE_FLY_STREAM]: sortByBaseFlyStream,
+    [SortHopperBy.BASE_FLY_SWAMP]: sortByBaseFlySwamp,
+    [SortHopperBy.BASE_FLY_RIVER]: sortByBaseFlyRiver,
+    [SortHopperBy.BASE_FLY_FOREST]: sortByBaseFlyForest,
+    [SortHopperBy.BASE_FLY_GREAT_LAKE]: sortByBaseFlyGreatLake,
+}
+
 export type HopperSortOptions = SortOptions<SortHopperBy>
 
 export function sortHoppers(hoppers: Hopper[], options: HopperSortOptions): Hopper[] {
     const { by, direction } = options
 
-    let sorted: Hopper[] = [...hoppers]
+    const sorted = SORT_MAPPING[by]([...hoppers])
 
-    switch (by) {
-        case SortHopperBy.TOKEN_ID:
-            sorted = sortByTokenId(hoppers)
-            break
-        case SortHopperBy.LEVEL:
-            sorted = sortByLevel(hoppers)
-            break
-        case SortHopperBy.LEVEL_COSTS:
-            sorted = sortByLevelCosts(hoppers)
-            break
-        case SortHopperBy.STRENGTH:
-            sorted = sortByStrength(hoppers)
-            break
-        case SortHopperBy.AGILITY:
-            sorted = sortByAgility(hoppers)
-            break
-        case SortHopperBy.VITALITY:
-            sorted = sortByVitality(hoppers)
-            break
-        case SortHopperBy.INTELLIGENCE:
-            sorted = sortByIntelligence(hoppers)
-            break
-        case SortHopperBy.FERTILITY:
-            sorted = sortByFertility(hoppers)
-            break
-        case SortHopperBy.RATING_POND:
-            sorted = sortByRatingPond(hoppers)
-            break
-        case SortHopperBy.RATING_STREAM:
-            sorted = sortByRatingStream(hoppers)
-            break
-        case SortHopperBy.RATING_SWAMP:
-            sorted = sortByRatingSwamp(hoppers)
-            break
-        case SortHopperBy.RATING_RIVER:
-            sorted = sortByRatingRiver(hoppers)
-            break
-        case SortHopperBy.RATING_FOREST:
-            sorted = sortByRatingForest(hoppers)
-            break
-        case SortHopperBy.RATING_GREAT_LAKE:
-            sorted = sortByRatingGreatLake(hoppers)
-            break
-        case SortHopperBy.PRICE:
-            sorted = sortByPrice(hoppers)
-            break
-        case SortHopperBy.MAX_PRICE_POND:
-            sorted = sortByMaxPricePond(hoppers)
-            break
-        case SortHopperBy.MAX_PRICE_STREAM:
-            sorted = sortByMaxPriceStream(hoppers)
-            break
-        case SortHopperBy.MAX_PRICE_SWAMP:
-            sorted = sortByMaxPriceSwamp(hoppers)
-            break
-        case SortHopperBy.MAX_PRICE_RIVER:
-            sorted = sortByMaxPriceRiver(hoppers)
-            break
-        case SortHopperBy.MAX_PRICE_FOREST:
-            sorted = sortByMaxPriceForest(hoppers)
-            break
-        case SortHopperBy.MAX_PRICE_GREAT_LAKE:
-            sorted = sortByMaxPriceGreatLake(hoppers)
-            break
-        case SortHopperBy.MAX_PRICE_FERTILITY:
-            sorted = sortByMaxPriceFertility(hoppers)
-            break
-        case SortHopperBy.BASE_FLY_LEVEL_POND:
-            sorted = sortByBaseFlyPerLevelPond(hoppers)
-            break
-        case SortHopperBy.BASE_FLY_LEVEL_STREAM:
-            sorted = sortByBaseFlyPerLevelStream(hoppers)
-            break
-        case SortHopperBy.BASE_FLY_LEVEL_SWAMP:
-            sorted = sortByBaseFlyPerLevelSwamp(hoppers)
-            break
-        case SortHopperBy.BASE_FLY_LEVEL_RIVER:
-            sorted = sortByBaseFlyPerLevelRiver(hoppers)
-            break
-        case SortHopperBy.BASE_FLY_LEVEL_FOREST:
-            sorted = sortByBaseFlyPerLevelForest(hoppers)
-            break
-        case SortHopperBy.BASE_FLY_LEVEL_GREAT_LAKE:
-            sorted = sortByBaseFlyPerLevelGreatLake(hoppers)
-            break
-        case SortHopperBy.BASE_FLY_POND:
-            sorted = sortByBaseFlyPond(hoppers)
-            break
-        case SortHopperBy.BASE_FLY_STREAM:
-            sorted = sortByBaseFlyStream(hoppers)
-            break
-        case SortHopperBy.BASE_FLY_SWAMP:
-            sorted = sortByBaseFlySwamp(hoppers)
-            break
-        case SortHopperBy.BASE_FLY_RIVER:
-            sorted = sortByBaseFlyRiver(hoppers)
-            break
-        case SortHopperBy.BASE_FLY_FOREST:
-            sorted = sortByBaseFlyForest(hoppers)
-            break
-        case SortHopperBy.BASE_FLY_GREAT_LAKE:
-            sorted = sortByBaseFlyGreatLake(hoppers)
-            break
-    }
-
-    switch (direction) {
-        case SortDirection.ASC:
-            return sorted
-        case SortDirection.DESC:
-            return sorted.reverse()
-    }
+    return applySortDirection(sorted, direction)
 }
 
 function sortByTokenId(hoppers: Hopper[]): Hopper[] {

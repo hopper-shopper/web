@@ -7,8 +7,6 @@ type UseControllableStateParams<T> = {
     onChange?: (value: T) => void
 }
 
-type SetStateFn<T> = (prevState?: T) => T
-
 export default function useControllableState<T>(params: UseControllableStateParams<T>) {
     const { value, defaultValue, onChange } = params
 
@@ -60,3 +58,5 @@ function useUncontrolledState<T>(params: UseUncontrolledStateParams<T>) {
 
     return uncontrolledState
 }
+
+type SetStateFn<T> = (prevState?: T) => T

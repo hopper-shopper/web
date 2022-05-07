@@ -1,8 +1,12 @@
 import { Adventure } from "utils/adventures"
-import { SortDirection, SortOptions } from "./_common"
+import { applySortDirection, Sorter, SortOptions } from "./_common"
 
 export enum SortAdventureBy {
     RANK = "RANK",
+}
+
+const SORT_MAPPING: Record<SortAdventureBy, Sorter<Adventure>> = {
+    [SortAdventureBy.RANK]: sortByRank,
 }
 
 export type AdventureSortOptions = SortOptions<SortAdventureBy>
@@ -13,23 +17,12 @@ export function sortAdventures(
 ): Adventure[] {
     const { by, direction } = options
 
-    let sorted = [...adventures]
+    const sorted = SORT_MAPPING[by]([...adventures])
 
-    switch (by) {
-        case SortAdventureBy.RANK:
-            sorted = sortByRank(adventures)
-            break
-    }
-
-    switch (direction) {
-        case SortDirection.ASC:
-            return sorted
-        case SortDirection.DESC:
-            return sorted.reverse()
-    }
+    return applySortDirection(sorted, direction)
 }
 
-const ranking = {
+const adventureRankRanking = {
     [Adventure.POND]: 0,
     [Adventure.STREAM]: 1,
     [Adventure.SWAMP]: 2,
@@ -39,6 +32,6 @@ const ranking = {
 }
 function sortByRank(adventures: Adventure[]): Adventure[] {
     return [...adventures].sort((a, b) => {
-        return ranking[a] - ranking[b]
+        return adventureRankRanking[a] - adventureRankRanking[b]
     })
 }

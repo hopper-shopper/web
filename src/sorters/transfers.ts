@@ -1,8 +1,12 @@
 import { Transfer } from "models/Transfer"
-import { SortDirection, SortOptions } from "./_common"
+import { applySortDirection, Sorter, SortOptions } from "./_common"
 
 export enum SortTransferBy {
     TIMESTAMP = "TIMESTAMP",
+}
+
+const SORT_MAPPING: Record<SortTransferBy, Sorter<Transfer>> = {
+    [SortTransferBy.TIMESTAMP]: sortByTimestamp,
 }
 
 export type TransferSortOptions = SortOptions<SortTransferBy>
@@ -10,20 +14,9 @@ export type TransferSortOptions = SortOptions<SortTransferBy>
 export function sortTransfers(transfers: Transfer[], options: TransferSortOptions): Transfer[] {
     const { by, direction } = options
 
-    let sorted: Transfer[] = [...transfers]
+    const sorted = SORT_MAPPING[by]([...transfers])
 
-    switch (by) {
-        case SortTransferBy.TIMESTAMP:
-            sorted = sortByTimestamp(transfers)
-            break
-    }
-
-    switch (direction) {
-        case SortDirection.ASC:
-            return sorted
-        case SortDirection.DESC:
-            return sorted.reverse()
-    }
+    return applySortDirection(sorted, direction)
 }
 
 function sortByTimestamp(transfers: Transfer[]): Transfer[] {
