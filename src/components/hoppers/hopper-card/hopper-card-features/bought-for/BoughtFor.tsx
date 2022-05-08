@@ -1,4 +1,4 @@
-import { useHopperContext } from "contests/HopperContext"
+import { useHopperContext } from "contexts/HopperContext"
 import { Currency, formatCurrency } from "formatters/currency"
 import { Listing } from "models/Listing"
 import { SortListingBy, sortListings } from "sorters/listings"

@@ -58,7 +58,7 @@ export function formatFlyChartFeature(feature: FlySupplyFeature): string {
 
 const featureTextMappingLong: Record<FlySupplyFeature, string> = {
     ...featureTextMapping,
-    [FlySupplyFeature.AVAILABLE]: "Available (Supply - Burned)",
+    [FlySupplyFeature.AVAILABLE]: "Available (Total - Burned)",
     [FlySupplyFeature.FREE]: "Free (Available - Staked)",
 }
 export function formatFlyChartFeatureLong(feature: FlySupplyFeature): string {

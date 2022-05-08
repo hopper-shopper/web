@@ -1,4 +1,4 @@
-import { useHopperContext } from "contests/HopperContext"
+import { useHopperContext } from "contexts/HopperContext"
 import { formatAdventure } from "formatters/adventure"
 import { styled } from "theme"
 import { getIdealAdventure } from "utils/adventures"

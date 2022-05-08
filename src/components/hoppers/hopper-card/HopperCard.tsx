@@ -1,4 +1,4 @@
-import HopperContext from "contests/HopperContext"
+import HopperContext from "contexts/HopperContext"
 import { Hopper } from "models/Hopper"
 import { PropsWithChildren } from "react"
 import { styled } from "theme"

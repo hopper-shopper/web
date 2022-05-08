@@ -1,6 +1,6 @@
 import Flex from "components/layout/flex/Flex"
 import WatchlistButton from "components/watchlist/watchlist-button/WatchlistButton"
-import { ProvideHopper } from "contests/HopperContext"
+import { ProvideHopper } from "contexts/HopperContext"
 import { useAtomValue } from "jotai"
 import { Hopper } from "models/Hopper"
 import { watchlistAtom } from "stores/watchlist"

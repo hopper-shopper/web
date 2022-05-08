@@ -8,14 +8,18 @@ import { scaleLinear, scaleTime } from "@visx/scale"
 import { Bar, Line, LinePath } from "@visx/shape"
 import { useTooltip, useTooltipInPortal } from "@visx/tooltip"
 import DateTooltip from "components/charts/date-tooltip/DateTooltip"
+import MarkerLine from "components/charts/marker-line/MarkerLine"
 import { bisector, extent } from "d3-array"
 import { Currency, getCompactCurrencyFormatter } from "formatters/currency"
 import { formatPercent } from "formatters/number"
+import useConditionalClass from "hooks/useConditionalClass"
 import useThemeValue from "hooks/useThemeValue"
+import useWindowEvent from "hooks/useWindowEvent"
 import throttle from "lodash.throttle"
 import { MouseEvent, TouchEvent, useMemo, useState } from "react"
-import { styled } from "theme"
+import { css, styled } from "theme"
 import { fromIsoDate } from "utils/date"
+import { IsoDatetime } from "utils/types"
 import {
     FlySupplyFeature,
     FLY_FEATURE_TO_KEY,
@@ -30,11 +34,12 @@ type FlySupplyChartProps = {
     height: number
 
     features: Set<FlySupplyFeature>
+    markers: FlySupplyMarkers
     data: FlySupplyChartData[]
 }
 
 export default function FlySupplyChart(props: FlySupplyChartProps) {
-    const { width, height, features, data } = props
+    const { width, height, features, markers, data } = props
 
     const marginLeft = 60
     const marginRight = 10
@@ -77,6 +82,12 @@ export default function FlySupplyChart(props: FlySupplyChartProps) {
         scroll: true,
     })
 
+    useWindowEvent("mouseup", () => {
+        hideBrush()
+        hideTooltip()
+    })
+    useConditionalClass(DISABLE_SELECTION_CLASS, tooltipOpen)
+
     const handleTooltip = useMemo(() => {
         return throttle(
             (event: TouchEvent<SVGRectElement> | MouseEvent<SVGRectElement>) => {
@@ -107,6 +118,13 @@ export default function FlySupplyChart(props: FlySupplyChartProps) {
             { trailing: false },
         )
     }, [marginLeft, height, dayScale, data])
+    const handleTooltipDismiss = () => {
+        if (brush !== null) {
+            return
+        }
+
+        hideTooltip()
+    }
 
     const handleBrush = (event: MouseEvent<SVGRectElement>) => {
         const { x } = localPoint(event) || { x: marginLeft }
@@ -206,6 +224,9 @@ export default function FlySupplyChart(props: FlySupplyChartProps) {
 
     const featuresArray = Array.from(features)
 
+    const mintX = dayScale(fromIsoDate(MINT_DATE))
+    const resumeX = dayScale(fromIsoDate(RESUME_DATE))
+
     return (
         <>
             <svg ref={containerRef} width={width} height={height}>
@@ -215,6 +236,11 @@ export default function FlySupplyChart(props: FlySupplyChartProps) {
                     left={marginLeft}
                     stroke={grayScale.gray6}
                 />
+
+                {markers.mint && <MarkerLine x={mintX} startY={startY} endY={endY} text="Mint" />}
+                {markers.resume && (
+                    <MarkerLine x={resumeX} startY={startY} endY={endY} text="Game resume" />
+                )}
 
                 {brush && (
                     <Bar
@@ -253,7 +279,7 @@ export default function FlySupplyChart(props: FlySupplyChartProps) {
                     onTouchStart={handleTooltip}
                     onTouchMove={handleTooltip}
                     onMouseMove={handleTooltip}
-                    onMouseLeave={hideTooltip}
+                    onMouseLeave={handleTooltipDismiss}
                     onMouseDown={handleBrush}
                     onMouseUp={hideBrush}
                 />
@@ -317,6 +343,15 @@ export default function FlySupplyChart(props: FlySupplyChartProps) {
     )
 }
 
+// Constants
+const MINT_DATE: IsoDatetime = "2022-03-11T19:00:00.000Z"
+const RESUME_DATE: IsoDatetime = "2022-03-18T18:30:00.000Z"
+const DISABLE_SELECTION_CLASS = css({
+    "*": {
+        userSelect: "none",
+    },
+})().className
+
 // Types
 type BrushState = {
     x1: number
@@ -327,6 +362,10 @@ type BrushState = {
 type BrushChange = {
     from: number
     to: number
+}
+export type FlySupplyMarkers = {
+    mint: boolean
+    resume: boolean
 }
 
 // Getters

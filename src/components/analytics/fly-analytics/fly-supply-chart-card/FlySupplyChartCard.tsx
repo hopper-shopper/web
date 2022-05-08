@@ -1,12 +1,15 @@
 import { ParentSizeModern } from "@visx/responsive"
 import useFlySupply from "api/hooks/useFlySupply"
+import Fieldset from "components/inputs/fieldset/Fieldset"
+import Label from "components/inputs/label/Label"
 import * as ChartContainer from "components/layout/chart-container/ChartContainer"
 import * as Tag from "components/tag/Tag"
 import useScreenSize from "hooks/useScreenSize"
 import useThemeValue from "hooks/useThemeValue"
 import useUniqueToggleList from "hooks/useUniqueToggleList"
+import { useState } from "react"
 import { styled } from "theme"
-import FlySupplyChart from "./fly-supply-chart/FlySupplyChart"
+import FlySupplyChart, { FlySupplyMarkers } from "./fly-supply-chart/FlySupplyChart"
 import {
     FlySupplyFeature,
     formatFlyChartFeatureLong,
@@ -14,6 +17,9 @@ import {
     SUPPLY_CHARTS_COLORS_LIGHT,
 } from "./fly-supply-chart/flySupplyChart.utils"
 import useFlySupplyChartData from "./fly-supply-chart/useFlySupplyChartData"
+import Checkbox from "components/inputs/checkbox/Checkbox"
+import useStateUpdate from "hooks/useStateUpdate"
+import Flex from "components/layout/flex/Flex"
 
 export default function FlySupplyChartCard() {
     const isTabletUp = useScreenSize("md")
@@ -26,6 +32,12 @@ export default function FlySupplyChartCard() {
         FlySupplyFeature.BURNED,
         FlySupplyFeature.STAKED,
     ])
+    const [chartMarkers, setChartMarkers] = useState<FlySupplyMarkers>({
+        mint: false,
+        resume: false,
+    })
+    const updateChartMarkers = useStateUpdate(setChartMarkers)
+
     const chartData = useFlySupplyChartData(supplies)
 
     const tagColors = useThemeValue(SUPPLY_CHARTS_COLORS_LIGHT, SUPPLY_CHARTS_COLORS_DARK)
@@ -56,6 +68,28 @@ export default function FlySupplyChartCard() {
                             </Tag.Root>
                         ))}
                     </TagsList>
+
+                    <Markers>
+                        <Flex gap="sm">
+                            <Label htmlFor="mint-date">Mint</Label>
+                            <Checkbox
+                                id="mint-date"
+                                checked={chartMarkers.mint}
+                                onCheckedChange={checked => updateChartMarkers({ mint: !!checked })}
+                            />
+                        </Flex>
+
+                        <Flex gap="sm">
+                            <Label htmlFor="resume-date">Resume</Label>
+                            <Checkbox
+                                id="resume-date"
+                                checked={chartMarkers.resume}
+                                onCheckedChange={checked =>
+                                    updateChartMarkers({ resume: !!checked })
+                                }
+                            />
+                        </Flex>
+                    </Markers>
                 </Actions>
             </ChartContainer.Header>
 
@@ -68,6 +102,7 @@ export default function FlySupplyChartCard() {
                                     width={width}
                                     height={height}
                                     features={features}
+                                    markers={chartMarkers}
                                     data={chartData}
                                 />
                             )}
@@ -96,7 +131,7 @@ const Actions = styled("div", {
     marginTop: "1rem",
     "@md": {
         flexDirection: "row",
-        // justifyContent: "flex-end",
+        justifyContent: "space-between",
         alignItems: "center",
     },
 })
@@ -107,4 +142,10 @@ const TagsList = styled("div", {
     "@md": {
         display: "flex",
     },
+})
+const Markers = styled("div", {
+    display: "flex",
+    justifyContent: "space-end",
+    alignItems: "center",
+    columnGap: "1rem",
 })

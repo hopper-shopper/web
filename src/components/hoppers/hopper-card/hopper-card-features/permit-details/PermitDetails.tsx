@@ -1,4 +1,4 @@
-import { useHopperContext } from "contests/HopperContext"
+import { useHopperContext } from "contexts/HopperContext"
 import { formatRating } from "formatters/rating"
 import { styled } from "theme"
 import * as Feature from "../HopperCardFeature"
