@@ -14,4 +14,6 @@ export type IsoDate = string
  */
 export type IsoDatetime = string
 
+export type DateLike = Date | number | string
+
 export type ObjectKey = string | number | symbol

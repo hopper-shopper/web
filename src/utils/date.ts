@@ -1,5 +1,5 @@
 import { format } from "date-fns"
-import { IsoDate, IsoDatetime } from "./types"
+import { DateLike, IsoDate, IsoDatetime } from "./types"
 
 export function fromIsoDate(isoDate: IsoDate): Date {
     return new Date(Date.parse(isoDate))
@@ -15,4 +15,21 @@ export function fromIsoDatetime(isoDatetime: IsoDatetime): Date {
 
 export function toIsoDatetime(date: Date): IsoDatetime {
     return date.toISOString()
+}
+
+export function fromDateLike(dateLike: DateLike): Date | null {
+    if (dateLike instanceof Date) {
+        return dateLike
+    } else if (typeof dateLike === "number") {
+        return new Date(dateLike)
+    } else if (typeof dateLike === "string") {
+        const unix = Date.parse(dateLike)
+        if (Number.isNaN(unix)) {
+            return null
+        } else {
+            return new Date(unix)
+        }
+    }
+
+    return null
 }

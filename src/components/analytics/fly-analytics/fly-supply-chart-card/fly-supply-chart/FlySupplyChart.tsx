@@ -1,17 +1,4 @@
-import {
-    brown,
-    brownDark,
-    gray,
-    grayDark,
-    pink,
-    pinkDark,
-    red,
-    redDark,
-    violet,
-    violetDark,
-    yellow,
-    yellowDark,
-} from "@radix-ui/colors"
+import { gray, grayDark } from "@radix-ui/colors"
 import { AxisBottom, AxisLeft } from "@visx/axis"
 import { curveStepAfter } from "@visx/curve"
 import { localPoint } from "@visx/event"
@@ -20,13 +7,22 @@ import { Group } from "@visx/group"
 import { scaleLinear, scaleTime } from "@visx/scale"
 import { Bar, Line, LinePath } from "@visx/shape"
 import { useTooltip, useTooltipInPortal } from "@visx/tooltip"
+import DateTooltip from "components/charts/date-tooltip/DateTooltip"
 import { bisector, extent } from "d3-array"
 import { Currency, getCompactCurrencyFormatter } from "formatters/currency"
+import { formatPercent } from "formatters/number"
 import useThemeValue from "hooks/useThemeValue"
-import { MouseEvent, TouchEvent, useMemo } from "react"
+import throttle from "lodash.throttle"
+import { MouseEvent, TouchEvent, useMemo, useState } from "react"
 import { styled } from "theme"
 import { fromIsoDate } from "utils/date"
-import { IsoDate } from "utils/types"
+import {
+    FlySupplyFeature,
+    FLY_FEATURE_TO_KEY,
+    formatFlyChartFeature,
+    SUPPLY_CHARTS_COLORS_DARK,
+    SUPPLY_CHARTS_COLORS_LIGHT,
+} from "./flySupplyChart.utils"
 import { FlySupplyChartData } from "./useFlySupplyChartData"
 
 type FlySupplyChartProps = {
@@ -72,6 +68,8 @@ export default function FlySupplyChart(props: FlySupplyChartProps) {
         })
     }, [startY, endY, features])
 
+    const [brush, setBrush] = useState<BrushState | null>(null)
+
     const { tooltipLeft, tooltipTop, tooltipOpen, tooltipData, showTooltip, hideTooltip } =
         useTooltip<FlySupplyChartData>({ tooltipOpen: false })
     const { containerRef, TooltipInPortal } = useTooltipInPortal({
@@ -79,19 +77,53 @@ export default function FlySupplyChart(props: FlySupplyChartProps) {
         scroll: true,
     })
 
-    const handleTooltip = (event: TouchEvent<SVGRectElement> | MouseEvent<SVGRectElement>) => {
-        let { x, y } = localPoint(event) || { x: marginLeft, y: height / 2 }
+    const handleTooltip = useMemo(() => {
+        return throttle(
+            (event: TouchEvent<SVGRectElement> | MouseEvent<SVGRectElement>) => {
+                let { x, y } = localPoint(event) || { x: marginLeft, y: height / 2 }
 
+                const x0 = dayScale.invert(x)
+                const index = bisectDate(data, x0, 1)
+
+                const item = data[index - 1]
+
+                showTooltip({
+                    tooltipData: item,
+                    tooltipLeft: x,
+                    tooltipTop: y,
+                })
+                setBrush(prev => {
+                    if (!prev) {
+                        return null
+                    }
+                    return {
+                        ...prev,
+                        x2: x,
+                        dataX2: item,
+                    }
+                })
+            },
+            30,
+            { trailing: false },
+        )
+    }, [marginLeft, height, dayScale, data])
+
+    const handleBrush = (event: MouseEvent<SVGRectElement>) => {
+        const { x } = localPoint(event) || { x: marginLeft }
         const x0 = dayScale.invert(x)
         const index = bisectDate(data, x0, 1)
 
         const item = data[index - 1]
 
-        showTooltip({
-            tooltipData: item,
-            tooltipLeft: x,
-            tooltipTop: y,
+        setBrush({
+            x1: x,
+            x2: x,
+            dataX1: item,
+            dataX2: item,
         })
+    }
+    const hideBrush = () => {
+        setBrush(null)
     }
 
     const renderLine = (forFeature: FlySupplyFeature): React.ReactNode => {
@@ -118,16 +150,58 @@ export default function FlySupplyChart(props: FlySupplyChartProps) {
 
         return (
             <circle
+                key={forFeature}
                 cx={tooltipLeft}
                 cy={supplyScale(getSupply(tooltipData))}
                 r={4}
-                fill={grayScale.gray9}
+                fill={colors[forFeature]}
                 fillOpacity={0.5}
-                stroke={grayScale.gray9}
+                stroke={colors[forFeature]}
                 strokeWidth={2}
                 pointerEvents="none"
             />
         )
+    }
+
+    const renderTooltipLine = (forFeature: FlySupplyFeature): React.ReactNode => {
+        if (!tooltipData) {
+            return null
+        }
+        const brushChange = getBrushChange(forFeature)
+        const brushChangeAbs = brushChange ? brushChange.to - brushChange.from : 0
+        const brushChangePercent = brushChange ? brushChange.to / brushChange.from - 1 : 0
+
+        return (
+            <SupplyItem key={forFeature}>
+                <span style={{ color: colors[forFeature] }}>
+                    {formatFlyChartFeature(forFeature)}
+                </span>
+                {brushChange === null && (
+                    <Supply>{formatSupply(getSupplyByFeature(forFeature)(tooltipData))}</Supply>
+                )}
+                {brushChange !== null && (
+                    <SupplyChange positive={brushChangeAbs > 0}>
+                        {formatSupply(brushChangeAbs)} ({formatPercent(brushChangePercent)})
+                    </SupplyChange>
+                )}
+            </SupplyItem>
+        )
+    }
+
+    const getBrushChange = (forFeature: FlySupplyFeature): null | BrushChange => {
+        if (!brush) {
+            return null
+        }
+
+        const getSupply = getSupplyByFeature(forFeature)
+
+        const fromSupply = getSupply(brush.dataX1)
+        const toSupply = getSupply(brush.dataX2)
+
+        return {
+            from: fromSupply,
+            to: toSupply,
+        }
     }
 
     const featuresArray = Array.from(features)
@@ -141,6 +215,17 @@ export default function FlySupplyChart(props: FlySupplyChartProps) {
                     left={marginLeft}
                     stroke={grayScale.gray6}
                 />
+
+                {brush && (
+                    <Bar
+                        x={Math.min(brush.x1, brush.x2)}
+                        y={endY}
+                        width={Math.abs(brush.x2 - brush.x1)}
+                        height={yMax}
+                        opacity={0.1}
+                        fill={grayScale.gray9}
+                    />
+                )}
 
                 {featuresArray.map(renderLine)}
 
@@ -169,6 +254,8 @@ export default function FlySupplyChart(props: FlySupplyChartProps) {
                     onTouchMove={handleTooltip}
                     onMouseMove={handleTooltip}
                     onMouseLeave={hideTooltip}
+                    onMouseDown={handleBrush}
+                    onMouseUp={hideBrush}
                 />
 
                 <AxisBottom
@@ -209,19 +296,8 @@ export default function FlySupplyChart(props: FlySupplyChartProps) {
                         applyPositionStyle
                         top={tooltipTop}
                         left={tooltipLeft}>
-                        <StyledTooltip css={{ minWidth: 200 }}>
-                            <SupplyList>
-                                {featuresArray.map(feature => (
-                                    <SupplyItem key={feature}>
-                                        <span style={{ color: colors[feature] }}>
-                                            {formatFeature(feature)}
-                                        </span>
-                                        <span>
-                                            {formatSupply(getSupplyByFeature(feature)(tooltipData))}
-                                        </span>
-                                    </SupplyItem>
-                                ))}
-                            </SupplyList>
+                        <StyledTooltip css={{ minWidth: 250 }}>
+                            <SupplyList>{featuresArray.map(renderTooltipLine)}</SupplyList>
                         </StyledTooltip>
                     </TooltipInPortal>
 
@@ -230,13 +306,10 @@ export default function FlySupplyChart(props: FlySupplyChartProps) {
                         unstyled
                         applyPositionStyle
                         offsetLeft={0}
+                        offsetTop={4}
                         top={yMax}
                         left={tooltipLeft}>
-                        <StlyedDateTooltipContainer>
-                            <StyledDateTooltip>
-                                {formatDateLong(tooltipData.date)}
-                            </StyledDateTooltip>
-                        </StlyedDateTooltipContainer>
+                        <DateTooltip date={tooltipData.date} />
                     </TooltipInPortal>
                 </>
             )}
@@ -245,36 +318,15 @@ export default function FlySupplyChart(props: FlySupplyChartProps) {
 }
 
 // Types
-export enum FlySupplyFeature {
-    TOTAL_SUPPLY,
-    BURNED,
-    STAKED,
-    FREE,
-    AVAILABLE,
+type BrushState = {
+    x1: number
+    x2: number
+    dataX1: FlySupplyChartData
+    dataX2: FlySupplyChartData
 }
-
-// Constants
-const FEATURE_TO_KEY: Record<FlySupplyFeature, keyof FlySupplyChartData> = {
-    [FlySupplyFeature.TOTAL_SUPPLY]: "total",
-    [FlySupplyFeature.BURNED]: "burned",
-    [FlySupplyFeature.STAKED]: "staked",
-    [FlySupplyFeature.AVAILABLE]: "available",
-    [FlySupplyFeature.FREE]: "free",
-}
-
-export const SUPPLY_CHARTS_COLORS_LIGHT: Record<FlySupplyFeature, string> = {
-    [FlySupplyFeature.TOTAL_SUPPLY]: red.red9,
-    [FlySupplyFeature.BURNED]: brown.brown9,
-    [FlySupplyFeature.STAKED]: yellow.yellow9,
-    [FlySupplyFeature.AVAILABLE]: pink.pink9,
-    [FlySupplyFeature.FREE]: violet.violet9,
-}
-export const SUPPLY_CHARTS_COLORS_DARK: Record<FlySupplyFeature, string> = {
-    [FlySupplyFeature.TOTAL_SUPPLY]: redDark.red9,
-    [FlySupplyFeature.BURNED]: brownDark.brown9,
-    [FlySupplyFeature.STAKED]: yellowDark.yellow9,
-    [FlySupplyFeature.AVAILABLE]: pinkDark.pink9,
-    [FlySupplyFeature.FREE]: violetDark.violet9,
+type BrushChange = {
+    from: number
+    to: number
 }
 
 // Getters
@@ -283,7 +335,7 @@ function getDate(item: FlySupplyChartData): Date {
 }
 function getSupplyByFeature(feature: FlySupplyFeature) {
     return (item: FlySupplyChartData): number => {
-        const key = FEATURE_TO_KEY[feature]
+        const key = FLY_FEATURE_TO_KEY[feature]
         const value = item[key]
 
         return typeof value === "number" ? value : 0
@@ -318,13 +370,6 @@ function formatDateShort(date: number): string {
 
     return formatter.format(date)
 }
-function formatDateLong(date: IsoDate): string {
-    const formatter = new Intl.DateTimeFormat([], {
-        dateStyle: "long",
-    })
-
-    return formatter.format(Date.parse(date))
-}
 
 const flyFormatter = getCompactCurrencyFormatter(Currency.FLY, [
     [1_000, "k"],
@@ -334,17 +379,6 @@ function formatSupply(supply: number): string {
     return flyFormatter(supply)
 }
 
-const featureTextMapping: Record<FlySupplyFeature, string> = {
-    [FlySupplyFeature.TOTAL_SUPPLY]: "Total",
-    [FlySupplyFeature.BURNED]: "Burned",
-    [FlySupplyFeature.STAKED]: "Staked",
-    [FlySupplyFeature.AVAILABLE]: "Available",
-    [FlySupplyFeature.FREE]: "Free",
-}
-function formatFeature(feature: FlySupplyFeature): string {
-    return featureTextMapping[feature]
-}
-
 // Components
 const StyledTooltip = styled("div", {
     backgroundColor: "$gray2",
@@ -352,6 +386,7 @@ const StyledTooltip = styled("div", {
     border: "1px solid $gray6",
     padding: "0.5rem",
     transform: "translateY(-50%)",
+    pointerEvents: "none",
 })
 const SupplyList = styled("div", {
     display: "flex",
@@ -359,26 +394,26 @@ const SupplyList = styled("div", {
     rowGap: "0.5rem",
 })
 const SupplyItem = styled("div", {
+    fontSize: "0.875rem",
+    lineHeight: 1.25,
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    fontSize: "0.875rem",
-    lineHeight: 1.25,
+})
+const Supply = styled("p", {
     color: "$gray12",
+    textAlign: "right",
 })
-const StlyedDateTooltipContainer = styled("div", {
-    position: "relative",
-})
-const StyledDateTooltip = styled("span", {
-    position: "absolute",
-    whiteSpace: "nowrap",
-    display: "inline-block",
-    textAlign: "center",
-    padding: "0.125rem 0.5rem",
-    border: "1px solid $blue6",
-    borderRadius: "$sm",
-    backgroundColor: "$blue9",
-    color: "#ffffff",
-    fontSize: "0.875rem",
-    transform: "translateX(-50%)",
+const SupplyChange = styled("p", {
+    textAlign: "right",
+    variants: {
+        positive: {
+            true: {
+                color: "$teal11",
+            },
+            false: {
+                color: "$red11",
+            },
+        },
+    },
 })

@@ -1,18 +1,18 @@
 import {
-    grassDark,
-    grayDark,
-    indigoDark,
-    mintDark,
-    pinkDark,
-    purpleDark,
-    skyDark,
     grass,
+    grassDark,
     gray,
+    grayDark,
     indigo,
+    indigoDark,
     mint,
+    mintDark,
     pink,
+    pinkDark,
     purple,
+    purpleDark,
     sky,
+    skyDark,
 } from "@radix-ui/colors"
 import { AxisBottom, AxisLeft } from "@visx/axis"
 import { localPoint } from "@visx/event"
@@ -21,6 +21,7 @@ import { Group } from "@visx/group"
 import { scaleBand, scaleLinear, scaleOrdinal, scaleQuantize } from "@visx/scale"
 import { Bar, BarGroup } from "@visx/shape"
 import { useTooltip, useTooltipInPortal } from "@visx/tooltip"
+import DateTooltip from "components/charts/date-tooltip/DateTooltip"
 import Flex from "components/layout/flex/Flex"
 import Screen from "components/layout/screen/Screen"
 import EmptyText from "components/typography/empty-text/EmptyText"
@@ -28,7 +29,6 @@ import { Currency, formatCurrency } from "formatters/currency"
 import useScreenSize from "hooks/useScreenSize"
 import useThemeValue from "hooks/useThemeValue"
 import { MouseEvent, TouchEvent, useMemo, useState } from "react"
-import { styled } from "theme"
 import { Adventure } from "utils/adventures"
 import { IsoDate } from "utils/types"
 import { ClaimedChartData } from "./useClaimedChartData"
@@ -261,9 +261,7 @@ export default function ClaimedChart(props: ClaimedChartProps) {
                     applyPositionStyle
                     top={yMax}
                     left={tooltipLeft}>
-                    <StlyedTooltipContainer style={{ minWidth: tooltipData.width }}>
-                        <StyledTooltip>{formatDateLong(tooltipData.date)}</StyledTooltip>
-                    </StlyedTooltipContainer>
+                    <DateTooltip date={tooltipData.date} style={{ minWidth: tooltipData.width }} />
                 </TooltipInPortal>
             )}
         </>
@@ -342,13 +340,6 @@ function formatDateShort(date: IsoDate): string {
 
     return formatter.format(Date.parse(date))
 }
-function formatDateLong(date: IsoDate): string {
-    const formatter = new Intl.DateTimeFormat([], {
-        dateStyle: "long",
-    })
-
-    return formatter.format(Date.parse(date))
-}
 
 function formatClaimed(claimed: number): string {
     return formatCurrency(claimed, Currency.FLY)
@@ -369,22 +360,3 @@ function sortKeys(keys: Array<keyof ClaimedChartData>): Array<keyof ClaimedChart
         return ranking[a] - ranking[b]
     })
 }
-
-// Components
-const StlyedTooltipContainer = styled("div", {
-    position: "relative",
-})
-const StyledTooltip = styled("span", {
-    position: "absolute",
-    whiteSpace: "nowrap",
-    display: "inline-block",
-    textAlign: "center",
-    padding: "0.125rem 0.5rem",
-    border: "1px solid $blue6",
-    borderRadius: "$sm",
-    backgroundColor: "$blue9",
-    color: "#ffffff",
-    fontSize: "0.875rem",
-    left: "50%",
-    transform: "translateX(-50%)",
-})
