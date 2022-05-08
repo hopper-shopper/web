@@ -430,6 +430,8 @@ function formatDateShort(date: number): string {
 }
 
 const flyFormatter = getCompactCurrencyFormatter(Currency.FLY, [
+    [-1_000_000, "m"],
+    [-1_000, "k"],
     [1_000, "k"],
     [1_000_000, "m"],
 ])

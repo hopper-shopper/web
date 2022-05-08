@@ -41,8 +41,11 @@ export function getCompactCurrencyFormatter(
     currency: Currency,
     mapping: Array<CompactUnit>,
 ): LocaleFormatter<number> {
-    const sortedMappings = [...mapping].sort(([a], [b]) => {
+    const positiveSortedMappings = [...mapping].sort(([a], [b]) => {
         return b - a
+    })
+    const negativeSortedMappings = [...mapping].sort(([a], [b]) => {
+        return a - b
     })
 
     const formatter = new Intl.NumberFormat([], {
@@ -51,9 +54,16 @@ export function getCompactCurrencyFormatter(
     })
 
     return value => {
-        const bestFit = sortedMappings.find(mapping => {
-            return mapping[0] <= value
-        })
+        let bestFit: CompactUnit | undefined
+        if (value >= 0) {
+            bestFit = positiveSortedMappings.find(mapping => {
+                return mapping[0] <= value
+            })
+        } else {
+            bestFit = negativeSortedMappings.find(mapping => {
+                return mapping[0] >= value
+            })
+        }
 
         if (!bestFit) {
             return formatter.format(value)
@@ -61,7 +71,7 @@ export function getCompactCurrencyFormatter(
 
         const [divisor, unit] = bestFit
 
-        const scaled = value / divisor
+        const scaled = value / Math.abs(divisor)
 
         return `${formatter.format(scaled)}${unit} ${formatCurrencyName(currency)}`
     }
