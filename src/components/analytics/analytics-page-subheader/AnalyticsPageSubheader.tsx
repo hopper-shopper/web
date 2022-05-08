@@ -17,9 +17,6 @@ export default function AnalyticsPageSubheader(props: AnalyticsPageSubheaderProp
                 <Tabs.Root
                     value={view}
                     onValueChange={value => onViewChange(value as AnalyticsNavigationView)}>
-                    <Tabs.Tab disabled value={AnalyticsNavigationView.HOPPERS}>
-                        Hoppers
-                    </Tabs.Tab>
                     <Tabs.Tab value={AnalyticsNavigationView.FLY}>FLY</Tabs.Tab>
                 </Tabs.Root>
             </Container>
@@ -29,11 +26,7 @@ export default function AnalyticsPageSubheader(props: AnalyticsPageSubheaderProp
 
 // Components
 const Container = styled("div", {
-    display: "grid",
-    rowGap: "2rem",
-    "@lg": {
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-    },
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
 })

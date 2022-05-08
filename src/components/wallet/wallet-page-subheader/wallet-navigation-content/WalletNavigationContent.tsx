@@ -38,12 +38,14 @@ export default function WalletNavigationContent(props: WalletNavigationContentPr
                     </Button>
                 </WalletContainer>
 
-                <Tabs.Root
-                    value={view}
-                    onValueChange={value => onViewChange(value as WalletNavigationView)}>
-                    <Tabs.Tab value={WalletNavigationView.GAMEPLAY}>Gameplay</Tabs.Tab>
-                    <Tabs.Tab value={WalletNavigationView.ANALYTICS}>Analytics</Tabs.Tab>
-                </Tabs.Root>
+                <TabsContainer>
+                    <Tabs.Root
+                        value={view}
+                        onValueChange={value => onViewChange(value as WalletNavigationView)}>
+                        <Tabs.Tab value={WalletNavigationView.GAMEPLAY}>Gameplay</Tabs.Tab>
+                        <Tabs.Tab value={WalletNavigationView.ANALYTICS}>Analytics</Tabs.Tab>
+                    </Tabs.Root>
+                </TabsContainer>
             </Container>
         </SubHeader>
     )
@@ -85,4 +87,8 @@ const StyledWallet = styled("h3", {
     fontSize: "1rem",
     color: "$gray12",
     fontWeight: 400,
+})
+const TabsContainer = styled("div", {
+    display: "flex",
+    justifyContent: "center",
 })

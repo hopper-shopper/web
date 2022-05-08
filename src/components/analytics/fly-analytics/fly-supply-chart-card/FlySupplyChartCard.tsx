@@ -129,7 +129,7 @@ const Actions = styled("div", {
     flexDirection: "column",
     rowGap: "1rem",
     marginTop: "1rem",
-    "@md": {
+    "@lg": {
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",

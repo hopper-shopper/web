@@ -9,16 +9,20 @@ import { Bar, Line, LinePath } from "@visx/shape"
 import { useTooltip, useTooltipInPortal } from "@visx/tooltip"
 import DateTooltip from "components/charts/date-tooltip/DateTooltip"
 import MarkerLine from "components/charts/marker-line/MarkerLine"
+import Screen from "components/layout/screen/Screen"
 import { bisector, extent } from "d3-array"
 import { Currency, getCompactCurrencyFormatter } from "formatters/currency"
 import { formatPercent } from "formatters/number"
 import useConditionalClass from "hooks/useConditionalClass"
+import useScreenSize from "hooks/useScreenSize"
 import useThemeValue from "hooks/useThemeValue"
 import useWindowEvent from "hooks/useWindowEvent"
 import throttle from "lodash.throttle"
 import { MouseEvent, TouchEvent, useMemo, useState } from "react"
+import { flushSync } from "react-dom"
 import { css, styled } from "theme"
 import { fromIsoDate } from "utils/date"
+import { isTouchDevice } from "utils/events"
 import { IsoDatetime } from "utils/types"
 import {
     FlySupplyFeature,
@@ -41,7 +45,11 @@ type FlySupplyChartProps = {
 export default function FlySupplyChart(props: FlySupplyChartProps) {
     const { width, height, features, markers, data } = props
 
-    const marginLeft = 60
+    const isTabletUp = useScreenSize("md")
+    const colors = useThemeValue(SUPPLY_CHARTS_COLORS_LIGHT, SUPPLY_CHARTS_COLORS_DARK)
+    const grayScale = useThemeValue(gray, grayDark)
+
+    const marginLeft = isTabletUp ? 60 : 10
     const marginRight = 10
     const marginTop = 5
     const marginBottom = 30
@@ -52,9 +60,6 @@ export default function FlySupplyChart(props: FlySupplyChartProps) {
     const endY = marginTop
     const xMax = endX - startX
     const yMax = startY - endY
-
-    const colors = useThemeValue(SUPPLY_CHARTS_COLORS_LIGHT, SUPPLY_CHARTS_COLORS_DARK)
-    const grayScale = useThemeValue(gray, grayDark)
 
     const dayScale = useMemo(() => {
         return scaleTime({
@@ -83,6 +88,9 @@ export default function FlySupplyChart(props: FlySupplyChartProps) {
     })
 
     useWindowEvent("mouseup", () => {
+        if (isTouchDevice() && !brush) {
+            return
+        }
         hideBrush()
         hideTooltip()
     })
@@ -126,18 +134,20 @@ export default function FlySupplyChart(props: FlySupplyChartProps) {
         hideTooltip()
     }
 
-    const handleBrush = (event: MouseEvent<SVGRectElement>) => {
+    const handleBrush = (event: TouchEvent<SVGRectElement> | MouseEvent<SVGRectElement>) => {
         const { x } = localPoint(event) || { x: marginLeft }
         const x0 = dayScale.invert(x)
         const index = bisectDate(data, x0, 1)
 
         const item = data[index - 1]
 
-        setBrush({
-            x1: x,
-            x2: x,
-            dataX1: item,
-            dataX2: item,
+        flushSync(() => {
+            setBrush({
+                x1: x,
+                x2: x,
+                dataX1: item,
+                dataX2: item,
+            })
         })
     }
     const hideBrush = () => {
@@ -186,8 +196,12 @@ export default function FlySupplyChart(props: FlySupplyChartProps) {
             return null
         }
         const brushChange = getBrushChange(forFeature)
-        const brushChangeAbs = brushChange ? brushChange.to - brushChange.from : 0
-        const brushChangePercent = brushChange ? brushChange.to / brushChange.from - 1 : 0
+        let brushChangeAbs = brushChange ? brushChange.to - brushChange.from : 0
+        let brushChangePercent = brushChange ? brushChange.to / brushChange.from - 1 : 0
+
+        if (Number.isNaN(brushChangePercent)) {
+            brushChangePercent = 0
+        }
 
         return (
             <SupplyItem key={forFeature}>
@@ -229,7 +243,7 @@ export default function FlySupplyChart(props: FlySupplyChartProps) {
 
     return (
         <>
-            <svg ref={containerRef} width={width} height={height}>
+            <svg ref={containerRef} width={width} height={height} style={{ touchAction: "pan-y" }}>
                 <GridRows
                     scale={supplyScale}
                     width={xMax}
@@ -276,7 +290,10 @@ export default function FlySupplyChart(props: FlySupplyChartProps) {
                     width={xMax}
                     height={yMax}
                     fill="transparent"
-                    onTouchStart={handleTooltip}
+                    onTouchStart={event => {
+                        handleBrush(event)
+                        handleTooltip(event)
+                    }}
                     onTouchMove={handleTooltip}
                     onMouseMove={handleTooltip}
                     onMouseLeave={handleTooltipDismiss}
@@ -297,21 +314,23 @@ export default function FlySupplyChart(props: FlySupplyChartProps) {
                     })}
                 />
 
-                <AxisLeft
-                    scale={supplyScale}
-                    left={startX}
-                    stroke={grayScale.gray6}
-                    hideAxisLine
-                    hideTicks
-                    tickStroke={grayScale.gray11}
-                    tickFormat={value => formatSupply(+value)}
-                    tickLabelProps={() => ({
-                        fill: grayScale.gray11,
-                        fontSize: 10,
-                        textAnchor: "end",
-                        verticalAnchor: "middle",
-                    })}
-                />
+                <Screen bp="md" constraint="min">
+                    <AxisLeft
+                        scale={supplyScale}
+                        left={startX}
+                        stroke={grayScale.gray6}
+                        hideAxisLine
+                        hideTicks
+                        tickStroke={grayScale.gray11}
+                        tickFormat={value => formatSupply(+value)}
+                        tickLabelProps={() => ({
+                            fill: grayScale.gray11,
+                            fontSize: 10,
+                            textAnchor: "end",
+                            verticalAnchor: "middle",
+                        })}
+                    />
+                </Screen>
             </svg>
 
             {tooltipOpen && tooltipData && (
@@ -322,7 +341,7 @@ export default function FlySupplyChart(props: FlySupplyChartProps) {
                         applyPositionStyle
                         top={tooltipTop}
                         left={tooltipLeft}>
-                        <StyledTooltip css={{ minWidth: 250 }}>
+                        <StyledTooltip>
                             <SupplyList>{featuresArray.map(renderTooltipLine)}</SupplyList>
                         </StyledTooltip>
                     </TooltipInPortal>
@@ -435,16 +454,23 @@ const SupplyList = styled("div", {
 const SupplyItem = styled("div", {
     fontSize: "0.875rem",
     lineHeight: 1.25,
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
+    "@md": {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        columnGap: "0.5rem",
+    },
 })
 const Supply = styled("p", {
     color: "$gray12",
-    textAlign: "right",
+    "@md": {
+        textAlign: "right",
+    },
 })
 const SupplyChange = styled("p", {
-    textAlign: "right",
+    "@md": {
+        textAlign: "right",
+    },
     variants: {
         positive: {
             true: {
