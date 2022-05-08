@@ -10,6 +10,7 @@ export default function Nav() {
             <ActivatableLink to={ROUTES.WALLET}>Wallet</ActivatableLink>
             <ActivatableLink to={ROUTES.WATCHLIST}>Watchlist</ActivatableLink>
             <ActivatableLink to={ROUTES.INSPECT}>Inspect</ActivatableLink>
+            <ActivatableLink to={ROUTES.ANALYTICS}>Analytics</ActivatableLink>
         </StyledNav>
     )
 }

@@ -3,12 +3,12 @@ import usePricesUpdater from "api/hooks/usePricesUpdater"
 import PageFooter from "components/footers/page-footer/PageFooter"
 import PageHeader from "components/headers/page-header/PageHeader"
 import useApplyTheme from "hooks/useApplyTheme"
+import AnalyticsPage from "pages/analytics-page/AnalyticsPage"
 import InspectPage from "pages/inspect-page/InspectPage"
 import MarketPage from "pages/market-page/MarketPage"
 import WalletPage from "pages/wallet-page/WalletPage"
 import WatchlistPage from "pages/watchlist-page/WatchlistPage"
-import { Outlet, Route, Routes } from "react-router-dom"
-import Redirect from "routing/Redirect"
+import { Navigate, Outlet, Route, Routes } from "react-router-dom"
 import * as ROUTES from "routing/routes"
 import { globalStyles, styled } from "./theme"
 
@@ -26,8 +26,10 @@ function App() {
                 <Route path={ROUTES.INSPECT} element={<InspectPage />} />
                 <Route path={ROUTES.WALLET} element={<WalletPage />} />
                 <Route path={ROUTES.WATCHLIST} element={<WatchlistPage />} />
+                <Route path={ROUTES.ANALYTICS} element={<AnalyticsPage />} />
 
-                <Route index element={<Redirect to={ROUTES.MARKET} />} />
+                <Route path="*" element={<Navigate to={ROUTES.MARKET} />} />
+                <Route index element={<Navigate to={ROUTES.MARKET} />} />
             </Route>
         </Routes>
     )

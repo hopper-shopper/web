@@ -6,7 +6,7 @@ import CurrentAdventure from "components/hoppers/hopper-card/hopper-card-slots/c
 import HopperCard from "components/hoppers/hopper-card/HopperCard"
 import InspectPageLink from "components/inspect/inspect-page-link/InspectPageLink"
 import Flex from "components/layout/flex/Flex"
-import { useHopperContext } from "contests/HopperContext"
+import { useHopperContext } from "contexts/HopperContext"
 import { Hopper } from "models/Hopper"
 import { Listing } from "models/Listing"
 

@@ -19,7 +19,6 @@ const StyledTitle = styled("h3", {
     color: "$gray12",
     fontWeight: 400,
     lineHeight: 1.5,
-    marginBottom: "1rem",
 })
 
 const StyledDescription = styled("p", {

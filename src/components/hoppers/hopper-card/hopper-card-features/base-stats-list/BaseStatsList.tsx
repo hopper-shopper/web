@@ -1,4 +1,4 @@
-import { useHopperContext } from "contests/HopperContext"
+import { useHopperContext } from "contexts/HopperContext"
 import useThemeValue from "hooks/useThemeValue"
 import { styled } from "theme"
 import { HOPPER_STATS_SCALE_DARK, HOPPER_STATS_SCALE_LIGHT } from "utils/hopper"

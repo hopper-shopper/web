@@ -1,6 +1,6 @@
 import { WalletAddress } from "models/User"
 import { Screens, styled } from "theme"
-import ClaimedChartCard from "../claimed-chart-card/ClaimedChartCard"
+import ClaimedChartCard from "./claimed-chart-card/ClaimedChartCard"
 
 type WalletAnalyticsProps = {
     wallet: WalletAddress
