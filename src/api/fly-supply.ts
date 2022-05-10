@@ -9,7 +9,7 @@ type GetFlySupplyResponse = {
 export function getFlySupplyUrl(): string {
     return `${ENDPOINT}/supply`
 }
-export async function fetchFylSupply(): Promise<FlySupply[]> {
+export async function fetchFlySupply(): Promise<FlySupply[]> {
     const response = await fetch(getFlySupplyUrl())
     const json = (await response.json()) as GetFlySupplyResponse
 

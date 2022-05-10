@@ -1,5 +1,6 @@
 import AnalyticsPageSubheader from "components/analytics/analytics-page-subheader/AnalyticsPageSubheader"
 import FlyAnalytics from "components/analytics/fly-analytics/FlyAnalytics"
+import HopperAnalytics from "components/analytics/hopper-analytics/HopperAnalytics"
 import useStateUpdate from "hooks/useStateUpdate"
 import useAnalyticsPageState, { AnalyticsNavigationView } from "./useAnalyticsPageState"
 
@@ -15,6 +16,7 @@ export default function AnalyticsPage() {
             />
 
             {state.view === AnalyticsNavigationView.FLY && <FlyAnalytics />}
+            {state.view === AnalyticsNavigationView.HOPPERS && <HopperAnalytics />}
         </>
     )
 }
