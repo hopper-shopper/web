@@ -3,17 +3,19 @@ import { Group } from "@visx/group"
 import { scaleLinear } from "@visx/scale"
 import { Line, LineRadial } from "@visx/shape"
 import { HoppersActivitySnapshot } from "models/Hopper"
-import React, { useMemo } from "react"
+import { useMemo } from "react"
+import { formatActivityKey, SnapshotKey } from "./hopperActivityChart.utils"
 
 type HopperActivityChartProps = {
     width: number
     height: number
 
+    keys: Array<keyof HoppersActivitySnapshot>
     activity: HoppersActivitySnapshot
 }
 
 export default function HopperActivityChart(props: HopperActivityChartProps) {
-    const { width, height, activity } = props
+    const { width, height, keys, activity } = props
 
     const marginLeft = 50
     const marginRight = 50
@@ -32,7 +34,7 @@ export default function HopperActivityChart(props: HopperActivityChartProps) {
         })
     }, [])
 
-    const countMax = Math.max(...generateDummyPoints(activity).map(point => point.count))
+    const countMax = Math.max(...getCounts(keys, activity))
     const yScale = useMemo(() => {
         return scaleLinear({
             range: [0, radius],
@@ -41,14 +43,14 @@ export default function HopperActivityChart(props: HopperActivityChartProps) {
     }, [radius, countMax])
 
     const webs = useMemo(() => {
-        return generateAngles(activity)
-    }, [activity])
+        return generateAngles(keys, activity)
+    }, [keys, activity])
     const points = useMemo(() => {
-        return generatePoints(activity, radius)
-    }, [activity, radius])
+        return generatePoints(keys, activity, radius)
+    }, [keys, activity, radius])
     const polygonPoints = useMemo(() => {
-        return generatePolygonPoints(activity, yScale)
-    }, [yScale, activity])
+        return generatePolygonPoints(keys, activity, yScale)
+    }, [keys, activity, yScale])
 
     return (
         <svg width={width} height={height}>
@@ -111,7 +113,7 @@ export default function HopperActivityChart(props: HopperActivityChartProps) {
 
 // Types
 type Point = {
-    key: keyof HoppersActivitySnapshot
+    key: SnapshotKey
     count: number
     x: number
     y: number
@@ -133,8 +135,8 @@ const ZERO_POINT: Point = {
 const LEVELS = 5
 
 // Data generators
-function generateAngles(snapshot: HoppersActivitySnapshot): number[] {
-    const length = generateDummyPoints(snapshot).length
+function generateAngles(keys: SnapshotKey[], snapshot: HoppersActivitySnapshot): number[] {
+    const length = generateDummyPoints(keys, snapshot).length
 
     const angles: number[] = []
 
@@ -144,8 +146,12 @@ function generateAngles(snapshot: HoppersActivitySnapshot): number[] {
 
     return angles
 }
-function generatePoints(snapshot: HoppersActivitySnapshot, radius: number): Point[] {
-    const points = generateDummyPoints(snapshot)
+function generatePoints(
+    keys: SnapshotKey[],
+    snapshot: HoppersActivitySnapshot,
+    radius: number,
+): Point[] {
+    const points = generateDummyPoints(keys, snapshot)
     const length = points.length
 
     const step = (Math.PI * 2) / length
@@ -158,10 +164,11 @@ function generatePoints(snapshot: HoppersActivitySnapshot, radius: number): Poin
     return points
 }
 function generatePolygonPoints(
+    keys: SnapshotKey[],
     snapshot: HoppersActivitySnapshot,
     scale: YScale,
 ): PolygonDefinitions {
-    const points = generateDummyPoints(snapshot)
+    const points = generateDummyPoints(keys, snapshot)
     const step = (Math.PI * 2) / points.length
 
     let pointString = ""
@@ -179,35 +186,16 @@ function generatePolygonPoints(
         pointString,
     }
 }
-function generateDummyPoints(snapshot: HoppersActivitySnapshot): Point[] {
-    const points: Point[] = [
-        { key: "idle", count: snapshot.idle, x: 0, y: 0 },
-        { key: "breeding", count: snapshot.breeding, x: 0, y: 0 },
-        { key: "marketplace", count: snapshot.marketplace, x: 0, y: 0 },
-        { key: "pond", count: snapshot.pond, x: 0, y: 0 },
-        { key: "stream", count: snapshot.stream, x: 0, y: 0 },
-        { key: "swamp", count: snapshot.swamp, x: 0, y: 0 },
-        { key: "river", count: snapshot.river, x: 0, y: 0 },
-        { key: "forest", count: snapshot.forest, x: 0, y: 0 },
-        { key: "greatLake", count: snapshot.greatLake, x: 0, y: 0 },
-    ]
+function generateDummyPoints(keys: SnapshotKey[], snapshot: HoppersActivitySnapshot): Point[] {
+    const points: Point[] = keys.map(key => ({
+        key,
+        count: snapshot[key],
+        x: 0,
+        y: 0,
+    }))
 
     return points
 }
-
-// Formatters
-const keyMapping: Record<keyof HoppersActivitySnapshot, string> = {
-    idle: "Idle",
-    breeding: "Breeding",
-    marketplace: "Marketplace",
-    adventure: "Adventure",
-    pond: "Pond",
-    stream: "Stream",
-    swamp: "Swamp",
-    river: "River",
-    forest: "Forest",
-    greatLake: "Great Lake",
-}
-function formatActivityKey(key: keyof HoppersActivitySnapshot): string {
-    return keyMapping[key]
+function getCounts(keys: SnapshotKey[], snapshot: HoppersActivitySnapshot): number[] {
+    return keys.map<number>(key => snapshot[key])
 }
