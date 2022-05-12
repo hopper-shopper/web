@@ -16,11 +16,11 @@ export default function HopperActivityChartCard() {
 
     const chartSize = ((): number => {
         if (isLaptopUp) {
-            return 500
-        } else if (isTabletUp) {
             return 400
+        } else if (isTabletUp) {
+            return 300
         }
-        return 300
+        return 250
     })()
 
     const total = KEYS.reduce((acc, cur) => acc + activity[cur], 0)
@@ -33,7 +33,7 @@ export default function HopperActivityChartCard() {
 
             <ChartContainer.Content>
                 <InnerContainer>
-                    <div style={{ width: chartSize, height: chartSize }}>
+                    <ChartWrapper css={{ size: chartSize }}>
                         <ParentSizeModern>
                             {({ height }) => (
                                 <>
@@ -48,14 +48,14 @@ export default function HopperActivityChartCard() {
                                 </>
                             )}
                         </ParentSizeModern>
-                    </div>
+                    </ChartWrapper>
 
                     <Details>
                         {KEYS.map(key => (
                             <Item key={key}>
                                 <ActivityDescription>
                                     <ActivityText>{formatActivityKey(key)}</ActivityText>
-                                    <ActivityCount>{activity[key]} Hoppers</ActivityCount>
+                                    <ActivityCount>{activity[key]}</ActivityCount>
                                 </ActivityDescription>
                                 <Progress.Root>
                                     <Progress.Indicator
@@ -91,7 +91,15 @@ const KEYS: Array<keyof HoppersActivitySnapshot> = [
 // Components
 const InnerContainer = styled("div", {
     display: "flex",
-    gap: "5rem",
+    flexDirection: "column",
+    gap: "2rem",
+    "@lg": {
+        flexDirection: "row",
+        gap: "5rem",
+    },
+})
+const ChartWrapper = styled("div", {
+    mx: "auto",
 })
 const Details = styled("div", {
     flex: 1,
@@ -101,9 +109,11 @@ const Details = styled("div", {
 })
 const Item = styled("div", {
     display: "grid",
-    gridTemplateColumns: "300px 1fr",
     alignItems: "center",
     columnGap: "1rem",
+    "@md": {
+        gridTemplateColumns: "200px 1fr",
+    },
 })
 const ActivityDescription = styled("p", {
     display: "flex",
