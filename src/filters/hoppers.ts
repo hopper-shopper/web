@@ -73,16 +73,6 @@ export function getHoppersOnWatchlistFilter(watchlist: HopperId[]): FilterFn<Hop
     return filter
 }
 
-export function getHoppersHiddenFilter(hidden: HopperId[]): FilterFn<Hopper> {
-    const filter: FilterFn<Hopper> = hoppers => {
-        return hoppers.filter(hopper => {
-            return !hidden.includes(hopper.tokenId)
-        })
-    }
-    filter.signature = `watchlist-hidden-filter-${Array.from(hidden).join(",")}`
-    return filter
-}
-
 export function getHoppersTierPermitFilter(permits: AdventureTierPermit[]): FilterFn<Hopper> {
     const filter: FilterFn<Hopper> = hoppers => {
         return hoppers.filter(hopper => {

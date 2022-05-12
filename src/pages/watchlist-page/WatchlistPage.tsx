@@ -7,16 +7,14 @@ import ConfigureWatchlistFilter from "components/watchlist/configure-watchlist-f
 import WatchlistCard from "components/watchlist/watchlist-card/WatchlistCard"
 import WatchlistHopperCard from "components/watchlist/watchlist-hopper-card/WatchlistHopperCard"
 import {
-    getHoppersHiddenFilter,
     getHoppersMarketFilter,
     getHoppersOnWatchlistFilter,
     getHoppersTierPermitFilter,
 } from "filters/hoppers"
 import useFilter from "hooks/useFilter"
 import { useAtomValue, useSetAtom } from "jotai"
-import { HopperId } from "models/Hopper"
 import { useMemo, useRef } from "react"
-import { watchlistAtom, toggleWatchlistAtom } from "stores/watchlist"
+import { toggleWatchlistAtom, watchlistAtom } from "stores/watchlist"
 import { Screens, styled } from "theme"
 import useWatchlistPageState from "./useWatchlistPageState"
 
@@ -38,10 +36,6 @@ export default function WatchlistPage() {
         ],
         hoppers,
     )
-    const withoutHiddenHoppers = useFilter(
-        [getHoppersHiddenFilter(watchlistFilter.hidden)],
-        filteredHoppers,
-    )
 
     const handleAddHopperIdSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
@@ -58,34 +52,17 @@ export default function WatchlistPage() {
         toggle(`${hopperId}`)
         addHopperIdRef.current.value = ""
     }
-    const toggleHidden = (hopperId: HopperId) => {
-        setWatchlistFilter(prev => {
-            const newHidden = new Set(prev.hidden)
-
-            // Add
-            if (!newHidden.has(hopperId)) {
-                newHidden.add(hopperId)
-            } else {
-                newHidden.delete(hopperId)
-            }
-
-            return {
-                ...prev,
-                hidden: Array.from(newHidden),
-            }
-        })
-    }
 
     const patchedHoppers = useMemo(() => {
         if (watchlistFilter.normalizeLevel > 0 && watchlistFilter.normalizeLevel <= 100) {
-            return withoutHiddenHoppers.map(hopper => ({
+            return filteredHoppers.map(hopper => ({
                 ...hopper,
                 level: watchlistFilter.normalizeLevel,
             }))
         }
 
-        return withoutHiddenHoppers
-    }, [withoutHiddenHoppers, watchlistFilter.normalizeLevel])
+        return filteredHoppers
+    }, [filteredHoppers, watchlistFilter.normalizeLevel])
 
     return (
         <Container>
@@ -104,7 +81,7 @@ export default function WatchlistPage() {
                         onSubmit={handleAddHopperIdSubmit}
                         css={{ marginBottom: "1rem" }}>
                         <Fieldset css={{ flex: 1 }}>
-                            <Label htmlFor="add-hopper-id">Add Hopper-ID</Label>
+                            <Label htmlFor="add-hopper-id">Add Hopper by ID</Label>
                             <Input
                                 ref={addHopperIdRef}
                                 id="add-hopper-id"
@@ -119,12 +96,7 @@ export default function WatchlistPage() {
                     </InputContainer>
 
                     {filteredHoppers.map(hopper => (
-                        <WatchlistCard
-                            key={hopper.tokenId}
-                            hopper={hopper}
-                            hidden={watchlistFilter.hidden.includes(hopper.tokenId)}
-                            toggleHide={() => toggleHidden(hopper.tokenId)}
-                        />
+                        <WatchlistCard key={hopper.tokenId} hopper={hopper} />
                     ))}
                 </WatchlistList>
 

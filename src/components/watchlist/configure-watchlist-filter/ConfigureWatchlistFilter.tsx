@@ -8,6 +8,7 @@ import Fieldset from "components/inputs/fieldset/Fieldset"
 import Input from "components/inputs/input/Input"
 import { HopperId } from "models/Hopper"
 import { toggleItem } from "utils/array"
+import * as LabeledInput from "components/inputs/labeled-input/LabeledInput"
 
 type ConfigureWatchlistFilterProps = {
     filter: WatchlistFilter
@@ -118,16 +119,18 @@ export default function ConfigureWatchlistFilter(props: ConfigureWatchlistFilter
                 <Section>
                     <Fieldset>
                         <Label htmlFor="normalize-level">Normalize level</Label>
-                        <Input
-                            id="normalize-level"
-                            type="number"
-                            placeholder="Normalize hopper levels"
-                            min={1}
-                            max={100}
-                            css={{ "@md": { width: 200 }, "@lg": { width: 250 } }}
-                            defaultValue={filter.normalizeLevel || ""}
-                            onBlur={handleNormalizeLevelChange}
-                        />
+                        <LabeledInput.Root css={{ "@md": { width: 200 }, "@lg": { width: 250 } }}>
+                            <LabeledInput.Input
+                                id="normalize-level"
+                                type="number"
+                                placeholder="Hoppers level"
+                                min={1}
+                                max={100}
+                                defaultValue={filter.normalizeLevel || ""}
+                                onBlur={handleNormalizeLevelChange}
+                            />
+                            <LabeledInput.Hint>Level</LabeledInput.Hint>
+                        </LabeledInput.Root>
                     </Fieldset>
                 </Section>
             </RightSlot>
@@ -156,7 +159,6 @@ export type WatchlistFilter = {
     market: WatchlistMarketFilter
     features: WatchlistCardFeature[]
     normalizeLevel: number
-    hidden: HopperId[]
     permit: AdventureTierPermit[]
 }
 

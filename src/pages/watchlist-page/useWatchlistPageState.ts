@@ -4,7 +4,6 @@ import {
     WatchlistFilter,
     WatchlistMarketFilter,
 } from "components/watchlist/configure-watchlist-filter/ConfigureWatchlistFilter"
-import { HopperId } from "models/Hopper"
 import { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { useMount } from "react-use"
@@ -31,7 +30,6 @@ const INITIAL_STATE: WatchlistFilter = {
     market: WatchlistMarketFilter.ANY,
     features: [WatchlistCardFeature.MARKET_PRICE, WatchlistCardFeature.ADVENTURE_PERMIT],
     normalizeLevel: 0,
-    hidden: [],
     permit: [
         AdventureTierPermit.T1,
         AdventureTierPermit.T2,
@@ -59,9 +57,6 @@ function deriveStateFromSearchParams(searchParams: URLSearchParams): WatchlistFi
         searchParams.get(NORMALIZE_LEVEL_KEY),
         INITIAL_STATE.normalizeLevel,
     )
-    const hidden = searchParams.has(HIDDEN_KEY)
-        ? parseHidden(searchParams.get(HIDDEN_KEY)!)
-        : INITIAL_STATE.hidden
     const permit = searchParams.has(PERMITS_KEY)
         ? parsePermits(searchParams.get(PERMITS_KEY)!)
         : INITIAL_STATE.permit
@@ -70,7 +65,6 @@ function deriveStateFromSearchParams(searchParams: URLSearchParams): WatchlistFi
         market,
         features,
         normalizeLevel,
-        hidden,
         permit,
     }
 }
@@ -85,10 +79,6 @@ function deriveSearchParamsFromState(state: WatchlistFilter): URLSearchParams {
 
     if (state.normalizeLevel > 0 && state.normalizeLevel <= 100) {
         params.set(NORMALIZE_LEVEL_KEY, `${state.normalizeLevel}`)
-    }
-
-    if (state.hidden.length > 0) {
-        params.set(HIDDEN_KEY, urlifyHidden(state.hidden))
     }
 
     if (state.permit.length > 0) {
@@ -132,13 +122,6 @@ function parseFeatures(features: string): WatchlistCardFeature[] {
             return featureMapping.get(feature)
         })
         .filter(Boolean) as WatchlistCardFeature[]
-}
-
-function urlifyHidden(hidden: HopperId[]): string {
-    return hidden.join(".")
-}
-function parseHidden(hidden: string): HopperId[] {
-    return hidden.split(".")
 }
 
 const permitMapping = createLookupMap([
