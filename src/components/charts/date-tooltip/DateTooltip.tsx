@@ -25,6 +25,7 @@ export default function DateTooltip(props: DateTooltipProps) {
 
 const Container = styled("div", {
     position: "relative",
+    left: "50%",
 })
 const DateText = styled("span", {
     position: "absolute",

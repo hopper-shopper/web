@@ -16,7 +16,7 @@ export default function HopperActivityChartCard() {
 
     const chartSize = ((): number => {
         if (isLaptopUp) {
-            return 400
+            return 500
         } else if (isTabletUp) {
             return 300
         }

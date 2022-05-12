@@ -47,7 +47,7 @@ export default function ClaimedChart(props: ClaimedChartProps) {
     const isTabletUp = useScreenSize("md")
     const [columnOverlay, setColumnOverlay] = useState<ColumnOverlayState | null>(null)
 
-    const marginLeft = isTabletUp ? 60 : 10
+    const marginLeft = isTabletUp ? 80 : 10
     const marginRight = 10
     const marginTop = 0
     const marginBottom = 30
@@ -128,7 +128,7 @@ export default function ClaimedChart(props: ClaimedChartProps) {
 
         if (typeof start === "number") {
             setColumnOverlay({
-                x: start,
+                x: start + marginLeft,
                 width: dayScale.bandwidth(),
             })
             showTooltip({
@@ -136,7 +136,7 @@ export default function ClaimedChart(props: ClaimedChartProps) {
                     date: column,
                     width: dayScale.bandwidth(),
                 },
-                tooltipLeft: start + marginLeft - marginRight,
+                tooltipLeft: start + marginLeft,
             })
         }
     }
@@ -165,7 +165,7 @@ export default function ClaimedChart(props: ClaimedChartProps) {
 
                 {columnOverlay !== null && (
                     <Bar
-                        x={columnOverlay.x + marginLeft}
+                        x={columnOverlay.x}
                         y={marginTop}
                         width={columnOverlay.width}
                         height={yMax}
@@ -257,6 +257,7 @@ export default function ClaimedChart(props: ClaimedChartProps) {
                 <TooltipInPortal
                     key={Date.now()}
                     offsetTop={-4}
+                    offsetLeft={0}
                     unstyled
                     applyPositionStyle
                     top={yMax}
