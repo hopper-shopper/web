@@ -28,7 +28,10 @@ const StyledDescription = styled("p", {
 
 const StyledContent = styled("div", {
     minHeight: 300,
-    padding: "1rem",
+    padding: "0 1rem 1rem",
+    "@md": {
+        padding: "0 2rem 2rem",
+    },
 })
 
 export const Root = StyledRoot

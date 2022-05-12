@@ -18,6 +18,7 @@ export default function AnalyticsPageSubheader(props: AnalyticsPageSubheaderProp
                     value={view}
                     onValueChange={value => onViewChange(value as AnalyticsNavigationView)}>
                     <Tabs.Tab value={AnalyticsNavigationView.FLY}>FLY</Tabs.Tab>
+                    <Tabs.Tab value={AnalyticsNavigationView.HOPPERS}>Hoppers</Tabs.Tab>
                 </Tabs.Root>
             </Container>
         </SubHeader>

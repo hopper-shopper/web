@@ -49,3 +49,16 @@ export type HopperListing = {
     active: boolean
     price: number
 }
+
+export type HoppersActivitySnapshot = {
+    idle: number
+    breeding: number
+    marketplace: number
+    adventure: number
+    pond: number
+    stream: number
+    swamp: number
+    river: number
+    forest: number
+    greatLake: number
+}

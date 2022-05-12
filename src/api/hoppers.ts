@@ -1,4 +1,4 @@
-import { Hopper } from "models/Hopper"
+import { Hopper, HoppersActivitySnapshot } from "models/Hopper"
 import {
     AdventureFilter,
     HoppersFilter,
@@ -30,6 +30,20 @@ export function getHoppersUrl(filter: HoppersFilter): string {
 export async function fetchHoppers(filter: HoppersFilter): Promise<Hopper[]> {
     const response = await fetch(getHoppersUrl(filter))
     const json = (await response.json()) as GetHoppersResponse
+
+    return json.data
+}
+
+type GetHoppersActivityResponse = {
+    data: HoppersActivitySnapshot
+}
+
+export function getHoppersActivityUrl(): string {
+    return `${ENDPOINT}/hoppers/activity`
+}
+export async function fetchHoppersActivity(): Promise<HoppersActivitySnapshot> {
+    const response = await fetch(getHoppersActivityUrl())
+    const json = (await response.json()) as GetHoppersActivityResponse
 
     return json.data
 }
