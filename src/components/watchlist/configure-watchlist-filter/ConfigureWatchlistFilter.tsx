@@ -147,6 +147,7 @@ export enum WatchlistCardFeature {
     MARKET_PRICE = "MARKET_PRICE",
 }
 export enum AdventureTierPermit {
+    T1 = "T1",
     T2 = "T2",
     T3 = "T3",
     T4 = "T4",
@@ -209,6 +210,7 @@ const ALL_FEATURES: WatchlistCardFeature[] = [
 ]
 
 const ALL_PERMITS: AdventureTierPermit[] = [
+    AdventureTierPermit.T1,
     AdventureTierPermit.T2,
     AdventureTierPermit.T3,
     AdventureTierPermit.T4,
@@ -239,6 +241,8 @@ function formatFeature(feature: WatchlistCardFeature): string {
 
 function formatPermit(permit: AdventureTierPermit): string {
     switch (permit) {
+        case AdventureTierPermit.T1:
+            return "T1"
         case AdventureTierPermit.T2:
             return "T2"
         case AdventureTierPermit.T3:

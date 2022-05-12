@@ -32,7 +32,12 @@ const INITIAL_STATE: WatchlistFilter = {
     features: [WatchlistCardFeature.MARKET_PRICE, WatchlistCardFeature.ADVENTURE_PERMIT],
     normalizeLevel: 0,
     hidden: [],
-    permit: [AdventureTierPermit.T2, AdventureTierPermit.T3, AdventureTierPermit.T4],
+    permit: [
+        AdventureTierPermit.T1,
+        AdventureTierPermit.T2,
+        AdventureTierPermit.T3,
+        AdventureTierPermit.T4,
+    ],
 }
 
 const MARKET_KEY = "market"
@@ -137,6 +142,7 @@ function parseHidden(hidden: string): HopperId[] {
 }
 
 const permitMapping = createLookupMap([
+    [AdventureTierPermit.T1, "t1"],
     [AdventureTierPermit.T2, "t2"],
     [AdventureTierPermit.T3, "t3"],
     [AdventureTierPermit.T4, "t4"],

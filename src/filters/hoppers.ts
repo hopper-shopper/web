@@ -86,20 +86,26 @@ export function getHoppersHiddenFilter(hidden: HopperId[]): FilterFn<Hopper> {
 export function getHoppersTierPermitFilter(permits: AdventureTierPermit[]): FilterFn<Hopper> {
     const filter: FilterFn<Hopper> = hoppers => {
         return hoppers.filter(hopper => {
-            const getAdventure = (permit: AdventureTierPermit): Adventure => {
+            const getAdventure = (permit: AdventureTierPermit): Adventure[] => {
                 switch (permit) {
+                    case AdventureTierPermit.T1:
+                        return [Adventure.POND, Adventure.STREAM, Adventure.SWAMP]
                     case AdventureTierPermit.T2:
-                        return Adventure.RIVER
+                        return [Adventure.RIVER]
                     case AdventureTierPermit.T3:
-                        return Adventure.FOREST
+                        return [Adventure.FOREST]
                     case AdventureTierPermit.T4:
-                        return Adventure.GREAT_LAKE
+                        return [Adventure.GREAT_LAKE]
                 }
             }
 
             return permits.some(permit => {
-                const rating = getRatingByAdventure(getAdventure(permit), hopper)
-                return rating > 0
+                const adventures = getAdventure(permit)
+
+                return adventures.some(adventure => {
+                    const rating = getRatingByAdventure(adventure, hopper)
+                    return rating > 0
+                })
             })
         })
     }
