@@ -1,5 +1,5 @@
 import { IconExternalLink } from "@tabler/icons"
-import { formatCurrency } from "formatters/currency"
+import { formatCurrency, getCurrencyFormatter } from "formatters/currency"
 import { formatGwei } from "formatters/gas"
 import { useAtomValue } from "jotai"
 import { gasGweiAtom } from "stores/gas"
@@ -14,6 +14,11 @@ export default function DesktopHeaderContent() {
     const currency = useAtomValue(currencyAtom)
     const avaxPrice = useAtomValue(avaxPriceByCurrencyAtom)
     const flyPrice = useAtomValue(flyPriceByCurrencyAtom)
+
+    const flyPriceFormatter = getCurrencyFormatter(currency, {
+        minimumFractionDigits: 3,
+        maximumFractionDigits: 3,
+    })
 
     return (
         <>
@@ -39,7 +44,7 @@ export default function DesktopHeaderContent() {
                     </Info>
                     <Info>
                         <InfoLabel>FLY</InfoLabel>
-                        <InfoValue>{formatCurrency(flyPrice, currency)}</InfoValue>
+                        <InfoValue>{flyPriceFormatter(flyPrice)}</InfoValue>
                     </Info>
                 </InfoContainer>
 

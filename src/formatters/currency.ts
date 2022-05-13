@@ -21,18 +21,29 @@ export function formatCurrencyName(currency: Currency): string {
 }
 
 export function formatCurrency(value: number, currency: Currency): string {
-    if (currency === Currency.EUR || currency === Currency.USD) {
-        return new Intl.NumberFormat([], {
-            style: "currency",
-            currency,
-        }).format(value)
-    }
-
-    const formatter = new Intl.NumberFormat([], {
+    const formatter = getCurrencyFormatter(currency, {
         maximumFractionDigits: 2,
         minimumFractionDigits: 2,
     })
-    return `${formatter.format(value)} ${formatCurrencyName(currency)}`
+    return formatter(value)
+}
+
+export function getCurrencyFormatter(
+    currency: Currency,
+    formatOptions?: Intl.NumberFormatOptions,
+): LocaleFormatter<number> {
+    if (currency === Currency.EUR || currency === Currency.USD) {
+        return new Intl.NumberFormat([], {
+            ...formatOptions,
+            style: "currency",
+            currency,
+        }).format
+    }
+
+    return value => {
+        const formatter = new Intl.NumberFormat([], formatOptions)
+        return `${formatter.format(value)} ${formatCurrencyName(currency)}`
+    }
 }
 
 type CompactUnit = readonly [divisor: number, unit: string]

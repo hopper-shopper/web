@@ -4,7 +4,7 @@ import IconButton from "components/inputs/buttons/icon-button/IconButton"
 import Flex from "components/layout/flex/Flex"
 import RightSlot from "components/layout/flex/RightSlot"
 import Grid from "components/layout/grid/Grid"
-import { formatCurrency } from "formatters/currency"
+import { formatCurrency, getCurrencyFormatter } from "formatters/currency"
 import { formatGwei } from "formatters/gas"
 import { useAtom, useAtomValue } from "jotai"
 import { useState } from "react"
@@ -25,6 +25,11 @@ export default function MobileHeaderContent() {
     const avaxPrice = useAtomValue(avaxPriceByCurrencyAtom)
     const flyPrice = useAtomValue(flyPriceByCurrencyAtom)
     const [theme, setTheme] = useAtom(themeAtom)
+
+    const flyPriceFormatter = getCurrencyFormatter(currency, {
+        minimumFractionDigits: 3,
+        maximumFractionDigits: 3,
+    })
 
     return (
         <>
@@ -53,7 +58,7 @@ export default function MobileHeaderContent() {
 
                                 <Tile>
                                     <TileLabel>FLY</TileLabel>
-                                    <TileValue>{formatCurrency(flyPrice, currency)}</TileValue>
+                                    <TileValue>{flyPriceFormatter(flyPrice)}</TileValue>
                                 </Tile>
                             </InfoBar>
 
