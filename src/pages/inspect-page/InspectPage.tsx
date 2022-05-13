@@ -1,5 +1,6 @@
 import useHoppers from "api/hooks/useHoppers"
 import useHoppersListings from "api/hooks/useHoppersListings"
+import BreedingCostsTable from "components/hoppers/breeding-costs-table/BreedingCostsTable"
 import HopperBreedingChances from "components/hoppers/hopper-breeding-chances/HopperBreedingChances"
 import HopperPreview from "components/hoppers/hopper-preview/HopperPreview"
 import HopperRoi from "components/hoppers/hopper-roi/HopperRoi"
@@ -84,6 +85,7 @@ export default function InspectPage() {
                         </Section.Header>
 
                         <HopperBreedingChances hopper={hopper} />
+                        <BreedingCostsTable hopper={hopper} />
                     </Section.Root>
 
                     <Section.Root>

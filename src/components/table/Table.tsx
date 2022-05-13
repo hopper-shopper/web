@@ -68,6 +68,8 @@ const StyledTableHead = styled("thead", {
     },
 })
 
+const StyledTableBody = styled("tbody")
+
 const StyledTableFoot = styled("tfoot", {
     variants: {
         sticky: {
@@ -121,6 +123,7 @@ const StyledSummaryCell = styled(StyledTableCell, {
 
 export const Root = StyledTable
 export const Head = StyledTableHead
+export const Body = StyledTableBody
 export const Foot = StyledTableFoot
 export const Row = StyledTableRow
 export const HeaderCell = StyledTableHeaderCell
