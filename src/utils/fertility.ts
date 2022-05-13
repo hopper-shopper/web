@@ -1,4 +1,5 @@
 import { Hopper } from "models/Hopper"
+import { clamp } from "./numbers"
 
 /**
  * Calculate the hopper price if it would be at fertility 10 with current price rate
@@ -17,7 +18,11 @@ export function calculateMaxFertilityRatingPrice(hopper: Hopper): number {
  * @returns
  */
 export function calculateTadpoleChanceAtLevel(atLevel: number, hopper: Hopper): number {
-    return (9 / 400) * (hopper.fertility + (3 * atLevel) / 10) * 100
+    return (9 / 400) * (hopper.fertility + (3 * atLevel) / 10)
+}
+
+export function getTadpoleChance(hopper: Hopper): number {
+    return calculateTadpoleChanceAtLevel(hopper.level, hopper)
 }
 
 /**
@@ -26,7 +31,11 @@ export function calculateTadpoleChanceAtLevel(atLevel: number, hopper: Hopper): 
  * @param hopper
  * @returns
  */
-export function calculateHopperLevelAtTadpoleChange(chance: number, hopper: Hopper): number {
-    const normalizedChance = chance > 1 ? chance / 100 : chance
-    return (normalizedChance * (400 / 9) * 10 - 10 * hopper.fertility) / 3
+export function calculateHopperLevelAtTadpoleChance(chance: number, hopper: Hopper): number {
+    const normalizedChance = clamp(0, 0.9, chance)
+    return clamp(1, 100, (normalizedChance * (400 / 9) * 10 - 10 * hopper.fertility) / 3)
+}
+
+export function getHopperMaxTadpoleChance(hopper: Hopper): number {
+    return (9 / 400) * (hopper.fertility + (3 * 100) / 10)
 }

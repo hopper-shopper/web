@@ -59,11 +59,7 @@ export default function HopperActivityChartCard() {
                                 </ActivityDescription>
                                 <Progress.Root>
                                     <Progress.Indicator
-                                        style={{
-                                            width:
-                                                total > 0 ? `${(activity[key] / total) * 100}%` : 0,
-                                        }}
-                                        severity="normal"
+                                        percent={total > 0 ? activity[key] / total : 0}
                                     />
                                 </Progress.Root>
                             </Item>

@@ -49,6 +49,7 @@
         "react-router-dom": "6",
         "react-use": "^17.3.2",
         "react-virtuoso": "^2.8.3",
+        "use-resize-observer": "^8.0.0",
         "validator": "^13.7.0"
     },
     "devDependencies": {

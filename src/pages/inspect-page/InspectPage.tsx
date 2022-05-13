@@ -1,5 +1,6 @@
 import useHoppers from "api/hooks/useHoppers"
 import useHoppersListings from "api/hooks/useHoppersListings"
+import HopperBreedingChances from "components/hoppers/hopper-breeding-chances/HopperBreedingChances"
 import HopperPreview from "components/hoppers/hopper-preview/HopperPreview"
 import HopperRoi from "components/hoppers/hopper-roi/HopperRoi"
 import Button from "components/inputs/buttons/button/Button"
@@ -75,6 +76,14 @@ export default function InspectPage() {
                         </Section.Header>
 
                         <HopperPreview hopper={hopper} />
+                    </Section.Root>
+
+                    <Section.Root>
+                        <Section.Header>
+                            <Section.Title>Breeding</Section.Title>
+                        </Section.Header>
+
+                        <HopperBreedingChances hopper={hopper} />
                     </Section.Root>
 
                     <Section.Root>

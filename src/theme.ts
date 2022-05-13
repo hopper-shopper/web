@@ -78,6 +78,14 @@ export const {
         mb: (margin: PropertyValue<"marginBottom">) => ({
             marginBottom: margin,
         }),
+        rr: (radius: PropertyValue<"borderRadius">) => ({
+            borderTopRightRadius: radius,
+            borderBottomRightRadius: radius,
+        }),
+        rl: (radius: PropertyValue<"borderRadius">) => ({
+            borderTopLeftRadius: radius,
+            borderBottomLeftRadius: radius,
+        }),
     },
 })
 

@@ -22,7 +22,7 @@ export default function FlyCap(props: FlyCapProps) {
         adventure,
     })
 
-    const userCapPercent = userCap.cap === 0 ? 0 : (userCap.current / userCap.cap) * 100
+    const userCapPercent = userCap.cap === 0 ? 0 : userCap.current / userCap.cap
     const userCapTime = userCap.time > 0 ? addSeconds(new Date(), userCap.time) : null
 
     return (
@@ -41,11 +41,8 @@ export default function FlyCap(props: FlyCapProps) {
                     )}
                 </Flex>
             </AdventureTitle>
-            <Progress.Root>
-                <Progress.Indicator
-                    style={{ width: `${userCapPercent}%` }}
-                    severity={userCapPercent > 95 ? "danger" : "normal"}
-                />
+            <Progress.Root color={userCapPercent > 0.95 ? "danger" : "normal"}>
+                <Progress.Indicator percent={userCapPercent} />
             </Progress.Root>
         </StyledCap>
     )

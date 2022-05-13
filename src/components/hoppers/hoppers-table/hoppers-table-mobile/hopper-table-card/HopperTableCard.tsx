@@ -19,7 +19,7 @@ import {
     getRatingByAdventure,
 } from "utils/adventures"
 import {
-    calculateHopperLevelAtTadpoleChange,
+    calculateHopperLevelAtTadpoleChance,
     calculateMaxFertilityRatingPrice,
 } from "utils/fertility"
 import { HOPPER_STATS_SCALE_DARK, HOPPER_STATS_SCALE_LIGHT } from "utils/hopper"
@@ -147,7 +147,7 @@ export default function HopperTableCard(props: HopperTableCardProps) {
                             {formatCurrency(
                                 calculateLevelUpCosts(
                                     hopper.level,
-                                    calculateHopperLevelAtTadpoleChange(0.5, hopper),
+                                    calculateHopperLevelAtTadpoleChance(0.5, hopper),
                                 ),
                                 Currency.FLY,
                             )}
