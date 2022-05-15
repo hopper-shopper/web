@@ -1,4 +1,5 @@
 import BaseStatsList from "components/hoppers/hopper-card/hopper-card-features/base-stats-list/BaseStatsList"
+import BreedingChance from "components/hoppers/hopper-card/hopper-card-features/breeding-chance/BreedingChance"
 import FlyEarnings from "components/hoppers/hopper-card/hopper-card-features/fly-earnings/FlyEarnings"
 import MarketPrice from "components/hoppers/hopper-card/hopper-card-features/market-price/MarketPrice"
 import PermitDetails from "components/hoppers/hopper-card/hopper-card-features/permit-details/PermitDetails"
@@ -26,6 +27,7 @@ export default function WatchlistHopperCard(props: WatchlistHopperCardProps) {
             <BaseStatsList />
 
             {features.includes(WatchlistCardFeature.MARKET_PRICE) && <MarketPrice />}
+            {features.includes(WatchlistCardFeature.BREEDING_CHANCE) && <BreedingChance />}
             {features.includes(WatchlistCardFeature.ADVENTURE_PERMIT) && <PermitDetails />}
             {features.includes(WatchlistCardFeature.FLY_EARNINGS) && <FlyEarnings />}
         </HopperCard>

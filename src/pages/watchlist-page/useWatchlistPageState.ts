@@ -41,7 +41,6 @@ const INITIAL_STATE: WatchlistFilter = {
 const MARKET_KEY = "market"
 const FEATURES_KEY = "features"
 const NORMALIZE_LEVEL_KEY = "normalize-level"
-const HIDDEN_KEY = "hidden"
 const PERMITS_KEY = "permits"
 
 // State update functions
@@ -106,6 +105,7 @@ const featureMapping = createLookupMap([
     [WatchlistCardFeature.MARKET_PRICE, "market-price"],
     [WatchlistCardFeature.ADVENTURE_PERMIT, "adventure-permit"],
     [WatchlistCardFeature.FLY_EARNINGS, "fly-earnings"],
+    [WatchlistCardFeature.BREEDING_CHANCE, "breeding-chance"],
 ])
 function urlifyFeatures(features: WatchlistCardFeature[]): string {
     return features

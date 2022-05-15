@@ -1,14 +1,12 @@
-import { styled } from "theme"
+import { CheckboxProps } from "@radix-ui/react-checkbox"
+import Checkbox from "components/inputs/checkbox/Checkbox"
+import Fieldset from "components/inputs/fieldset/Fieldset"
+import Label from "components/inputs/label/Label"
+import * as LabeledInput from "components/inputs/labeled-input/LabeledInput"
 import * as Radio from "components/inputs/radio/Radio"
 import Flex from "components/layout/flex/Flex"
-import Label from "components/inputs/label/Label"
-import Checkbox from "components/inputs/checkbox/Checkbox"
-import { CheckboxProps } from "@radix-ui/react-checkbox"
-import Fieldset from "components/inputs/fieldset/Fieldset"
-import Input from "components/inputs/input/Input"
-import { HopperId } from "models/Hopper"
+import { styled } from "theme"
 import { toggleItem } from "utils/array"
-import * as LabeledInput from "components/inputs/labeled-input/LabeledInput"
 
 type ConfigureWatchlistFilterProps = {
     filter: WatchlistFilter
@@ -148,6 +146,7 @@ export enum WatchlistCardFeature {
     ADVENTURE_PERMIT = "ADVENTURE_PERMIT",
     FLY_EARNINGS = "FLY_EARNINGS",
     MARKET_PRICE = "MARKET_PRICE",
+    BREEDING_CHANCE = "BREEDING_CHANCE",
 }
 export enum AdventureTierPermit {
     T1 = "T1",
@@ -207,6 +206,7 @@ const ALL_MARKET_FILTERS: WatchlistMarketFilter[] = [
 
 const ALL_FEATURES: WatchlistCardFeature[] = [
     WatchlistCardFeature.MARKET_PRICE,
+    WatchlistCardFeature.BREEDING_CHANCE,
     WatchlistCardFeature.ADVENTURE_PERMIT,
     WatchlistCardFeature.FLY_EARNINGS,
 ]
@@ -238,6 +238,8 @@ function formatFeature(feature: WatchlistCardFeature): string {
             return "Adventure permit"
         case WatchlistCardFeature.FLY_EARNINGS:
             return "FLY earnings"
+        case WatchlistCardFeature.BREEDING_CHANCE:
+            return "Breeding chance"
     }
 }
 
