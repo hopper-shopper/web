@@ -3,6 +3,7 @@ import Input from "components/inputs/input/Input"
 import Label from "components/inputs/label/Label"
 import * as LabeledInput from "components/inputs/labeled-input/LabeledInput"
 import Flex from "components/layout/flex/Flex"
+import EmptyText from "components/typography/empty-text/EmptyText"
 import useObservableState from "hooks/useObservableState"
 import { useAtomValue } from "jotai"
 import { Hopper } from "models/Hopper"
@@ -90,16 +91,21 @@ export default function HopperRoi(props: HopperRoiProps) {
                 </Fieldset>
             </Inputs>
 
-            <ProvideHopperRoi
-                hopper={hopper}
-                startAtLevel={startAtLevel}
-                boughtForFly={boughtForFly}>
-                <Flex direction="column" y="stretch" gap="md">
-                    {ALL_ADVENTURES.map(adventure => (
-                        <RoiInDaysRail key={adventure} adventure={adventure} />
-                    ))}
-                </Flex>
-            </ProvideHopperRoi>
+            {boughtForFly === 0 && (
+                <EmptyText>Please enter Hopper price to calculate it's ROI</EmptyText>
+            )}
+            {boughtForFly > 0 && (
+                <ProvideHopperRoi
+                    hopper={hopper}
+                    startAtLevel={startAtLevel}
+                    boughtForFly={boughtForFly}>
+                    <Flex direction="column" y="stretch" gap="md">
+                        {ALL_ADVENTURES.map(adventure => (
+                            <RoiInDaysRail key={adventure} adventure={adventure} />
+                        ))}
+                    </Flex>
+                </ProvideHopperRoi>
+            )}
         </Container>
     )
 }

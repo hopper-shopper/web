@@ -18,7 +18,11 @@ export default function BreedingCostsTable(props: BreedingCostsTableProps) {
             <Table.Root border={false}>
                 <Table.Head sticky>
                     <Table.Row>
-                        <Table.HeaderCell align="left">Level</Table.HeaderCell>
+                        <Table.HeaderCell
+                            align="left"
+                            css={{ width: 70, "@md": { width: "auto" } }}>
+                            Level
+                        </Table.HeaderCell>
                         <Table.HeaderCell align="left">Level costs</Table.HeaderCell>
                         <Table.HeaderCell align="left">Breeding chance</Table.HeaderCell>
                     </Table.Row>
