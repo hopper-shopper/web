@@ -35,6 +35,7 @@ export default function FlySupplyChartCard() {
     const [chartMarkers, setChartMarkers] = useState<FlySupplyMarkers>({
         mint: false,
         resume: false,
+        breedingV2: false,
     })
     const updateChartMarkers = useStateUpdate(setChartMarkers)
 
@@ -86,6 +87,17 @@ export default function FlySupplyChartCard() {
                                 checked={chartMarkers.resume}
                                 onCheckedChange={checked =>
                                     updateChartMarkers({ resume: !!checked })
+                                }
+                            />
+                        </Flex>
+
+                        <Flex gap="sm">
+                            <Label htmlFor="breeding-v2">Breeding resume</Label>
+                            <Checkbox
+                                id="breeding-v2"
+                                checked={chartMarkers.breedingV2}
+                                onCheckedChange={checked =>
+                                    updateChartMarkers({ breedingV2: !!checked })
                                 }
                             />
                         </Flex>

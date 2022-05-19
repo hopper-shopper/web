@@ -18,13 +18,13 @@ export default function MarkerLine(props: MarkerLineProps) {
     return (
         <Group>
             <Line
-                from={{ x, y: endY + 20 }}
+                from={{ x, y: endY + 10 }}
                 to={{ x, y: startY }}
                 stroke={blueScale.blue9}
-                strokeWidth={3}
+                strokeWidth={2}
                 pointerEvents="none"
             />
-            <text fill={blueScale.blue11} x={x} y={endY + 10} textAnchor="middle" fontSize={10}>
+            <text fill={blueScale.blue11} x={x} y={endY} textAnchor="middle" fontSize={10}>
                 {text}
             </text>
         </Group>
