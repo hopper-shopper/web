@@ -1,12 +1,15 @@
+import { useSetAtom } from "jotai"
 import { HopperId } from "models/Hopper"
 import { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { useMount } from "react-use"
+import { addHopperToHistoryAtom } from "stores/inspect"
 import { isValidHopperId } from "utils/hopper"
 
 export default function useInspectPageState() {
     const [searchParams, setSearchParams] = useSearchParams()
     const [state, setState] = useState<InspectPageState>(deriveStateFromSearchParams(searchParams))
+    const addHopperToHistory = useSetAtom(addHopperToHistoryAtom)
 
     useMount(() => {
         setState(deriveStateFromSearchParams(searchParams))
@@ -14,6 +17,10 @@ export default function useInspectPageState() {
 
     useEffect(() => {
         setSearchParams(deriveSearchParamsFromState(state), { replace: true })
+
+        if (state.hopperId) {
+            addHopperToHistory(state.hopperId)
+        }
     }, [state])
 
     return [state, setState] as const

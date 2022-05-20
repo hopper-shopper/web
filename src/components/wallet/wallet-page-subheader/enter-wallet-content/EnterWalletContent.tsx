@@ -9,11 +9,7 @@ import Flex from "components/layout/flex/Flex"
 import { formatWalletAddress } from "formatters/wallet"
 import { useAtomValue, useSetAtom } from "jotai"
 import { WalletAddress } from "models/User"
-import {
-    walletsHistoryAtom,
-    addWalletToHistoryAtom,
-    removeWalletFromHistoryAtom,
-} from "stores/wallet"
+import { removeWalletFromHistoryAtom, walletsHistoryAtom } from "stores/wallet"
 import { Screens, styled } from "theme"
 import { isValidWalletAddress } from "utils/user"
 
@@ -26,7 +22,6 @@ export default function EnterWalletContent(props: EnterWalletContentProps) {
     const { initialWallet, onChange } = props
 
     const walletsHistory = useAtomValue(walletsHistoryAtom)
-    const addWalletToHistory = useSetAtom(addWalletToHistoryAtom)
     const removeWalletFromHistory = useSetAtom(removeWalletFromHistoryAtom)
 
     const handleWalletSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -45,12 +40,6 @@ export default function EnterWalletContent(props: EnterWalletContentProps) {
         }
 
         onChange(walletAddress.toString())
-        addWalletToHistory(walletAddress.toString())
-    }
-
-    const handlePreviousWalletClick = (wallet: WalletAddress) => {
-        addWalletToHistory(wallet)
-        onChange(wallet)
     }
 
     return (
@@ -78,8 +67,7 @@ export default function EnterWalletContent(props: EnterWalletContentProps) {
                     <PrevWalletTitle>Previous searches</PrevWalletTitle>
                     {walletsHistory.slice(0, 3).map(prevWallet => (
                         <PrevWalletItem key={prevWallet}>
-                            <PrevWalletAddress
-                                onClick={() => handlePreviousWalletClick(prevWallet)}>
+                            <PrevWalletAddress onClick={() => onChange(prevWallet)}>
                                 {formatWalletAddress(prevWallet)}
                             </PrevWalletAddress>
                             <IconButton

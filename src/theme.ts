@@ -14,6 +14,7 @@ import {
 import { createStitches, CSS, PropertyValue } from "@stitches/react"
 
 export const Screens = {
+    xs: 375,
     sm: 640,
     md: 768,
     lg: 1024,

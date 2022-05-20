@@ -49,9 +49,9 @@ export default function FlySupplyChart(props: FlySupplyChartProps) {
     const colors = useThemeValue(SUPPLY_CHARTS_COLORS_LIGHT, SUPPLY_CHARTS_COLORS_DARK)
     const grayScale = useThemeValue(gray, grayDark)
 
-    const marginLeft = isTabletUp ? 60 : 10
-    const marginRight = 10
-    const marginTop = 5
+    const marginLeft = isTabletUp ? 60 : 20
+    const marginRight = 20
+    const marginTop = 20
     const marginBottom = 30
 
     const startX = marginLeft
@@ -240,6 +240,7 @@ export default function FlySupplyChart(props: FlySupplyChartProps) {
 
     const mintX = dayScale(fromIsoDate(MINT_DATE))
     const resumeX = dayScale(fromIsoDate(RESUME_DATE))
+    const breedingX = dayScale(fromIsoDate(BREEDING_V2_DATE))
 
     return (
         <>
@@ -254,6 +255,9 @@ export default function FlySupplyChart(props: FlySupplyChartProps) {
                 {markers.mint && <MarkerLine x={mintX} startY={startY} endY={endY} text="Mint" />}
                 {markers.resume && (
                     <MarkerLine x={resumeX} startY={startY} endY={endY} text="Game resume" />
+                )}
+                {markers.breedingV2 && (
+                    <MarkerLine x={breedingX} startY={startY} endY={endY} text="Breeding resume" />
                 )}
 
                 {brush && (
@@ -365,6 +369,7 @@ export default function FlySupplyChart(props: FlySupplyChartProps) {
 // Constants
 const MINT_DATE: IsoDatetime = "2022-03-11T19:00:00.000Z"
 const RESUME_DATE: IsoDatetime = "2022-03-18T18:30:00.000Z"
+const BREEDING_V2_DATE: IsoDatetime = "2022-05-17T13:00:00.000Z"
 const DISABLE_SELECTION_CLASS = css({
     "*": {
         userSelect: "none",
@@ -385,11 +390,12 @@ type BrushChange = {
 export type FlySupplyMarkers = {
     mint: boolean
     resume: boolean
+    breedingV2: boolean
 }
 
 // Getters
 function getDate(item: FlySupplyChartData): Date {
-    return fromIsoDate(item.date)
+    return item.date
 }
 function getSupplyByFeature(feature: FlySupplyFeature) {
     return (item: FlySupplyChartData): number => {
@@ -417,7 +423,7 @@ function maxSupply(features: FlySupplyFeature[], data: FlySupplyChartData[]) {
 
     return Math.max(...values)
 }
-const bisectDate = bisector<FlySupplyChartData, Date>(item => fromIsoDate(item.date)).left
+const bisectDate = bisector<FlySupplyChartData, Date>(getDate).left
 
 // Formatters
 function formatDateShort(date: number): string {

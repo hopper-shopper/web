@@ -34,7 +34,7 @@ export function calculateCostToLevelUp(forLevel: number): number {
     const base = Math.ceil(forLevel ** 1.43522 / 7.5)
 
     if (forLevel === 100) {
-        return 500 + base
+        return 500
     }
 
     return base
