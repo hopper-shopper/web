@@ -1,12 +1,15 @@
+import { useSetAtom } from "jotai"
 import { WalletAddress } from "models/User"
 import { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { useMount } from "react-use"
+import { addWalletToHistoryAtom } from "stores/wallet"
 import { createLookupMap } from "utils/map"
 
 export default function useWalletPageState() {
     const [searchParams, setSearchParams] = useSearchParams()
     const [state, setState] = useState(deriveStateFromSearchParams(searchParams))
+    const addWalletToHistory = useSetAtom(addWalletToHistoryAtom)
 
     useMount(() => {
         setState(deriveStateFromSearchParams(searchParams))
@@ -14,6 +17,10 @@ export default function useWalletPageState() {
 
     useEffect(() => {
         setSearchParams(deriveSearchParamsFromState(state), { replace: true })
+
+        if (state.wallet) {
+            addWalletToHistory(state.wallet)
+        }
     }, [state])
 
     return [state, setState] as const

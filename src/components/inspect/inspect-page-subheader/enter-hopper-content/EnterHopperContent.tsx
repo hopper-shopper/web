@@ -37,10 +37,6 @@ export default function EnterHopperContent(props: EnterHopperContentProps) {
         onChange(hopperId.toString())
     }
 
-    const handlePreviousHopperClick = (hopperId: HopperId) => {
-        onChange(hopperId)
-    }
-
     return (
         <>
             <Container>
@@ -69,7 +65,7 @@ export default function EnterHopperContent(props: EnterHopperContentProps) {
                         {hoppersHistory.slice(0, 5).map(prevHopper => (
                             <PrevHopperItem
                                 key={prevHopper.hopperId}
-                                onClick={() => handlePreviousHopperClick(prevHopper.hopperId)}>
+                                onClick={() => onChange(prevHopper.hopperId)}>
                                 <PrevHopperImage src={prevHopper.image ?? ""} />
                                 <PrevHopperId>{prevHopper.hopperId}</PrevHopperId>
                             </PrevHopperItem>

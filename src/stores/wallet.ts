@@ -16,11 +16,7 @@ export const walletsHistoryEntriesAtom = atomWithStorage<WalletHistoryEntry[]>(
 )
 export const walletsHistoryAtom = atom(get => {
     const entries = get(walletsHistoryEntriesAtom)
-    const sortedEntries = [...entries].sort((a, b) => {
-        return b.datetime - a.datetime
-    })
-
-    return sortedEntries.map(entry => entry.wallet)
+    return sortEntries(entries).map(entry => entry.wallet)
 })
 export const addWalletToHistoryAtom = atom(null, (_, set, wallet: WalletAddress) => {
     set(walletsHistoryEntriesAtom, prev => {
@@ -38,7 +34,7 @@ export const addWalletToHistoryAtom = atom(null, (_, set, wallet: WalletAddress)
             next.push({ wallet, datetime: new Date().getTime() })
         }
 
-        return next
+        return sortEntries(next).slice(0, 10)
     })
 })
 export const removeWalletFromHistoryAtom = atom(null, (_, set, wallet: WalletAddress) => {
@@ -46,3 +42,9 @@ export const removeWalletFromHistoryAtom = atom(null, (_, set, wallet: WalletAdd
         return prev.filter(entry => entry.wallet !== wallet)
     })
 })
+
+function sortEntries(entries: WalletHistoryEntry[]): WalletHistoryEntry[] {
+    return [...entries].sort((a, b) => {
+        return b.datetime - a.datetime
+    })
+}
