@@ -1,10 +1,12 @@
 import { ParentSizeModern } from "@visx/responsive"
 import useFlySupply from "api/hooks/useFlySupply"
-import Fieldset from "components/inputs/fieldset/Fieldset"
+import Checkbox from "components/inputs/checkbox/Checkbox"
 import Label from "components/inputs/label/Label"
 import * as ChartContainer from "components/layout/chart-container/ChartContainer"
+import Flex from "components/layout/flex/Flex"
 import * as Tag from "components/tag/Tag"
 import useScreenSize from "hooks/useScreenSize"
+import useStateUpdate from "hooks/useStateUpdate"
 import useThemeValue from "hooks/useThemeValue"
 import useUniqueToggleList from "hooks/useUniqueToggleList"
 import { useState } from "react"
@@ -17,9 +19,6 @@ import {
     SUPPLY_CHARTS_COLORS_LIGHT,
 } from "./fly-supply-chart/flySupplyChart.utils"
 import useFlySupplyChartData from "./fly-supply-chart/useFlySupplyChartData"
-import Checkbox from "components/inputs/checkbox/Checkbox"
-import useStateUpdate from "hooks/useStateUpdate"
-import Flex from "components/layout/flex/Flex"
 
 export default function FlySupplyChartCard() {
     const isTabletUp = useScreenSize("md")

@@ -395,7 +395,7 @@ export type FlySupplyMarkers = {
 
 // Getters
 function getDate(item: FlySupplyChartData): Date {
-    return fromIsoDate(item.date)
+    return item.date
 }
 function getSupplyByFeature(feature: FlySupplyFeature) {
     return (item: FlySupplyChartData): number => {
@@ -423,7 +423,7 @@ function maxSupply(features: FlySupplyFeature[], data: FlySupplyChartData[]) {
 
     return Math.max(...values)
 }
-const bisectDate = bisector<FlySupplyChartData, Date>(item => fromIsoDate(item.date)).left
+const bisectDate = bisector<FlySupplyChartData, Date>(getDate).left
 
 // Formatters
 function formatDateShort(date: number): string {

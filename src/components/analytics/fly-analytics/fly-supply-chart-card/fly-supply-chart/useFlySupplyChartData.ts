@@ -1,9 +1,11 @@
+import { addDays, setHours } from "date-fns"
 import useSort from "hooks/useSort"
 import { FlySupply } from "models/FlySupply"
 import { useMemo } from "react"
 import { sortFlySupply, SortFlySupplyBy } from "sorters/fly-supply"
 import { SortDirection } from "sorters/_common"
-import { IsoDate } from "utils/types"
+import { fromIsoDate } from "utils/date"
+import { IsoDate, IsoDatetime } from "utils/types"
 
 export default function useFlySupplyChartData(supplies: FlySupply[]): FlySupplyChartData[] {
     const { sorted: sortedSupplies } = useSort({
@@ -20,12 +22,20 @@ export default function useFlySupplyChartData(supplies: FlySupply[]): FlySupplyC
 
         for (const snapshot of sortedSupplies) {
             data.push({
-                date: snapshot.date,
+                date: setHours(fromIsoDate(snapshot.date), 12),
                 total: snapshot.supply,
                 burned: snapshot.burned,
                 staked: snapshot.staked,
                 available: snapshot.available,
                 free: snapshot.free,
+            })
+        }
+
+        if (data.length > 0) {
+            const lastItem = data[data.length - 1]
+            data.push({
+                ...lastItem,
+                date: addDays(lastItem.date, 1),
             })
         }
 
@@ -36,7 +46,7 @@ export default function useFlySupplyChartData(supplies: FlySupply[]): FlySupplyC
 }
 
 export type FlySupplyChartData = {
-    date: IsoDate
+    date: Date
     total: number
     burned: number
     staked: number
