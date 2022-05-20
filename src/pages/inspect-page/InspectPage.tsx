@@ -4,21 +4,23 @@ import BreedingCostsTable from "components/hoppers/breeding-costs-table/Breeding
 import HopperBreedingChances from "components/hoppers/hopper-breeding-chances/HopperBreedingChances"
 import HopperPreview from "components/hoppers/hopper-preview/HopperPreview"
 import HopperRoi from "components/hoppers/hopper-roi/HopperRoi"
-import Button from "components/inputs/buttons/button/Button"
-import Fieldset from "components/inputs/fieldset/Fieldset"
-import InputForm from "components/inputs/input-form/InputForm"
-import Input from "components/inputs/input/Input"
-import Label from "components/inputs/label/Label"
+import InspectPageSubheader from "components/inspect/inspect-page-subheader/InspectPageSubheader"
 import * as Section from "components/layout/section/Section"
 import ListingsTable from "components/listings/listings-table/ListingsTable"
 import EmptyText from "components/typography/empty-text/EmptyText"
+import useStateUpdate from "hooks/useStateUpdate"
+import { useSetAtom } from "jotai"
 import { Hopper } from "models/Hopper"
+import { useEffect } from "react"
+import { updateHopperHistoryEntryAtom } from "stores/inspect"
 import { Screens, styled } from "theme"
-import { isValidHopperId } from "utils/hopper"
 import useInspectPageState from "./useInspectPageState"
 
 export default function InspectPage() {
     const [state, setState] = useInspectPageState()
+    const updateState = useStateUpdate(setState)
+
+    const updateHopperEntry = useSetAtom(updateHopperHistoryEntryAtom)
 
     const { hoppers } = useHoppers({
         tokenIds: state.hopperId ? [state.hopperId] : [],
@@ -28,40 +30,18 @@ export default function InspectPage() {
     })
     const hopper = state.hopperId ? (hoppers[0] as Hopper | null) : null
 
-    const handleHopperIdSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault()
-        const formData = new FormData(event.currentTarget)
-        const hopperId = formData.get("hopper")
-
-        if (!hopperId) {
-            return
+    useEffect(() => {
+        for (const hopper of hoppers) {
+            updateHopperEntry({
+                hopperId: hopper.tokenId,
+                image: hopper.image,
+            })
         }
-
-        if (!isValidHopperId(hopperId.toString())) {
-            return
-        }
-
-        setState({ hopperId: hopperId.toString() })
-    }
+    }, [hoppers, updateHopperEntry])
 
     return (
         <>
-            <InputForm css={{ maxWidth: 375 }} onSubmit={handleHopperIdSubmit}>
-                <Fieldset css={{ flex: 1 }}>
-                    <Label htmlFor="hopper-id">Hopper-ID</Label>
-                    <Input
-                        id="hopper-id"
-                        name="hopper"
-                        type="number"
-                        min={0}
-                        max={9999}
-                        placeholder="Hopper-ID"
-                        defaultValue={state.hopperId || ""}
-                    />
-                </Fieldset>
-
-                <Button type="submit">Load</Button>
-            </InputForm>
+            <InspectPageSubheader state={state} onChange={updateState} />
 
             {!state.hopperId && (
                 <EmptyText align="center" padding="md">

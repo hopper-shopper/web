@@ -38,7 +38,7 @@ export const addWalletToHistoryAtom = atom(null, (_, set, wallet: WalletAddress)
             next.push({ wallet, datetime: new Date().getTime() })
         }
 
-        return Array.from(next)
+        return next
     })
 })
 export const removeWalletFromHistoryAtom = atom(null, (_, set, wallet: WalletAddress) => {
