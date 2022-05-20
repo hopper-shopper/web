@@ -99,7 +99,7 @@ export default function ClaimedChart(props: ClaimedChartProps) {
             domain: [0, dataMax],
             range: [yMax, 0],
         })
-    }, [data, dataMax, height])
+    }, [data, dataMax, yMax])
 
     const colorScale = useMemo(() => {
         return scaleOrdinal({

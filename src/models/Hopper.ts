@@ -1,3 +1,5 @@
+import { IsoDate } from "utils/types"
+
 export type Hopper = {
     tokenId: HopperId
     strength: number
@@ -50,7 +52,8 @@ export type HopperListing = {
     price: number
 }
 
-export type HoppersActivitySnapshot = {
+export type HopperActivitiesSnapshot = {
+    date: IsoDate
     idle: number
     breeding: number
     marketplace: number
