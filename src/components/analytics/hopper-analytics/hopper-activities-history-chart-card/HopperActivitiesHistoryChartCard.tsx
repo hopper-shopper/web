@@ -2,18 +2,19 @@ import useHopperActivitiesHistory from "api/hooks/useHopperActivitiesHistory"
 import useScreenSize from "hooks/useScreenSize"
 import * as Section from "components/layout/section/Section"
 import { ParentSizeModern } from "@visx/responsive"
+import * as Stepper from "components/inputs/stepper/Stepper"
 import HopperActivitiesHistoryChart, {
-    ALL_HOPPER_SNAPSHOT_KEYS,
     COUNT_CHARTS_COLORS_DARK,
     COUNT_CHARTS_COLORS_LIGHT,
 } from "./hopper-activities-history-chart/HopperActivitiesHistoryChart"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import { fromIsoDate } from "utils/date"
 import { Screens, styled } from "theme"
 import useUniqueToggleList from "hooks/useUniqueToggleList"
 import { HopperActivitiesSnapshot } from "models/Hopper"
 import * as Tag from "components/tag/Tag"
 import useThemeValue from "hooks/useThemeValue"
+import { getSPFormatter } from "formatters/text"
 
 export default function HopperActivitiesHistoryChartCard() {
     const { activities, loading } = useHopperActivitiesHistory()
@@ -21,8 +22,10 @@ export default function HopperActivitiesHistoryChartCard() {
     const isTabletUp = useScreenSize("md")
     const isLaptopUp = useScreenSize("lg")
 
-    const { state: keys, toggle: toggleKey } =
-        useUniqueToggleList<keyof HopperActivitiesSnapshot>(ALL_HOPPER_SNAPSHOT_KEYS)
+    const { state: keys, toggle: toggleKey } = useUniqueToggleList<keyof HopperActivitiesSnapshot>(
+        INITIAL_HOPPER_SNAPSHOT_KEYS,
+    )
+    const [days, setDays] = useState(14)
 
     const tagColors = useThemeValue(COUNT_CHARTS_COLORS_LIGHT, COUNT_CHARTS_COLORS_DARK)
 
@@ -40,9 +43,9 @@ export default function HopperActivitiesHistoryChartCard() {
             .sort((a, b) => {
                 return +fromIsoDate(b.date) - +fromIsoDate(a.date)
             })
-            .slice(0, 10)
+            .slice(0, days)
             .reverse()
-    }, [activities])
+    }, [activities, days])
 
     return (
         <Section.Root>
@@ -50,14 +53,27 @@ export default function HopperActivitiesHistoryChartCard() {
                 <Section.Title>Hopper activities</Section.Title>
             </Section.Header>
 
-            <FeatureList>
-                {SORTED_HOPPER_SNAPSHOT_KEYS.map((key, index) => (
-                    <Tag.Root key={key} disabled={!keys.has(key)} onClick={() => toggleKey(key)}>
-                        <Tag.Marker css={{ backgroundColor: tagColors[index] }} />
-                        <Tag.Text>{formatKey(key)}</Tag.Text>
-                    </Tag.Root>
-                ))}
-            </FeatureList>
+            <Actions>
+                <Stepper.Root min={1} max={activities.length} value={days} onValueChange={setDays}>
+                    <Stepper.Decrement />
+                    <Stepper.Value css={{ minWidth: 70 }}>
+                        {days} {daySPFormatter(days)}
+                    </Stepper.Value>
+                    <Stepper.Increment />
+                </Stepper.Root>
+
+                <FeatureList>
+                    {SORTED_HOPPER_SNAPSHOT_KEYS.map((key, index) => (
+                        <Tag.Root
+                            key={key}
+                            disabled={!keys.has(key)}
+                            onClick={() => toggleKey(key)}>
+                            <Tag.Marker css={{ backgroundColor: tagColors[index] }} />
+                            <Tag.Text>{formatKey(key)}</Tag.Text>
+                        </Tag.Root>
+                    ))}
+                </FeatureList>
+            </Actions>
 
             <Bg css={{ height: chartHeight }}>
                 <ParentSizeModern>
@@ -79,6 +95,11 @@ export default function HopperActivitiesHistoryChartCard() {
     )
 }
 
+const INITIAL_HOPPER_SNAPSHOT_KEYS: Array<keyof HopperActivitiesSnapshot> = [
+    "idle",
+    "breeding",
+    "marketplace",
+]
 const SORTED_HOPPER_SNAPSHOT_KEYS: Array<keyof HopperActivitiesSnapshot> = [
     "idle",
     "breeding",
@@ -91,14 +112,38 @@ const SORTED_HOPPER_SNAPSHOT_KEYS: Array<keyof HopperActivitiesSnapshot> = [
     "greatLake",
 ]
 
+const daySPFormatter = getSPFormatter("Day", "Days")
+
 const Bg = styled("div", {
     backgroundColor: "$gray2",
-    padding: "1rem",
+    padding: "0.5rem",
     borderRadius: "$md",
+    "@md": {
+        padding: "1rem",
+    },
+})
+const Actions = styled("div", {
+    display: "flex",
+    flexDirection: "column",
+    rowGap: "1rem",
+    marginTop: "1rem",
+    "@md": {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+    },
 })
 const FeatureList = styled("div", {
-    display: "flex",
+    display: "grid",
+    gridTemplateColumns: "repeat(2, 1fr)",
     gap: "0.5rem",
+    "@md": {
+        gridTemplateColumns: "repeat(3, 1fr)",
+    },
+    "@lg": {
+        display: "flex",
+        flexDirection: "row",
+    },
 })
 
 const mapping: Record<keyof HopperActivitiesSnapshot, string> = {

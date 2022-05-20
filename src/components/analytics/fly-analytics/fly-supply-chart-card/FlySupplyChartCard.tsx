@@ -2,8 +2,8 @@ import { ParentSizeModern } from "@visx/responsive"
 import useFlySupply from "api/hooks/useFlySupply"
 import Checkbox from "components/inputs/checkbox/Checkbox"
 import Label from "components/inputs/label/Label"
-import * as ChartContainer from "components/layout/chart-container/ChartContainer"
 import Flex from "components/layout/flex/Flex"
+import * as Section from "components/layout/section/Section"
 import * as Tag from "components/tag/Tag"
 import useScreenSize from "hooks/useScreenSize"
 import useStateUpdate from "hooks/useStateUpdate"
@@ -52,59 +52,56 @@ export default function FlySupplyChartCard() {
     })()
 
     return (
-        <ChartContainer.Root>
-            <ChartContainer.Header>
-                <ChartContainer.Title>FLY supply</ChartContainer.Title>
+        <Section.Root>
+            <Section.Header>
+                <Section.Title>FLY supply</Section.Title>
+            </Section.Header>
+            <Actions>
+                <TagsList>
+                    {ALL_FEATURES.map(feature => (
+                        <Tag.Root
+                            key={feature}
+                            disabled={!features.has(feature)}
+                            onClick={() => toggleFeature(feature)}>
+                            <Tag.Marker css={{ backgroundColor: tagColors[feature] }} />
+                            <Tag.Text>{formatFlyChartFeatureLong(feature)}</Tag.Text>
+                        </Tag.Root>
+                    ))}
+                </TagsList>
 
-                <Actions>
-                    <TagsList>
-                        {ALL_FEATURES.map(feature => (
-                            <Tag.Root
-                                key={feature}
-                                disabled={!features.has(feature)}
-                                onClick={() => toggleFeature(feature)}>
-                                <Tag.Marker css={{ backgroundColor: tagColors[feature] }} />
-                                <Tag.Text>{formatFlyChartFeatureLong(feature)}</Tag.Text>
-                            </Tag.Root>
-                        ))}
-                    </TagsList>
+                <Markers>
+                    <Flex gap="sm">
+                        <Label htmlFor="mint-date">Mint</Label>
+                        <Checkbox
+                            id="mint-date"
+                            checked={chartMarkers.mint}
+                            onCheckedChange={checked => updateChartMarkers({ mint: !!checked })}
+                        />
+                    </Flex>
 
-                    <Markers>
-                        <Flex gap="sm">
-                            <Label htmlFor="mint-date">Mint</Label>
-                            <Checkbox
-                                id="mint-date"
-                                checked={chartMarkers.mint}
-                                onCheckedChange={checked => updateChartMarkers({ mint: !!checked })}
-                            />
-                        </Flex>
+                    <Flex gap="sm">
+                        <Label htmlFor="resume-date">Resume</Label>
+                        <Checkbox
+                            id="resume-date"
+                            checked={chartMarkers.resume}
+                            onCheckedChange={checked => updateChartMarkers({ resume: !!checked })}
+                        />
+                    </Flex>
 
-                        <Flex gap="sm">
-                            <Label htmlFor="resume-date">Resume</Label>
-                            <Checkbox
-                                id="resume-date"
-                                checked={chartMarkers.resume}
-                                onCheckedChange={checked =>
-                                    updateChartMarkers({ resume: !!checked })
-                                }
-                            />
-                        </Flex>
+                    <Flex gap="sm">
+                        <Label htmlFor="breeding-v2">Breeding resume</Label>
+                        <Checkbox
+                            id="breeding-v2"
+                            checked={chartMarkers.breedingV2}
+                            onCheckedChange={checked =>
+                                updateChartMarkers({ breedingV2: !!checked })
+                            }
+                        />
+                    </Flex>
+                </Markers>
+            </Actions>
 
-                        <Flex gap="sm">
-                            <Label htmlFor="breeding-v2">Breeding resume</Label>
-                            <Checkbox
-                                id="breeding-v2"
-                                checked={chartMarkers.breedingV2}
-                                onCheckedChange={checked =>
-                                    updateChartMarkers({ breedingV2: !!checked })
-                                }
-                            />
-                        </Flex>
-                    </Markers>
-                </Actions>
-            </ChartContainer.Header>
-
-            <ChartContainer.Content css={{ height: chartHeight }}>
+            <Bg css={{ height: chartHeight }}>
                 <ParentSizeModern>
                     {({ width, height }) => (
                         <>
@@ -120,8 +117,8 @@ export default function FlySupplyChartCard() {
                         </>
                     )}
                 </ParentSizeModern>
-            </ChartContainer.Content>
-        </ChartContainer.Root>
+            </Bg>
+        </Section.Root>
     )
 }
 
@@ -135,6 +132,14 @@ const ALL_FEATURES: FlySupplyFeature[] = [
 ]
 
 // Components
+const Bg = styled("div", {
+    backgroundColor: "$gray2",
+    padding: "0.5rem",
+    borderRadius: "$md",
+    "@md": {
+        padding: "1rem",
+    },
+})
 const Actions = styled("div", {
     display: "flex",
     flexDirection: "column",

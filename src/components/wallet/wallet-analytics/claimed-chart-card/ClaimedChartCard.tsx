@@ -2,7 +2,7 @@ import { ParentSizeModern } from "@visx/responsive"
 import { TransferDirection } from "api/filters/transfers"
 import useTransfers from "api/hooks/useTransfers"
 import * as Stepper from "components/inputs/stepper/Stepper"
-import * as ChartContainer from "components/layout/chart-container/ChartContainer"
+import * as Section from "components/layout/section/Section"
 import * as Tag from "components/tag/Tag"
 import { formatAdventure } from "formatters/adventure"
 import { getSPFormatter } from "formatters/text"
@@ -63,7 +63,7 @@ export default function ClaimedChartCard(props: ClaimedChartCardProps) {
 
     const chartHeight = ((): number => {
         if (isLaptopUp) {
-            return 700
+            return 600
         } else if (isTabletUp) {
             return 500
         }
@@ -71,34 +71,34 @@ export default function ClaimedChartCard(props: ClaimedChartCardProps) {
     })()
 
     return (
-        <ChartContainer.Root>
-            <ChartContainer.Header>
-                <ChartContainer.Title>Claimed FLY</ChartContainer.Title>
+        <Section.Root>
+            <Section.Header>
+                <Section.Title>Claimed FLY</Section.Title>
+            </Section.Header>
 
-                <Actions>
-                    <Stepper.Root min={1} value={days} onValueChange={setDays}>
-                        <Stepper.Decrement />
-                        <Stepper.Value css={{ minWidth: 70 }}>
-                            {days} {daySPFormatter(days)}
-                        </Stepper.Value>
-                        <Stepper.Increment />
-                    </Stepper.Root>
+            <Actions>
+                <Stepper.Root min={1} value={days} onValueChange={setDays}>
+                    <Stepper.Decrement />
+                    <Stepper.Value css={{ minWidth: 70 }}>
+                        {days} {daySPFormatter(days)}
+                    </Stepper.Value>
+                    <Stepper.Increment />
+                </Stepper.Root>
 
-                    <TagsList>
-                        {sortedAdventures.map((adventure, index) => (
-                            <Tag.Root
-                                key={adventure}
-                                disabled={!visible.has(adventure)}
-                                onClick={() => toggleVisibility(adventure)}>
-                                <Tag.Marker css={{ backgroundColor: tagColors[index] }} />
-                                <Tag.Text>{formatAdventure(adventure)}</Tag.Text>
-                            </Tag.Root>
-                        ))}
-                    </TagsList>
-                </Actions>
-            </ChartContainer.Header>
+                <TagsList>
+                    {sortedAdventures.map((adventure, index) => (
+                        <Tag.Root
+                            key={adventure}
+                            disabled={!visible.has(adventure)}
+                            onClick={() => toggleVisibility(adventure)}>
+                            <Tag.Marker css={{ backgroundColor: tagColors[index] }} />
+                            <Tag.Text>{formatAdventure(adventure)}</Tag.Text>
+                        </Tag.Root>
+                    ))}
+                </TagsList>
+            </Actions>
 
-            <ChartContainer.Content css={{ height: chartHeight }}>
+            <Bg css={{ height: chartHeight }}>
                 <ParentSizeModern>
                     {({ width, height }) => (
                         <>
@@ -114,8 +114,8 @@ export default function ClaimedChartCard(props: ClaimedChartCardProps) {
                         </>
                     )}
                 </ParentSizeModern>
-            </ChartContainer.Content>
-        </ChartContainer.Root>
+            </Bg>
+        </Section.Root>
     )
 }
 
@@ -126,6 +126,14 @@ const sortedAdventures = sortAdventures(ALL_ADVENTURES, {
 
 const daySPFormatter = getSPFormatter("Day", "Days")
 
+const Bg = styled("div", {
+    backgroundColor: "$gray2",
+    padding: "0.5rem",
+    borderRadius: "$md",
+    "@md": {
+        padding: "1rem",
+    },
+})
 const Actions = styled("div", {
     display: "flex",
     flexDirection: "column",

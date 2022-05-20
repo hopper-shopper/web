@@ -24,7 +24,9 @@ import { Group } from "@visx/group"
 import { scaleBand, scaleLinear, scaleOrdinal } from "@visx/scale"
 import { BarGroup } from "@visx/shape"
 import Flex from "components/layout/flex/Flex"
+import Screen from "components/layout/screen/Screen"
 import EmptyText from "components/typography/empty-text/EmptyText"
+import useScreenSize from "hooks/useScreenSize"
 import useThemeValue from "hooks/useThemeValue"
 import { HopperActivitiesSnapshot } from "models/Hopper"
 import { useMemo } from "react"
@@ -39,9 +41,10 @@ type HopperActivitiesHistoryChartProps = {
 }
 
 export default function HopperActivitiesHistoryChart(props: HopperActivitiesHistoryChartProps) {
-    const { width, height, data, keys } = props
+    const { width, height, data, keys: unsortedKeys } = props
 
-    const marginLeft = 40
+    const isTabletUp = useScreenSize("md")
+    const marginLeft = isTabletUp ? 50 : 20
     const marginRight = 10
     const marginTop = 20
     const marginBottom = 30
@@ -51,6 +54,10 @@ export default function HopperActivitiesHistoryChart(props: HopperActivitiesHist
 
     const colors = useThemeValue(COUNT_CHARTS_COLORS_LIGHT, COUNT_CHARTS_COLORS_DARK)
     const grayScale = useThemeValue(gray, grayDark)
+
+    const keys = useMemo(() => {
+        return sortKeys(unsortedKeys)
+    }, [unsortedKeys])
 
     const dayScale = useMemo(() => {
         return scaleBand({
@@ -148,25 +155,27 @@ export default function HopperActivitiesHistoryChart(props: HopperActivitiesHist
                 })}
             />
 
-            <AxisLeft
-                top={marginTop}
-                scale={countScale}
-                left={marginLeft}
-                stroke={grayScale.gray6}
-                tickStroke={grayScale.gray6}
-                tickLabelProps={() => ({
-                    fill: grayScale.gray11,
-                    fontSize: 10,
-                    textAnchor: "end",
-                    verticalAnchor: "middle",
-                })}
-            />
+            <Screen bp="md" constraint="min">
+                <AxisLeft
+                    top={marginTop}
+                    scale={countScale}
+                    left={marginLeft}
+                    stroke={grayScale.gray6}
+                    tickStroke={grayScale.gray6}
+                    tickLabelProps={() => ({
+                        fill: grayScale.gray11,
+                        fontSize: 10,
+                        textAnchor: "end",
+                        verticalAnchor: "middle",
+                    })}
+                />
+            </Screen>
         </svg>
     )
 }
 
 // Constants
-export const ALL_HOPPER_SNAPSHOT_KEYS: Array<keyof HopperActivitiesSnapshot> = [
+const ALL_HOPPER_SNAPSHOT_KEYS: Array<keyof HopperActivitiesSnapshot> = [
     "idle",
     "breeding",
     "marketplace",
@@ -228,4 +237,26 @@ function formatDateShort(date: Date): string {
     })
 
     return formatter.format(date)
+}
+
+// Sorters
+const ranking: Record<keyof HopperActivitiesSnapshot, number> = {
+    date: -1,
+    adventure: -1,
+    idle: 0,
+    breeding: 1,
+    marketplace: 2,
+    pond: 3,
+    stream: 4,
+    swamp: 5,
+    river: 6,
+    forest: 7,
+    greatLake: 8,
+}
+function sortKeys(
+    keys: Array<keyof HopperActivitiesSnapshot>,
+): Array<keyof HopperActivitiesSnapshot> {
+    return [...keys].sort((a, b) => {
+        return ranking[a] - ranking[b]
+    })
 }
