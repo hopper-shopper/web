@@ -19,18 +19,25 @@ import {
     tealDark,
 } from "@radix-ui/colors"
 import { AxisBottom, AxisLeft } from "@visx/axis"
+import { localPoint } from "@visx/event"
 import { GridRows } from "@visx/grid"
 import { Group } from "@visx/group"
-import { scaleBand, scaleLinear, scaleOrdinal } from "@visx/scale"
-import { BarGroup } from "@visx/shape"
+import { scaleBand, scaleLinear, scaleOrdinal, scaleQuantize } from "@visx/scale"
+import { Bar, BarGroup } from "@visx/shape"
+import { useTooltip, useTooltipInPortal } from "@visx/tooltip"
+import DateTooltip from "components/charts/date-tooltip/DateTooltip"
 import Flex from "components/layout/flex/Flex"
 import Screen from "components/layout/screen/Screen"
 import EmptyText from "components/typography/empty-text/EmptyText"
+import { bisector } from "d3-array"
 import useScreenSize from "hooks/useScreenSize"
 import useThemeValue from "hooks/useThemeValue"
 import { HopperActivitiesSnapshot } from "models/Hopper"
-import { useMemo } from "react"
+import { MouseEvent, TouchEvent, useMemo, useState } from "react"
+import { styled } from "theme"
 import { fromIsoDate } from "utils/date"
+import { clamp } from "utils/numbers"
+import { formatHopperActivitiesKey } from "./hopperActivitiesHistory.utils"
 
 type HopperActivitiesHistoryChartProps = {
     width: number
@@ -66,6 +73,14 @@ export default function HopperActivitiesHistoryChart(props: HopperActivitiesHist
             range: [0, xMax],
         })
     }, [data, xMax])
+    const dayScaleInvert = useMemo(() => {
+        const domain = dayScale.domain()
+        const range = dayScale.range()
+        return scaleQuantize({
+            domain: range,
+            range: domain,
+        })
+    }, [dayScale])
 
     const bandWidth = dayScale.bandwidth()
     const activityScale = useMemo(() => {
@@ -91,6 +106,48 @@ export default function HopperActivitiesHistoryChart(props: HopperActivitiesHist
         })
     }, [colors])
 
+    const [columnOverlay, setColumnOverlay] = useState<ColumnOverlayState | null>(null)
+    const tooltip = useTooltip<TooltipData>({
+        tooltipOpen: false,
+    })
+    const { containerRef, TooltipInPortal } = useTooltipInPortal({
+        detectBounds: true,
+        scroll: true,
+    })
+
+    const handleTooltip = (event: TouchEvent<SVGRectElement> | MouseEvent<SVGRectElement>) => {
+        if (data.length === 0) {
+            return
+        }
+
+        let { x, y } = localPoint(event) || { x: marginLeft, y: height / 2 }
+        x -= marginLeft
+
+        const date = dayScaleInvert(x)
+        const start = dayScale(date)
+        const dataIndex = bisectDate(data, date, 1)
+        const item = data[dataIndex - 1]
+
+        if (typeof start === "number") {
+            setColumnOverlay({
+                x: start + marginLeft,
+                width: dayScale.bandwidth(),
+            })
+            tooltip.showTooltip({
+                tooltipLeft: start + marginLeft,
+                tooltipTop: y,
+                tooltipData: {
+                    snapshot: item,
+                    width: dayScale.bandwidth(),
+                },
+            })
+        }
+    }
+    const hideTooltip = () => {
+        setColumnOverlay(null)
+        tooltip.hideTooltip()
+    }
+
     if (data.length === 0) {
         return (
             <Flex x="center" y="center" css={{ width, height }}>
@@ -100,7 +157,7 @@ export default function HopperActivitiesHistoryChart(props: HopperActivitiesHist
     }
 
     return (
-        <svg width={width} height={height}>
+        <svg ref={containerRef} width={width} height={height}>
             <GridRows
                 scale={countScale}
                 width={xMax}
@@ -108,6 +165,18 @@ export default function HopperActivitiesHistoryChart(props: HopperActivitiesHist
                 left={marginLeft}
                 stroke={grayScale.gray6}
             />
+
+            {columnOverlay !== null && (
+                <Bar
+                    x={columnOverlay.x}
+                    y={marginTop}
+                    width={columnOverlay.width}
+                    height={yMax}
+                    fill={grayScale.gray6}
+                    rx={4}
+                    pointerEvents="none"
+                />
+            )}
 
             <Group top={marginTop} left={marginLeft}>
                 <BarGroup
@@ -141,6 +210,18 @@ export default function HopperActivitiesHistoryChart(props: HopperActivitiesHist
                 </BarGroup>
             </Group>
 
+            <Bar
+                x={marginLeft}
+                y={marginTop}
+                width={xMax}
+                height={yMax}
+                fill="transparent"
+                onTouchStart={handleTooltip}
+                onTouchMove={handleTooltip}
+                onMouseMove={handleTooltip}
+                onMouseLeave={hideTooltip}
+            />
+
             <AxisBottom
                 top={yMax + marginTop}
                 left={marginLeft}
@@ -170,8 +251,66 @@ export default function HopperActivitiesHistoryChart(props: HopperActivitiesHist
                     })}
                 />
             </Screen>
+
+            {tooltip.tooltipOpen && tooltip.tooltipData && (
+                <>
+                    <TooltipInPortal
+                        key={`date-${Date.now()}`}
+                        offsetTop={-4}
+                        offsetLeft={0}
+                        unstyled
+                        applyPositionStyle
+                        top={yMax + marginTop}
+                        left={tooltip.tooltipLeft}>
+                        <DateTooltip
+                            date={tooltip.tooltipData.snapshot.date}
+                            style={{ minWidth: tooltip.tooltipData.width }}
+                        />
+                    </TooltipInPortal>
+
+                    <TooltipInPortal
+                        key={`count-${Date.now()}`}
+                        offsetTop={-10}
+                        offsetLeft={0}
+                        unstyled
+                        applyPositionStyle
+                        top={tooltip.tooltipTop}
+                        left={(tooltip.tooltipLeft || 0) + tooltip.tooltipData.width / 2}>
+                        <TooltipContainer>
+                            <Tooltip>
+                                {keys.map(key => (
+                                    <TooltipRow key={key}>
+                                        <TooltipText>
+                                            <TooltipMarker
+                                                css={{ backgroundColor: colorScale(key) }}
+                                            />
+                                            <TooltipKey>
+                                                {formatHopperActivitiesKey(key)}
+                                            </TooltipKey>
+                                        </TooltipText>
+
+                                        <TooltipCount>
+                                            {tooltip.tooltipData?.snapshot[key]}
+                                        </TooltipCount>
+                                    </TooltipRow>
+                                ))}
+                            </Tooltip>
+                        </TooltipContainer>
+                    </TooltipInPortal>
+                </>
+            )}
         </svg>
     )
+}
+
+// Types
+type TooltipData = {
+    snapshot: HopperActivitiesSnapshot
+    width: number
+}
+type ColumnOverlayState = {
+    x: number
+    width: number
 }
 
 // Constants
@@ -228,6 +367,7 @@ function countMax(
 
     return Math.max(...values)
 }
+const bisectDate = bisector<HopperActivitiesSnapshot, Date>(getDate).right
 
 // Formatters
 function formatDateShort(date: Date): string {
@@ -260,3 +400,44 @@ function sortKeys(
         return ranking[a] - ranking[b]
     })
 }
+
+// Components
+const TooltipContainer = styled("div", {
+    position: "relative",
+    left: "100%",
+    pointerEvents: "none",
+})
+const Tooltip = styled("div", {
+    position: "absolute",
+    transform: "translate3d(-50%, -100%, 0)",
+    padding: "0.5rem",
+    borderRadius: "$md",
+    border: "1px solid $gray6",
+    backgroundColor: "$gray2",
+    display: "flex",
+    flexDirection: "column",
+    rowGap: "0.5rem",
+})
+const TooltipRow = styled("div", {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    columnGap: "1rem",
+})
+const TooltipText = styled("span", {
+    display: "inline-flex",
+    alignItems: "center",
+    columnGap: "0.5rem",
+})
+const TooltipMarker = styled("div", {
+    size: "0.5rem",
+    borderRadius: "50%",
+})
+const TooltipKey = styled("span", {
+    color: "$gray11",
+    fontSize: "0.875rem",
+})
+const TooltipCount = styled("span", {
+    color: "$gray12",
+    fontSize: "0.875rem",
+})

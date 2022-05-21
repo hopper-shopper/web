@@ -5,6 +5,7 @@ import Label from "components/inputs/label/Label"
 import Flex from "components/layout/flex/Flex"
 import * as Section from "components/layout/section/Section"
 import * as Tag from "components/tag/Tag"
+import { formatDateTime } from "formatters/date"
 import useScreenSize from "hooks/useScreenSize"
 import useStateUpdate from "hooks/useStateUpdate"
 import useThemeValue from "hooks/useThemeValue"
@@ -51,11 +52,28 @@ export default function FlySupplyChartCard() {
         return 400
     })()
 
+    const since = chartData.length > 0 ? chartData[0].date : null
+
     return (
         <Section.Root>
             <Section.Header>
                 <Section.Title>FLY supply</Section.Title>
             </Section.Header>
+
+            {since && (
+                <Section.Description>
+                    FLY supply history since {formatDateTime(since, { timeStyle: undefined })}.
+                    Vested and locked FLY is estimated and interpolated over the defined time range.
+                    See{" "}
+                    <StyledLink
+                        target="_blank"
+                        href="https://hoppers-game.gitbook.io/hoppers-game/about/tokenomics#emission-distributions">
+                        docs
+                    </StyledLink>{" "}
+                    for details.
+                </Section.Description>
+            )}
+
             <Actions>
                 <TagsList>
                     {ALL_FEATURES.map(feature => (
@@ -144,7 +162,6 @@ const Actions = styled("div", {
     display: "flex",
     flexDirection: "column",
     rowGap: "1rem",
-    marginTop: "1rem",
     "@lg": {
         flexDirection: "row",
         justifyContent: "space-between",
@@ -164,4 +181,9 @@ const Markers = styled("div", {
     justifyContent: "space-end",
     alignItems: "center",
     columnGap: "1rem",
+})
+const StyledLink = styled("a", {
+    fontSize: "0.875rem",
+    color: "$blue11",
+    textDecoration: "none",
 })
