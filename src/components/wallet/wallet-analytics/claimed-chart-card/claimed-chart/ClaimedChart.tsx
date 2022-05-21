@@ -91,7 +91,7 @@ export default function ClaimedChart(props: ClaimedChartProps) {
             padding: 0.2,
             range: [0, bandWidth],
         })
-    }, [dayScale, bandWidth, visibleKeys])
+    }, [bandWidth, visibleKeys])
 
     const dataMax = Math.max(...data.map(item => claimedMax(item, visibleKeys)))
     const claimedScale = useMemo(() => {
@@ -99,7 +99,7 @@ export default function ClaimedChart(props: ClaimedChartProps) {
             domain: [0, dataMax],
             range: [yMax, 0],
         })
-    }, [data, dataMax, height])
+    }, [dataMax, yMax])
 
     const colorScale = useMemo(() => {
         return scaleOrdinal({

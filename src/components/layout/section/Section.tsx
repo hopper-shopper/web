@@ -35,6 +35,13 @@ const StyledTitle = styled("h2", {
     },
 })
 
+const StyledDescription = styled("p", {
+    fontSize: "0.875rem",
+    color: "$gray11",
+    lineHeight: 1.25,
+})
+
 export const Root = StyledRoot
 export const Header = StyledHeader
 export const Title = StyledTitle
+export const Description = StyledDescription

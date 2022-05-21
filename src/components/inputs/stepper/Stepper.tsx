@@ -9,12 +9,16 @@ type StepperContextProps = {
     value: number
     increment: () => void
     decrement: () => void
+    canIncrement: boolean
+    canDecrement: boolean
 }
 
 const StepperContext = createContext<StepperContextProps>({
     value: 0,
     increment: () => {},
     decrement: () => {},
+    canIncrement: true,
+    canDecrement: true,
 })
 function useStepperContext() {
     return useContext(StepperContext)
@@ -49,6 +53,10 @@ const StyledChange = styled("button", {
     },
     "&:focus": {
         outline: "2px solid $blue8",
+    },
+    "&:disabled": {
+        opacity: 0.5,
+        pointerEvents: "none",
     },
     "& > svg": {
         fontSize: "1.25rem",
@@ -89,7 +97,7 @@ function WrappedRoot(props: RootProps) {
             return next
         })
     }
-    const decrement = () =>
+    const decrement = () => {
         setValue(prev => {
             const next = (prev || 0) - 1
             if (next < min) {
@@ -97,9 +105,14 @@ function WrappedRoot(props: RootProps) {
             }
             return next
         })
+    }
+
+    const canIncrement = (value || 0) < max
+    const canDecrement = (value || 0) > min
 
     return (
-        <StepperContext.Provider value={{ value: value || 0, increment, decrement }}>
+        <StepperContext.Provider
+            value={{ value: value || 0, increment, decrement, canIncrement, canDecrement }}>
             <StyledRoot {...restRootProps} />
         </StepperContext.Provider>
     )
@@ -112,7 +125,7 @@ function WrappedValue(props: ComponentProps<typeof StyledValue>) {
     return <StyledValue {...props}>{children}</StyledValue>
 }
 function WrappedIncrement(props: ComponentProps<typeof StyledChange>) {
-    const { increment } = useStepperContext()
+    const { increment, canIncrement } = useStepperContext()
 
     const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
         increment()
@@ -120,13 +133,13 @@ function WrappedIncrement(props: ComponentProps<typeof StyledChange>) {
     }
 
     return (
-        <StyledChange {...props} onClick={handleClick}>
+        <StyledChange {...props} disabled={!canIncrement || props.disabled} onClick={handleClick}>
             <IconPlus />
         </StyledChange>
     )
 }
 function WrappedDecrement(props: ComponentProps<typeof StyledChange>) {
-    const { decrement } = useStepperContext()
+    const { decrement, canDecrement } = useStepperContext()
 
     const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
         decrement()
@@ -134,7 +147,7 @@ function WrappedDecrement(props: ComponentProps<typeof StyledChange>) {
     }
 
     return (
-        <StyledChange {...props} onClick={handleClick}>
+        <StyledChange {...props} disabled={!canDecrement || props.disabled} onClick={handleClick}>
             <IconMinus />
         </StyledChange>
     )

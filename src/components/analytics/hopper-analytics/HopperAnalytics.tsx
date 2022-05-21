@@ -1,10 +1,10 @@
 import { Screens, styled } from "theme"
-import HopperActivityChartCard from "./hopper-activity-chart-card/HopperActivityChartCard"
+import HopperActivitiesHistoryChartCard from "./hopper-activities-history-chart-card/HopperActivitiesHistoryChartCard"
 
 export default function HopperAnalytics() {
     return (
         <Container>
-            <HopperActivityChartCard />
+            <HopperActivitiesHistoryChartCard />
         </Container>
     )
 }
