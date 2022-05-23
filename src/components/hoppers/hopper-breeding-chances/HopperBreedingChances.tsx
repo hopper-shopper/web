@@ -13,11 +13,13 @@ export default function HopperBreedingChances(props: HopperBreedingChancesProps)
     const maxChance = getHopperMaxTadpoleChance(hopper)
     const currentChance = getTadpoleChance(hopper)
 
+    const render75 = maxChance > 0.75
+
     return (
         <Progress.Root size="lg">
             <Progress.Step at={0.25}>25 %</Progress.Step>
             <Progress.Step at={0.5}>50 %</Progress.Step>
-            <Progress.Step at={0.75}>75 %</Progress.Step>
+            {render75 && <Progress.Step at={0.75}>75 %</Progress.Step>}
             <Progress.Step at={maxChance}>
                 max{" "}
                 {formatPercent(maxChance, {

@@ -30,6 +30,7 @@ const StyledIndicator = styled(ProgressPrimitives.Indicator, {
     alignItems: "center",
     fontSize: "0.75rem",
     rr: "$sm",
+    paddingRight: "0.5rem",
     variants: {
         align: {
             left: {
