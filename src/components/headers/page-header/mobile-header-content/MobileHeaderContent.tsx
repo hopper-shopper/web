@@ -84,7 +84,7 @@ export default function MobileHeaderContent() {
                         </Flex>
 
                         <Footer>
-                            <Flex x="center" css={{ mb: "1rem" }}>
+                            <Flex x="start" css={{ mb: "2rem" }}>
                                 <WhatsNewDialog>
                                     <Button size="sm">What's new?</Button>
                                 </WhatsNewDialog>
