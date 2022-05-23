@@ -1,4 +1,6 @@
-import { IconExternalLink } from "@tabler/icons"
+import { IconBell, IconBolt, IconExternalLink, IconList } from "@tabler/icons"
+import IconButton from "components/inputs/buttons/icon-button/IconButton"
+import WhatsNewDialog from "components/whats-new/WhatsNewDialog"
 import { formatCurrency, getCurrencyFormatter } from "formatters/currency"
 import { formatGwei } from "formatters/gas"
 import { useAtomValue } from "jotai"
@@ -48,7 +50,14 @@ export default function DesktopHeaderContent() {
                     </Info>
                 </InfoContainer>
 
-                <SettingsDropdown />
+                <Actions>
+                    <WhatsNewDialog>
+                        <IconButton>
+                            <IconBolt />
+                        </IconButton>
+                    </WhatsNewDialog>
+                    <SettingsDropdown />
+                </Actions>
             </Right>
         </>
     )
@@ -89,4 +98,10 @@ const InfoExternal = styled("a", {
     "& > svg": {
         size: "0.75rem",
     },
+})
+const Actions = styled("div", {
+    marginLeft: "2rem",
+    display: "flex",
+    justifyContent: "flex-end",
+    columnGap: "1rem",
 })

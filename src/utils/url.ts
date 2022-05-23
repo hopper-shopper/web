@@ -1,6 +1,8 @@
 import { HopperId } from "models/Hopper"
 import { WalletAddress } from "models/User"
-import { INSPECT, WALLET } from "routing/routes"
+import { AnalyticsNavigationView } from "pages/analytics-page/useAnalyticsPageState"
+import { ANALYTICS, INSPECT, WALLET } from "routing/routes"
+import { createLookupMap } from "./map"
 
 type InspectPageUrlParams = {
     hopper: HopperId
@@ -23,4 +25,21 @@ type HopperMarketUrlParams = {
 }
 export function getHopperMarketUrl(params: HopperMarketUrlParams): string {
     return `https://hoppersgame.io/market#h${params.hopper}`
+}
+
+type AnalyticsPageUrlParams = {
+    view: AnalyticsNavigationView
+}
+const viewMapping = createLookupMap([
+    [AnalyticsNavigationView.FLY, "fly"],
+    [AnalyticsNavigationView.HOPPERS, "hoppers"],
+])
+function urlifyAnalyticsView(view: AnalyticsNavigationView): string {
+    return viewMapping.get(view) ?? "fly"
+}
+export function getAnalyticsPageUrl(params: AnalyticsPageUrlParams): string {
+    const searchParams = new URLSearchParams({
+        view: urlifyAnalyticsView(params.view),
+    })
+    return `${ANALYTICS}?${searchParams.toString()}`
 }

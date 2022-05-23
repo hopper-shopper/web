@@ -15,7 +15,7 @@ export default function SettingsDropdown() {
     return (
         <Dropdown.Root>
             <Dropdown.Trigger asChild>
-                <IconButton css={{ marginLeft: "2rem" }}>
+                <IconButton>
                     <IconSettings />
                 </IconButton>
             </Dropdown.Trigger>

@@ -1,9 +1,11 @@
 import { IconDeviceDesktop, IconMenu, IconMoon, IconSun } from "@tabler/icons"
 import * as Drawer from "components/drawer/Drawer"
+import Button from "components/inputs/buttons/button/Button"
 import IconButton from "components/inputs/buttons/icon-button/IconButton"
 import Flex from "components/layout/flex/Flex"
 import RightSlot from "components/layout/flex/RightSlot"
 import Grid from "components/layout/grid/Grid"
+import WhatsNewDialog from "components/whats-new/WhatsNewDialog"
 import { formatCurrency, getCurrencyFormatter } from "formatters/currency"
 import { formatGwei } from "formatters/gas"
 import { useAtom, useAtomValue } from "jotai"
@@ -82,6 +84,12 @@ export default function MobileHeaderContent() {
                         </Flex>
 
                         <Footer>
+                            <Flex x="center" css={{ mb: "1rem" }}>
+                                <WhatsNewDialog>
+                                    <Button size="sm">What's new?</Button>
+                                </WhatsNewDialog>
+                            </Flex>
+
                             <Grid columns="3" gap="sm" css={{ justifyItems: "center" }}>
                                 <ThemeButton
                                     active={theme === "system"}
@@ -137,19 +145,17 @@ const TileValue = styled("p", {
     color: "$gray12",
     fontSize: "1rem",
 })
-const Footer = styled("div", {
+const Footer = styled("footer", {
     position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
     padding: "1rem 2rem",
-    backgroundColor: "$gray3",
 })
 const ThemeButton = styled("button", {
     all: "unset",
-    borderRadius: "$md",
     border: "none",
-    backgroundColor: "$gray3",
+    borderRadius: "$md",
     color: "$gray11",
     padding: "0.25rem 0.5rem",
     display: "inline-flex",

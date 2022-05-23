@@ -1,9 +1,7 @@
 import * as DialogPrimitives from "@radix-ui/react-dialog"
 import { ComponentProps } from "@stitches/react"
 import { IconX } from "@tabler/icons"
-import Button from "components/inputs/buttons/button/Button"
 import IconButton from "components/inputs/buttons/icon-button/IconButton"
-import Screen from "components/layout/screen/Screen"
 import useControllableState from "hooks/useControllableState"
 import { createContext, useContext } from "react"
 import { Screens, styled } from "theme"
@@ -24,7 +22,7 @@ function useDialogContext() {
 // Components
 
 const StyledOverlay = styled(DialogPrimitives.Overlay, {
-    zIndex: 99,
+    zIndex: Number.MAX_SAFE_INTEGER - 1,
     backgroundColor: "$blackA9",
     position: "fixed",
     inset: 0,
@@ -32,40 +30,27 @@ const StyledOverlay = styled(DialogPrimitives.Overlay, {
 })
 
 const StyledContent = styled(DialogPrimitives.Content, {
-    zIndex: 100,
+    zIndex: Number.MAX_SAFE_INTEGER,
     backgroundColor: "$gray1",
     position: "fixed",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
+    inset: 0,
     width: "100vw",
     maxWidth: Screens.sm,
-    height: "100vh",
     padding: "1rem",
-    paddingBottom: "4rem",
     display: "flex",
     flexDirection: "column",
     "&:focus": {
         outline: "none",
     },
     "@md": {
-        height: "auto",
+        inset: "50% auto auto 50%",
+        transform: "translate(-50%, -50%)",
         maxHeight: "80vh",
         borderRadius: "$md",
         border: "1px solid $gray6",
         paddingBottom: 0,
         padding: "2rem",
     },
-})
-
-const StyledFooter = styled("div", {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: "$gray3",
-    padding: "1rem",
-    display: "flex",
 })
 
 const StyledTitle = styled(DialogPrimitives.Title, {
@@ -110,26 +95,10 @@ function WrappedRoot(props: RootProps) {
 
 type ContentProps = ComponentProps<typeof StyledContent>
 function WrappedContent(props: ContentProps) {
-    const { onOpenChange } = useDialogContext()
-
     return (
         <DialogPrimitives.Portal>
             <StyledOverlay />
-            <StyledContent {...props}>
-                {props.children}
-
-                <Screen bp="md" constraint="max">
-                    <StyledFooter>
-                        <Button
-                            color="neutral"
-                            size="sm"
-                            fullWidth
-                            onClick={() => onOpenChange(false)}>
-                            Close
-                        </Button>
-                    </StyledFooter>
-                </Screen>
-            </StyledContent>
+            <StyledContent {...props}>{props.children}</StyledContent>
         </DialogPrimitives.Portal>
     )
 }
