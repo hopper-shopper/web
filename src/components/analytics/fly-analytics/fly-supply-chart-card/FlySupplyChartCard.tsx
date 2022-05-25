@@ -28,8 +28,8 @@ export default function FlySupplyChartCard() {
     const { supplies, loading } = useFlySupply()
 
     const { state: features, toggle: toggleFeature } = useUniqueToggleList<FlySupplyFeature>([
-        FlySupplyFeature.TOTAL_SUPPLY,
         FlySupplyFeature.BURNED,
+        FlySupplyFeature.CIRCULATING,
         FlySupplyFeature.STAKED,
     ])
     const [chartMarkers, setChartMarkers] = useState<FlySupplyMarkers>({
@@ -142,10 +142,9 @@ export default function FlySupplyChartCard() {
 
 // Constants
 const ALL_FEATURES: FlySupplyFeature[] = [
-    FlySupplyFeature.TOTAL_SUPPLY,
+    FlySupplyFeature.CIRCULATING,
     FlySupplyFeature.BURNED,
     FlySupplyFeature.STAKED,
-    FlySupplyFeature.AVAILABLE,
     FlySupplyFeature.FREE,
 ]
 

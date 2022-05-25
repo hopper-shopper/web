@@ -38,6 +38,8 @@ const StyledValue = styled("span", {
 })
 
 const StyledChange = styled("button", {
+    all: "unset",
+    boxSizing: "border-box",
     size: "1.5rem",
     borderRadius: "$sm",
     border: "1px solid $gray7",
@@ -59,7 +61,7 @@ const StyledChange = styled("button", {
         pointerEvents: "none",
     },
     "& > svg": {
-        fontSize: "1.25rem",
+        size: "1rem",
     },
 })
 

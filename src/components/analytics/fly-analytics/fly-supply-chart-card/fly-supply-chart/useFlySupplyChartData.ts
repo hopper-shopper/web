@@ -5,7 +5,6 @@ import { useMemo } from "react"
 import { sortFlySupply, SortFlySupplyBy } from "sorters/fly-supply"
 import { SortDirection } from "sorters/_common"
 import { fromIsoDate } from "utils/date"
-import { IsoDate, IsoDatetime } from "utils/types"
 
 export default function useFlySupplyChartData(supplies: FlySupply[]): FlySupplyChartData[] {
     const { sorted: sortedSupplies } = useSort({
@@ -23,10 +22,10 @@ export default function useFlySupplyChartData(supplies: FlySupply[]): FlySupplyC
         for (const snapshot of sortedSupplies) {
             data.push({
                 date: setHours(fromIsoDate(snapshot.date), 12),
-                total: snapshot.supply,
+                minted: snapshot.minted,
                 burned: snapshot.burned,
                 staked: snapshot.staked,
-                available: snapshot.available,
+                circulating: snapshot.circulating,
                 free: snapshot.free,
             })
         }
@@ -47,9 +46,9 @@ export default function useFlySupplyChartData(supplies: FlySupply[]): FlySupplyC
 
 export type FlySupplyChartData = {
     date: Date
-    total: number
+    minted: number
     burned: number
+    circulating: number
     staked: number
-    available: number
     free: number
 }
