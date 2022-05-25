@@ -142,8 +142,8 @@ export default function FlySupplyChartCard() {
 
 // Constants
 const ALL_FEATURES: FlySupplyFeature[] = [
-    FlySupplyFeature.BURNED,
     FlySupplyFeature.CIRCULATING,
+    FlySupplyFeature.BURNED,
     FlySupplyFeature.STAKED,
     FlySupplyFeature.FREE,
 ]
