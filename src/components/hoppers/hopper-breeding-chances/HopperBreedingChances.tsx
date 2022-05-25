@@ -13,7 +13,7 @@ export default function HopperBreedingChances(props: HopperBreedingChancesProps)
     const maxChance = getHopperMaxTadpoleChance(hopper)
     const currentChance = getTadpoleChance(hopper)
 
-    const render75 = maxChance > 0.75
+    const render75 = maxChance > 0.8
 
     return (
         <Progress.Root size="lg">

@@ -2,19 +2,13 @@ import { IsoDate } from "utils/types"
 
 export type FlySupply = {
     date: IsoDate
-    /**
-     * Total supply
-     */
-    supply: number
+    minted: number
     burned: number
+    circulating: number
     /**
      * Total staked
      */
     staked: number
-    /**
-     * Total supply - burned
-     */
-    available: number
     /**
      * Total supply - burned - staked
      */

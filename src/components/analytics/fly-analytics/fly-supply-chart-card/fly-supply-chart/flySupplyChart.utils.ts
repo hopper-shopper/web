@@ -14,42 +14,37 @@ import { FlySupplyChartData } from "./useFlySupplyChartData"
 
 // Types
 export enum FlySupplyFeature {
-    TOTAL_SUPPLY,
     BURNED,
+    CIRCULATING,
     STAKED,
     FREE,
-    AVAILABLE,
 }
 
 // Constants
 export const FLY_FEATURE_TO_KEY: Record<FlySupplyFeature, keyof FlySupplyChartData> = {
-    [FlySupplyFeature.TOTAL_SUPPLY]: "total",
     [FlySupplyFeature.BURNED]: "burned",
+    [FlySupplyFeature.CIRCULATING]: "circulating",
     [FlySupplyFeature.STAKED]: "staked",
-    [FlySupplyFeature.AVAILABLE]: "available",
     [FlySupplyFeature.FREE]: "free",
 }
 
 export const SUPPLY_CHARTS_COLORS_LIGHT: Record<FlySupplyFeature, string> = {
-    [FlySupplyFeature.TOTAL_SUPPLY]: red.red9,
     [FlySupplyFeature.BURNED]: brown.brown9,
     [FlySupplyFeature.STAKED]: yellow.yellow9,
-    [FlySupplyFeature.AVAILABLE]: pink.pink9,
+    [FlySupplyFeature.CIRCULATING]: pink.pink9,
     [FlySupplyFeature.FREE]: violet.violet9,
 }
 export const SUPPLY_CHARTS_COLORS_DARK: Record<FlySupplyFeature, string> = {
-    [FlySupplyFeature.TOTAL_SUPPLY]: redDark.red9,
     [FlySupplyFeature.BURNED]: brownDark.brown9,
     [FlySupplyFeature.STAKED]: yellowDark.yellow9,
-    [FlySupplyFeature.AVAILABLE]: pinkDark.pink9,
+    [FlySupplyFeature.CIRCULATING]: pinkDark.pink9,
     [FlySupplyFeature.FREE]: violetDark.violet9,
 }
 
 const featureTextMapping: Record<FlySupplyFeature, string> = {
-    [FlySupplyFeature.TOTAL_SUPPLY]: "Total",
     [FlySupplyFeature.BURNED]: "Burned",
     [FlySupplyFeature.STAKED]: "Staked",
-    [FlySupplyFeature.AVAILABLE]: "Available",
+    [FlySupplyFeature.CIRCULATING]: "Circulating",
     [FlySupplyFeature.FREE]: "Free",
 }
 export function formatFlyChartFeature(feature: FlySupplyFeature): string {
@@ -58,8 +53,7 @@ export function formatFlyChartFeature(feature: FlySupplyFeature): string {
 
 const featureTextMappingLong: Record<FlySupplyFeature, string> = {
     ...featureTextMapping,
-    [FlySupplyFeature.AVAILABLE]: "Available (Total - Burned)",
-    [FlySupplyFeature.FREE]: "Free (Available - Staked)",
+    [FlySupplyFeature.FREE]: "Free (Circulating - Staked)",
 }
 export function formatFlyChartFeatureLong(feature: FlySupplyFeature): string {
     return featureTextMappingLong[feature]
