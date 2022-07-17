@@ -16,7 +16,14 @@ export default function TransfersBreakdown(props: TransfersBreakdownProps) {
         return calculateTransfersProfit(getTransfersTypesFilter("claim")(transfers))
     }, [transfers])
     const burned = useMemo(() => {
-        return calculateTransfersProfit(getTransfersTypesFilter("level-up", "breeding")(transfers))
+        return calculateTransfersProfit(
+            getTransfersTypesFilter(
+                "level-up",
+                "breeding",
+                "change-name",
+                "multi-level-up",
+            )(transfers),
+        )
     }, [transfers])
 
     return (
